@@ -53,7 +53,8 @@ class Sprite {
 		this.img.src = path;
 	}
 
-	draw(ctx, x, y, sX, sY, iIndex, mirror = false) {
+	draw(ctx, x, y, sX, sY, options = {}) {
+		const { mirror, iIndex, cropX, cropY } = options;
 		if (mirror) {
 			ctx.save();
 			ctx.setTransform(
@@ -62,10 +63,10 @@ class Sprite {
 				x + sX, // set the x origin
 				y + 0
 			);
-			ctx.drawImage(this.img, 0, iIndex * this.sizeY, this.sizeX, this.sizeY, 0, 0, sX, sY);
+			ctx.drawImage(this.img, 0, (iIndex || 0) * this.sizeY, cropX || this.sizeX, cropY || this.sizeY, 0, 0, sX, sY);
 			ctx.restore(); // restore the state as it was when this function was called
 		} else {
-			ctx.drawImage(this.img, 0, iIndex * this.sizeY, this.sizeX, this.sizeY, x, y, sX, sY);
+			ctx.drawImage(this.img, 0, (iIndex || 0) * this.sizeY, cropX || this.sizeX, cropY || this.sizeY, x, y, sX, sY);
 		}
 	}
 }
@@ -118,6 +119,14 @@ class Font {
 		}
 		if (c.charCodeAt(0) >= '0'.charCodeAt(0) && c.charCodeAt(0) <= '9'.charCodeAt(0)) {
 			return 52 + c.charCodeAt(0) - '0'.charCodeAt(0);
+		}
+		switch (c) {
+			case '[':
+				return 62;
+			case ']':
+				return 63;
+			case '/':
+				return 64;
 		}
 	}
 
@@ -757,11 +766,11 @@ class AnimationEngine {
 					this.ctx.save();
 					this.ctx.translate(posX + sizeX / 2, posY + sizeY / 2);
 					this.ctx.rotate(rot * Math.PI / 180);
-					sprite.draw(this.ctx, -sizeX / 2, -sizeY / 2, sizeX, sizeY, iIndex);
+					sprite.draw(this.ctx, -sizeX / 2, -sizeY / 2, sizeX, sizeY, { iIndex, mirror });
 					this.ctx.restore();
 				} else {
 					if (sprite instanceof Sprite) {
-						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, iIndex, mirror);
+						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, { iIndex, mirror });
 					} else {
 						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, iIndex, text);
 					}
