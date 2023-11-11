@@ -177,7 +177,8 @@ function drawCards(battleState) { //playerData, selectedCard) {
 				}
 			},
 			{
-				forceHoverOn: () => selectedCard === i
+				forceHoverOn: () => selectedCard === i,
+				onRightPress: () => battleData[playerIndex].hand.splice(i, 1)
 			});
 	});
 

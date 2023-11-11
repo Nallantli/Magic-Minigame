@@ -20,6 +20,9 @@ function makeInteractable(x, y, sizeX, sizeY, render, hoverRender, onPress, opti
 		if (onPress && clickPos?.x >= x && clickPos?.x < x + sizeX && clickPos?.y >= y && clickPos?.y < y + sizeY) {
 			onPress({ x, y, sizeX, sizeY });
 		}
+		if (options?.onRightPress && rightClickPos?.x >= x && rightClickPos?.x < x + sizeX && rightClickPos?.y >= y && rightClickPos?.y < y + sizeY) {
+			options.onRightPress({ x, y, sizeX, sizeY });
+		}
 	} else {
 		render({ x, y, sizeX, sizeY });
 	}
