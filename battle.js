@@ -178,7 +178,11 @@ function drawCards(battleState) { //playerData, selectedCard) {
 			},
 			{
 				forceHoverOn: () => selectedCard === i,
-				onRightPress: () => battleData[playerIndex].hand.splice(i, 1)
+				onRightPress: () => {
+					if (selectedCard === undefined) {
+						inputData.discardCard = i;
+					}
+				}
 			});
 	});
 
@@ -299,7 +303,12 @@ function battleGameLoop(timeMs) {
 		if (inputData.selectedVictims !== undefined) {
 			battleState.selectedVictims[battleState.playerIndex] = inputData.selectedVictims;
 		}
-
+		if (inputData.discardCard !== undefined) {
+			battleState.battleData[battleState.playerIndex].hand.splice(inputData.discardCard, 1);
+		}
+		if (rightClickPos && battleState.selectedCards[battleState.playerIndex] !== undefined) {
+			battleState.selectedCards[battleState.playerIndex] = undefined;
+		}
 		if (battleState.selectedCards[battleState.playerIndex] === 'PASS' || battleState.selectedVictims[battleState.playerIndex].length > 0) {
 			const withdrawAnimationData = {
 				ticks: 10,
@@ -354,11 +363,6 @@ function battleGameLoop(timeMs) {
 
 			battleState.animationQueue.push(new AnimationEngine(withdrawAnimationData, TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 			battleState.battleIndex = 0;
-		}
-		if (rightClickPos) {
-			if (battleState.selectedCards[battleState.playerIndex] !== undefined) {
-				battleState.selectedCards[battleState.playerIndex] = undefined;
-			}
 		}
 	} else {
 		const postBattle = (casterIndex, victimIndices, spellIndex, calculatedDamages) => {
