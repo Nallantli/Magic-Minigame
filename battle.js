@@ -361,9 +361,9 @@ function battleGameLoop(timeMs) {
 			}
 		}
 	} else {
-		const postBattle = (casterIndex, victimIndices, spellIndex) => {
+		const postBattle = (casterIndex, victimIndices, spellIndex, calculatedDamages) => {
 			if (casterIndex !== undefined) {
-				battleState.battleData = iterateSpell(casterIndex, victimIndices, spellIndex, battleState.battleData);
+				battleState.battleData = iterateSpell(casterIndex, victimIndices, spellIndex, battleState.battleData, calculatedDamages);
 			}
 			battleState.battleIndex++;
 			if (battleState.battleIndex === 8) {
@@ -401,15 +401,21 @@ function battleGameLoop(timeMs) {
 			if (victimIndices.length > 0 && battleState.battleData[battleState.battleIndex].entity.health > 0) {
 				const spellIndex = battleState.selectedCards[battleState.battleIndex];
 				const spell = battleState.battleData[battleState.battleIndex].hand[spellIndex];
+				const calculatedDamages = victimIndices
+					.map(i => battleState.battleData[i])
+					.map(victimData => calculateDamages(
+						spell,
+						battleState.battleData[battleState.battleIndex],
+						victimData));
 				const sequence = battleState.battleIndex < 4
-					? createLeftAttackSequence(battleState.battleData, battleState.battleIndex, victimIndices.reverse(), spell, 0)
-					: createRightAttackSequence(battleState.battleData, battleState.battleIndex, victimIndices.reverse(), spell, 0);
+					? createLeftAttackSequence(battleState.battleData, battleState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0)
+					: createRightAttackSequence(battleState.battleData, battleState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0);
 				const animation = new AnimationEngine({
 					ticks: sequence.length,
 					actions: sequence.actions
 				}, TICK_TIME, FPS, canvas, ctx, () => {
 					reduceAnimationQueue();
-					postBattle(battleState.battleIndex, victimIndices, spellIndex);
+					postBattle(battleState.battleIndex, victimIndices, spellIndex, calculatedDamages);
 				});
 				battleState.animationQueue.push(animation);
 			} else {

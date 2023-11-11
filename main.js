@@ -1,5 +1,5 @@
-const FPS = 120;
-const TICK_TIME = 24;
+const FPS = 75;
+let TICK_TIME = 15;
 
 const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
@@ -70,7 +70,8 @@ function generateBattleState() {
 	];
 	const rightEntityIds = [
 		'skeleton',
-		'ghost'
+		'ghost',
+		'phoenix'
 	];
 	const battleData = [
 		...leftEntityIds.map(id => generateBattleEntity(getEntityFromStateById(id), randomAI)),

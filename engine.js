@@ -19,6 +19,7 @@ const ATYPES = {
 	SET_OPACITY: 'SET_OPACITY',
 	SET_ROTATION: 'SET_ROTATION',
 	PLAY_SOUND: 'PLAY_SOUND',
+	SET_FRAME: 'SET_FRAME',
 
 	// INTERNAL
 	START_CHANGE_POSITION_X: 'START_CHANGE_POSITION_X',
@@ -147,11 +148,14 @@ class AnimationEngine {
 		this.callback = callback;
 		this.iterator = 0;
 
+		this.frameCount = 0;
+		this.lastFrameCount = 0;
+
 		this.initialize();
 	}
 
 	tickToFrame(tick) {
-		return tick * this.fps / this.tickTime;
+		return Math.floor(tick * this.fps / this.tickTime);
 	}
 
 	initialize() {
@@ -207,6 +211,15 @@ class AnimationEngine {
 					parsedActions[this.tickToFrame(tick)].push({
 						type: ATYPES.PAUSE_ANIMATION,
 						id: id
+					});
+					break;
+				}
+				case ATYPES.SET_FRAME: {
+					const { tick, id, iIndex } = action;
+					parsedActions[this.tickToFrame(tick)].push({
+						type: ATYPES.SET_FRAME,
+						id: id,
+						iIndex: iIndex
 					});
 					break;
 				}
@@ -620,10 +633,44 @@ class AnimationEngine {
 						break;
 					}
 					default:
-						this.internalActions[i].push(action)
+						if (action.play || action.type === ATYPES.PLAY_ANIMATION) {
+							let startIndex = undefined;
+							for (let j = i; j >= 0; j--) {
+								const relAction = parsedActions[j].find(action2 => action2.id === action.id && action2.iIndex !== undefined);
+								if (relAction) {
+									startIndex = relAction.iIndex;
+									break;
+								}
+							}
+							let c = 1;
+							let k = 0;
+							for (let j = i; j < parsedActions.length; j++) {
+								let flag = false;
+								parsedActions[j].forEach(parsedAction => {
+									if ((parsedAction.play === false || parsedAction.type === ATYPES.PAUSE_ANIMATION) && parsedAction.id === action.id) {
+										flag = true;
+									}
+								});
+								if (flag) {
+									break;
+								} else if (j > i && k % this.tickToFrame(1) === 0) {
+									this.internalActions[j].push({
+										type: ATYPES.SET_FRAME,
+										id: action.id,
+										iIndex: startIndex + c
+									});
+									c++;
+								}
+								k++;
+							}
+						}
+						if (action.type !== ATYPES.PLAY_ANIMATION && action.type !== ATYPES.PAUSE_ANIMATION) {
+							this.internalActions[i].push(action);
+						}
 				}
 			});
 		}
+		console.log(this.internalActions);
 	}
 
 	doTick() {
@@ -657,6 +704,7 @@ class AnimationEngine {
 					};
 					break;
 				}
+				/*
 				case ATYPES.PLAY_ANIMATION: {
 					const { id } = action;
 					this.tracker[id] = {
@@ -672,13 +720,13 @@ class AnimationEngine {
 						play: false
 					};
 					break;
-				}
+				} */
 				case ATYPES.SET_SPRITE: {
 					const { id, sprite, play, iIndex, text, mirror } = action;
 					this.tracker[id] = {
 						...this.tracker[id],
 						sprite: sprite,
-						play: play,
+						play: play || false,
 						iIndex: iIndex,
 						text: text,
 						mirror: mirror || false
@@ -733,6 +781,14 @@ class AnimationEngine {
 					};
 					break;
 				}
+				case ATYPES.SET_FRAME: {
+					const { id, iIndex } = action;
+					this.tracker[id] = {
+						...this.tracker[id],
+						iIndex: iIndex
+					};
+					break;
+				}
 				case ATYPES.PLAY_SOUND: {
 					const { audio, volume } = action;
 					audio.volume = volume;
@@ -744,14 +800,21 @@ class AnimationEngine {
 	}
 
 	runFrame(timeMs) {
+		if (!this.fpsStartTime || timeMs - this.fpsStartTime >= 1000) {
+			this.fpsStartTime = timeMs;
+			this.lastFrameCount = this.frameCount;
+			this.frameCount = 0;
+		}
 		if (!this.startTime || timeMs - this.startTime >= 1000 / this.fps) {
 			this.doTick();
 			this.startTime = timeMs;
 			this.iterator++;
+			this.frameCount++;
 		}
+		numberText.draw(this.ctx, scale(1), scale(1), scale(4), scale(6), this.lastFrameCount < this.fps ? 2 : (this.lastFrameCount > this.fps ? 4 : 0), String(this.lastFrameCount));
 		Object.entries(this.tracker)
 			.toSorted((a, b) => a[1].zIndex - b[1].zIndex)
-			.forEach(([id, { display, sprite, alpha, posX, posY, sizeX, sizeY, rot, iIndex, play, text, mirror }]) => {
+			.forEach(([_, { display, sprite, alpha, posX, posY, sizeX, sizeY, rot, iIndex, text, mirror }]) => {
 				if (!display) {
 					return;
 				}
@@ -760,17 +823,14 @@ class AnimationEngine {
 					this.ctx.save();
 					this.ctx.translate(posX + sizeX / 2, posY + sizeY / 2);
 					this.ctx.rotate(rot * Math.PI / 180);
-					sprite.draw(this.ctx, -sizeX / 2, -sizeY / 2, sizeX, sizeY, { iIndex, mirror });
+					sprite.draw(this.ctx, -sizeX / 2, -sizeY / 2, sizeX, sizeY, { iIndex: iIndex % sprite.indices, mirror });
 					this.ctx.restore();
 				} else {
 					if (sprite instanceof Sprite) {
-						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, { iIndex, mirror });
+						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, { iIndex: iIndex % sprite.indices, mirror });
 					} else {
 						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, iIndex, text);
 					}
-				}
-				if (play && this.iterator % this.tickToFrame(1) === 0) {
-					this.tracker[id].iIndex = (iIndex + 1) % sprite.indices;
 				}
 			});
 		if (this.iterator >= this.internalActions.length) {

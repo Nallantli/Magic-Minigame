@@ -96,6 +96,22 @@ let state = {
 			idleSprite: new Sprite('./img/characters/ghost/idle_64x64.png', 64, 64, 21),
 			castSprite: new Sprite('./img/characters/ghost/cast_64x64.png', 64, 64, 3),
 			deathSprite: new Sprite('./img/characters/ghost/death_64x64.png', 64, 64, 12)
+		},
+		{
+			id: 'phoenix',
+			name: 'Phoenix',
+			element: 'fire',
+			maxHealth: 300,
+			health: 300,
+			deck: [
+				...Object.values(SPELLS.fire),
+				...Object.values(SPELLS.fire),
+				...Object.values(SPELLS.fire),
+				...Object.values(SPELLS.fire),
+			],
+			idleSprite: new Sprite('./img/characters/phoenix/idle_64x64.png', 64, 64, 8),
+			castSprite: new Sprite('./img/characters/phoenix/idle_64x64.png', 64, 64, 8),
+			deathSprite: new Sprite('./img/characters/phoenix/death_64x64.png', 64, 64, 10)
 		}
 	],
 	deckState: {

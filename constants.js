@@ -84,7 +84,8 @@ const SPELLS = {
 			damages: [
 				{
 					tick: 8,
-					damage: -80,
+					minDamage: -80,
+					maxDamage: -100,
 					element: 'air'
 				}
 			],
@@ -155,7 +156,8 @@ const SPELLS = {
 			damages: [
 				{
 					tick: 8,
-					damage: -140,
+					minDamage: -100,
+					maxDamage: -140,
 					element: 'fire'
 				}
 			],
@@ -236,7 +238,8 @@ const SPELLS = {
 			damages: [
 				{
 					tick: 8,
-					damage: -110,
+					minDamage: -110,
+					maxDamage: -130,
 					element: 'water',
 					steal: .5
 				}
@@ -308,7 +311,8 @@ const SPELLS = {
 			damages: [
 				{
 					tick: 12,
-					damage: -240,
+					minDamage: -240,
+					maxDamage: -280,
 					element: 'water'
 				}
 			],
@@ -335,7 +339,8 @@ const SPELLS = {
 			damages: [
 				{
 					tick: 8,
-					damage: -100,
+					maxDamage: -100,
+					minDamage: -90,
 					element: 'earth'
 				}
 			],
@@ -352,7 +357,8 @@ const SPELLS = {
 			damages: [
 				{
 					tick: 10,
-					damage: -200,
+					maxDamage: -200,
+					minDamage: -170,
 					element: 'earth'
 				}
 			],

@@ -53,6 +53,9 @@ function makeToolTip(sizeX, sizeY, render) {
 }
 
 function calculateDamages(spell, caster, victim) {
+	if (spell.type !== SPELL_TYPES.ATTACK_ALL && spell.type !== SPELL_TYPES.ATTACK_BASIC) {
+		return {};
+	}
 	const shields = victim.shields;
 	const blades = caster.blades;
 	let usedBladeIds = [];
@@ -69,7 +72,7 @@ function calculateDamages(spell, caster, victim) {
 	return {
 		usedBladeIds,
 		damages: spell.damages.map(d => {
-			let base = d.damage;
+			let base = d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage);
 			let usedShieldIds = []
 			shields.forEach(({ id, value, element }, i) => {
 				if ((d.element === element || element === 'all') && !totalUsedShieldIds.includes(id)) {
@@ -99,7 +102,7 @@ function getTotalVril(data, element) {
 	return superVril + vril;
 }
 
-function iterateSpell(casterIndex, victimIndices, spellIndex, battleData) {
+function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calculatedDamages) {
 	const spell = battleData[casterIndex].hand[spellIndex];
 	switch (spell.type) {
 		case SPELL_TYPES.HEALING_BASIC:
@@ -108,16 +111,16 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData) {
 		case SPELL_TYPES.ATTACK_BASIC:
 		case SPELL_TYPES.ATTACK_ALL:
 			{
-				victimIndices.forEach(i => {
+				victimIndices.forEach((victimIndex, i) => {
 					let newShields = [];
-					const { usedBladeIds, damages } = calculateDamages(spell, battleData[casterIndex], battleData[i])
+					const { usedBladeIds, damages } = calculatedDamages[i];
 					damages.forEach(({ damage, usedShieldIds, steal }) => {
 						for (let j = 0; j < battleData[i].shields.length; j++) {
 							if (!usedShieldIds.map(({ index }) => index).includes(j)) {
-								newShields.push(battleData[i].shields[j]);
+								newShields.push(battleData[victimIndex].shields[j]);
 							}
 						}
-						battleData[i].entity.health += damage;
+						battleData[victimIndex].entity.health += damage;
 						if (steal) {
 							battleData[casterIndex].entity.health -= damage * steal;
 						}
