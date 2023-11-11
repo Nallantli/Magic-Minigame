@@ -299,7 +299,32 @@ const SPELLS = {
 			cardSprite: new Sprite('./img/spells/water_blade/card_48x64.png', 48, 64, 1),
 			spellAnimation: new Sprite('./img/spells/water_blade/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
-		}
+		},
+		DELUGE: {
+			id: crypto.randomUUID(),
+			name: "Deluge",
+			type: SPELL_TYPES.ATTACK_BASIC,
+			element: 'water',
+			damages: [
+				{
+					tick: 12,
+					damage: -240,
+					element: 'water'
+				}
+			],
+			victimShields: [{
+				id: crypto.randomUUID(),
+				tick: 19,
+				value: 15,
+				sprite: new Sprite('./img/spells/deluge/bonus_10x12.png', 10, 12, 1),
+				element: 'water',
+				isBonus: false
+			}],
+			vrilRequired: 3,
+			cardSprite: new Sprite('./img/spells/deluge/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/deluge/spell_240x135.png', 240, 135, 20),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		},
 	},
 	earth: {
 		BOULDER: {
@@ -346,7 +371,7 @@ const SPELLS = {
 					id: crypto.randomUUID(),
 					tick: 7,
 					value: -25,
-					sprite: new Sprite('./img/spells/air_shield/bonus_10x12.png', 10, 12, 1),
+					sprite: new Sprite('./img/spells/earth_shield/bonus_air_10x12.png', 10, 12, 1),
 					element: 'air',
 					isBonus: true
 				},
@@ -354,7 +379,7 @@ const SPELLS = {
 					id: crypto.randomUUID(),
 					tick: 9,
 					value: -25,
-					sprite: new Sprite('./img/spells/fire_shield/bonus_10x12.png', 10, 12, 1),
+					sprite: new Sprite('./img/spells/earth_shield/bonus_fire_10x12.png', 10, 12, 1),
 					element: 'fire',
 					isBonus: true
 				},
@@ -362,7 +387,7 @@ const SPELLS = {
 					id: crypto.randomUUID(),
 					tick: 11,
 					value: -25,
-					sprite: new Sprite('./img/spells/water_shield/bonus_10x12.png', 10, 12, 1),
+					sprite: new Sprite('./img/spells/earth_shield/bonus_water_10x12.png', 10, 12, 1),
 					element: 'water',
 					isBonus: true
 				},
@@ -370,7 +395,7 @@ const SPELLS = {
 					id: crypto.randomUUID(),
 					tick: 12,
 					value: -25,
-					sprite: new Sprite('./img/spells/earth_shield/bonus_10x12.png', 10, 12, 1),
+					sprite: new Sprite('./img/spells/earth_shield/bonus_earth_10x12.png', 10, 12, 1),
 					element: 'earth',
 					isBonus: true
 				}

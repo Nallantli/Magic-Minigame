@@ -69,10 +69,8 @@ function generateBattleState() {
 		'earth_wizard'
 	];
 	const rightEntityIds = [
-		'fire_skeleton',
-		'air_skeleton',
-		'water_skeleton',
-		'earth_skeleton'
+		'skeleton',
+		'ghost'
 	];
 	const battleData = [
 		...leftEntityIds.map(id => generateBattleEntity(getEntityFromStateById(id), randomAI)),

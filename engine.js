@@ -147,17 +147,11 @@ class AnimationEngine {
 		this.callback = callback;
 		this.iterator = 0;
 
-		this.doTick = this.doTick.bind(this);
-		this.tickToFrame = this.tickToFrame.bind(this);
-		this.initialize = this.initialize.bind(this);
-		this.runFrame = this.runFrame.bind(this);
-
 		this.initialize();
-
 	}
 
 	tickToFrame(tick) {
-		return Math.floor(tick / this.tickTime * this.fps);
+		return tick * this.fps / this.tickTime;
 	}
 
 	initialize() {

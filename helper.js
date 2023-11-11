@@ -98,6 +98,33 @@ function getTotalVril(data, element) {
 
 function iterateSpell(casterIndex, victimIndices, spellIndex, battleData) {
 	const spell = battleData[casterIndex].hand[spellIndex];
+	switch (spell.type) {
+		case SPELL_TYPES.HEALING_BASIC:
+			spell.heals.forEach(({ heal }) => battleData[victimIndices[0]].entity.health += heal);
+			break;
+		case SPELL_TYPES.ATTACK_BASIC:
+		case SPELL_TYPES.ATTACK_ALL:
+			{
+				victimIndices.forEach(i => {
+					let newShields = [];
+					const { usedBladeIds, damages } = calculateDamages(spell, battleData[casterIndex], battleData[i])
+					damages.forEach(({ damage, usedShieldIds, steal }) => {
+						for (let j = 0; j < battleData[i].shields.length; j++) {
+							if (!usedShieldIds.map(({ index }) => index).includes(j)) {
+								newShields.push(battleData[i].shields[j]);
+							}
+						}
+						battleData[i].entity.health += damage;
+						if (steal) {
+							battleData[casterIndex].entity.health -= damage * steal;
+						}
+					});
+					battleData[casterIndex].blades = battleData[casterIndex].blades.filter((_, i) => !usedBladeIds.map(({ index }) => index).includes(i));
+					battleData[i].shields = newShields;
+				});
+			}
+			break;
+	}
 	if (spell.victimShields) {
 		victimIndices.forEach(i => {
 			battleData[i].shields = [
@@ -125,33 +152,6 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData) {
 			...battleData[casterIndex].blades,
 			...spell.casterBlades
 		];
-	}
-	switch (spell.type) {
-		case SPELL_TYPES.HEALING_BASIC:
-			spell.heals.forEach(({ heal }) => battleData[victimIndices[0]].entity.health += heal);
-			break;
-		case SPELL_TYPES.ATTACK_BASIC:
-		case SPELL_TYPES.ATTACK_ALL:
-			{
-				victimIndices.forEach(i => {
-					let newShields = [];
-					const { usedBladeIds, damages } = calculateDamages(spell, battleData[casterIndex], battleData[i])
-					damages.forEach(({ damage, usedShieldIds, steal }) => {
-						for (let j = 0; j < battleData[i].shields.length; j++) {
-							if (!usedShieldIds.map(({ index }) => index).includes(j)) {
-								newShields.push(battleData[i].shields[j]);
-							}
-						}
-						battleData[i].entity.health += damage;
-						if (steal) {
-							battleData[casterIndex].entity.health -= damage * steal;
-						}
-					});
-					battleData[casterIndex].blades = battleData[casterIndex].blades.filter((_, i) => !usedBladeIds.map(({ index }) => index).includes(i));
-					battleData[i].shields = newShields;
-				});
-			}
-			break;
 	}
 	battleData[casterIndex].vril -= spell.vrilRequired;
 	battleData[casterIndex].hand.splice(spellIndex, 1);

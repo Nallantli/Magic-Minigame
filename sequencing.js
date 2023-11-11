@@ -602,13 +602,17 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 			actions = [
 				...actions,
 				...createLeftShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(6), scale(280)),
-				...createLeftBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false)
+				...createLeftBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false),
+				...createLeftShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick, true, scale(6), scale(280)),
+				...createLeftBladeCastingSequence(spell.victimBlades || [], victimData.entity.id, victimData.blades.length, spellAnimationStartTick, true)
 			];
 		} else {
 			actions = [
 				...actions,
 				...createRightShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(480 - 26), scale(280)),
-				...createRightBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false)
+				...createRightBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false),
+				...createRightShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick, true, scale(480 - 26), scale(280)),
+				...createRightBladeCastingSequence(spell.victimBlades || [], victimData.entity.id, victimData.blades.length, spellAnimationStartTick, true)
 			];
 		}
 	} else {
@@ -616,12 +620,14 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 			if (enterLeft) {
 				actions = [
 					...actions,
-					...createLeftShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(72 - victimDatas.length * 8 + i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i))
+					...createLeftShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(72 - victimDatas.length * 8 + i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i)),
+					...createLeftShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick, true, scale(72 - victimDatas.length * 8 + i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i))
 				];
 			} else {
 				actions = [
 					...actions,
-					...createRightShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(450 - (72 - victimDatas.length * 8) - i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i))
+					...createRightShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(450 - (72 - victimDatas.length * 8) - i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i)),
+					...createRightShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick, true, scale(450 - (72 - victimDatas.length * 8) - i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i))
 				];
 			}
 		});

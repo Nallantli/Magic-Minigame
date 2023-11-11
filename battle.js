@@ -258,7 +258,7 @@ const reduceAnimationQueue = () => state.battleState.animationQueue.splice(0, 1)
 function battleGameLoop(timeMs) {
 	const { battleState } = state;
 
-	if (!battleState.startTime || timeMs - battleState.startTime >= TICK_TIME * 1000 / FPS) {
+	if (!battleState.startTime || timeMs - battleState.startTime >= 1000 / TICK_TIME) {
 		battleState.startTime = timeMs;
 		battleState.iterator++;
 	}
