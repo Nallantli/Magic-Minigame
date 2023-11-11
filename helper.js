@@ -115,7 +115,7 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calcul
 					let newShields = [];
 					const { usedBladeIds, damages } = calculatedDamages[i];
 					damages.forEach(({ damage, usedShieldIds, steal }) => {
-						for (let j = 0; j < battleData[i].shields.length; j++) {
+						for (let j = 0; j < battleData[victimIndex].shields.length; j++) {
 							if (!usedShieldIds.map(({ index }) => index).includes(j)) {
 								newShields.push(battleData[victimIndex].shields[j]);
 							}
@@ -125,8 +125,8 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calcul
 							battleData[casterIndex].entity.health -= damage * steal;
 						}
 					});
-					battleData[casterIndex].blades = battleData[casterIndex].blades.filter((_, i) => !usedBladeIds.map(({ index }) => index).includes(i));
-					battleData[i].shields = newShields;
+					battleData[casterIndex].blades = battleData[casterIndex].blades.filter((_, j) => !usedBladeIds.map(({ index }) => index).includes(j));
+					battleData[victimIndex].shields = newShields;
 				});
 			}
 			break;

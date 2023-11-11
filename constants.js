@@ -166,6 +166,24 @@ const SPELLS = {
 			spellAnimation: new Sprite('./img/spells/fireball/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
+		BALEFIRE: {
+			id: crypto.randomUUID(),
+			name: "Balefire",
+			type: SPELL_TYPES.ATTACK_BASIC,
+			element: 'fire',
+			damages: [
+				{
+					tick: 14,
+					minDamage: -220,
+					maxDamage: -250,
+					element: 'fire'
+				}
+			],
+			vrilRequired: 2,
+			cardSprite: new Sprite('./img/spells/balefire/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/balefire/spell_240x135.png', 240, 135, 19),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		},
 		FIRE_SHIELD: {
 			id: crypto.randomUUID(),
 			name: "Fire Shield",
