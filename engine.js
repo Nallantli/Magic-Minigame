@@ -64,11 +64,24 @@ class Sprite {
 				x + sX, // set the x origin
 				y + 0
 			);
-			ctx.drawImage(this.img, 0, (iIndex || 0) * this.sizeY, cropX || this.sizeX, cropY || this.sizeY, 0, 0, sX, sY);
+			ctx.drawImage(this.img, 0, ((iIndex || 0) % this.indices) * this.sizeY, cropX || this.sizeX, cropY || this.sizeY, 0, 0, sX, sY);
 			ctx.restore(); // restore the state as it was when this function was called
 		} else {
-			ctx.drawImage(this.img, 0, (iIndex || 0) * this.sizeY, cropX || this.sizeX, cropY || this.sizeY, x, y, sX, sY);
+			ctx.drawImage(this.img, 0, ((iIndex || 0) % this.indices) * this.sizeY, cropX || this.sizeX, cropY || this.sizeY, x, y, sX, sY);
 		}
+	}
+}
+
+class CompositeSprite {
+	constructor(sprites, sizeX, sizeY, indices) {
+		this.sprites = sprites;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+		this.indices = indices;
+	}
+
+	draw(ctx, x, y, sX, sY, options = {}) {
+		this.sprites.forEach(sprite => sprite.draw(ctx, x, y, sX, sY, options));
 	}
 }
 
@@ -111,29 +124,9 @@ class Font {
 		this.img.src = fontPath
 	}
 
-	toC(c) {
-		if (c.charCodeAt(0) >= 'A'.charCodeAt(0) && c.charCodeAt(0) <= 'Z'.charCodeAt(0)) {
-			return c.charCodeAt(0) - 'A'.charCodeAt(0);
-		}
-		if (c.charCodeAt(0) >= 'a'.charCodeAt(0) && c.charCodeAt(0) <= 'z'.charCodeAt(0)) {
-			return 26 + c.charCodeAt(0) - 'a'.charCodeAt(0);
-		}
-		if (c.charCodeAt(0) >= '0'.charCodeAt(0) && c.charCodeAt(0) <= '9'.charCodeAt(0)) {
-			return 52 + c.charCodeAt(0) - '0'.charCodeAt(0);
-		}
-		switch (c) {
-			case '[':
-				return 62;
-			case ']':
-				return 63;
-			case '/':
-				return 64;
-		}
-	}
-
 	draw(ctx, x, y, sX, sY, iIndex, str) {
 		for (let i = 0; i < str.length; i++) {
-			ctx.drawImage(this.img, this.sizeX * this.toC(str[i]), iIndex * this.sizeY, this.sizeX, this.sizeY, x + i * sX, y, sX, sY);
+			ctx.drawImage(this.img, this.sizeX * str.charCodeAt(i), iIndex * this.sizeY, this.sizeX, this.sizeY, x + i * sX, y, sX, sY);
 		}
 	}
 }
@@ -826,7 +819,7 @@ class AnimationEngine {
 					sprite.draw(this.ctx, -sizeX / 2, -sizeY / 2, sizeX, sizeY, { iIndex: iIndex % sprite.indices, mirror });
 					this.ctx.restore();
 				} else {
-					if (sprite instanceof Sprite) {
+					if (sprite instanceof Sprite || sprite instanceof CompositeSprite) {
 						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, { iIndex: iIndex % sprite.indices, mirror });
 					} else {
 						sprite.draw(this.ctx, posX, posY, sizeX, sizeY, iIndex, text);

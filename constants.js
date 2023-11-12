@@ -28,7 +28,10 @@ const sprites = {
 	DECK_CIRCLE_48x64: new Sprite('./img/deck_circle_48x64.png', 48, 64, 1),
 	BACK_32x32: new Sprite('./img/back_32x32.png', 32, 32, 1),
 	EDIT_DECKS_64x12: new Sprite('./img/edit_decks_64x12.png', 64, 12, 1),
+	CUSTOMIZE_64x12: new Sprite('./img/customize_64x12.png', 64, 12, 1),
 	TOOLTIP_CORNER_3x3: new Sprite('./img/tooltip_corner_3x3.png', 3, 3, 4),
+	CUSTOMIZE_ICONS_16x16: new Sprite('./img/customize_icons_16x16.png', 16, 16, 4),
+	CUSTOMIZE_LIST_136x300: new Sprite('./img/customize_list_136x300.png', 136, 300, 1),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
 };
@@ -77,7 +80,7 @@ const SPELLS = {
 	},
 	air: {
 		DUST_DEVIL: {
-			id: crypto.randomUUID(),
+			id: 'air.dust_devil',
 			name: "Dust Devil",
 			type: SPELL_TYPES.ATTACK_ALL,
 			element: 'air',
@@ -95,7 +98,7 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
 		GENTLE_BREEZE: {
-			id: crypto.randomUUID(),
+			id: 'air.gentle_breeze',
 			name: "Gentle Breeze",
 			type: SPELL_TYPES.HEALING_BASIC,
 			element: 'air',
@@ -111,12 +114,12 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
 		},
 		AIR_SHIELD: {
-			id: crypto.randomUUID(),
+			id: 'air.air_shield',
 			name: "Air Shield",
 			type: SPELL_TYPES.SHIELD_BASIC,
 			element: 'air',
 			victimShields: [{
-				id: crypto.randomUUID(),
+				id: 'air.air_shield.vs1',
 				tick: 8,
 				value: -50,
 				sprite: new Sprite('./img/spells/air_shield/bonus_10x12.png', 10, 12, 1),
@@ -129,12 +132,12 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
 		},
 		AIR_BLADE: {
-			id: crypto.randomUUID(),
+			id: 'air.air_blade',
 			name: "Air Blade",
 			type: SPELL_TYPES.BLADE_BASIC,
 			element: 'air',
 			victimBlades: [{
-				id: crypto.randomUUID(),
+				id: 'air.air_blade.vb1',
 				tick: 8,
 				value: 25,
 				sprite: new Sprite('./img/spells/air_blade/bonus_10x12.png', 10, 12, 1),
@@ -145,11 +148,29 @@ const SPELLS = {
 			cardSprite: new Sprite('./img/spells/air_blade/card_48x64.png', 48, 64, 1),
 			spellAnimation: new Sprite('./img/spells/air_blade/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
+		},
+		AIR_TRAP: {
+			id: 'air.air_trap',
+			name: "Air Trap",
+			type: SPELL_TYPES.TRAP_BASIC,
+			element: 'air',
+			victimShields: [{
+				id: 'air.air_trap.vs1',
+				tick: 8,
+				value: 25,
+				sprite: new Sprite('./img/spells/air_trap/bonus_10x12.png', 10, 12, 1),
+				element: 'air',
+				isBonus: false
+			}],
+			vrilRequired: 0,
+			cardSprite: new Sprite('./img/spells/air_trap/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/air_trap/spell_240x135.png', 240, 135, 12),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		}
 	},
 	fire: {
 		FIREBALL: {
-			id: crypto.randomUUID(),
+			id: 'fire.fireball',
 			name: "Fireball",
 			type: SPELL_TYPES.ATTACK_BASIC,
 			element: 'fire',
@@ -167,7 +188,7 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
 		BALEFIRE: {
-			id: crypto.randomUUID(),
+			id: 'fire.balefire',
 			name: "Balefire",
 			type: SPELL_TYPES.ATTACK_BASIC,
 			element: 'fire',
@@ -185,12 +206,12 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
 		FIRE_SHIELD: {
-			id: crypto.randomUUID(),
+			id: 'fire.fire_shield',
 			name: "Fire Shield",
 			type: SPELL_TYPES.SHIELD_BASIC,
 			element: 'fire',
 			victimShields: [{
-				id: crypto.randomUUID(),
+				id: 'fire.fire_shield.vs1',
 				tick: 8,
 				value: -40,
 				sprite: new Sprite('./img/spells/fire_shield/bonus_10x12.png', 10, 12, 1),
@@ -203,12 +224,12 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
 		},
 		FIRE_BLADE: {
-			id: crypto.randomUUID(),
+			id: 'fire.fire_blade',
 			name: "Fire Blade",
 			type: SPELL_TYPES.BLADE_BASIC,
 			element: 'fire',
 			victimBlades: [{
-				id: crypto.randomUUID(),
+				id: 'fire.fire_blade.vb1',
 				tick: 8,
 				value: 35,
 				sprite: new Sprite('./img/spells/fire_blade/bonus_10x12.png', 10, 12, 1),
@@ -221,12 +242,12 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
 		},
 		MAGNIFY: {
-			id: crypto.randomUUID(),
+			id: 'fire.magnify',
 			name: "Magnify",
 			type: SPELL_TYPES.JINX_BASIC,
 			element: 'fire',
 			victimBlades: [{
-				id: crypto.randomUUID(),
+				id: 'fire.magnify.vb1',
 				tick: 8,
 				value: 30,
 				sprite: new Sprite('./img/spells/magnify/bonus_10x12.png', 10, 12, 1),
@@ -234,22 +255,40 @@ const SPELLS = {
 				isBonus: true
 			}],
 			casterBlades: [{
-				id: crypto.randomUUID(),
+				id: 'fire.magnify.cb1',
 				tick: 10,
-				value: 60,
+				value: 50,
 				sprite: new Sprite('./img/spells/magnify/bonus_10x12.png', 10, 12, 1),
 				element: 'all',
 				isBonus: true
 			}],
-			vrilRequired: 0,
+			vrilRequired: 1,
 			cardSprite: new Sprite('./img/spells/magnify/card_48x64.png', 48, 64, 1),
 			spellAnimation: new Sprite('./img/spells/magnify/spell_240x135.png', 240, 135, 12),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		},
+		FIRE_TRAP: {
+			id: 'fire.fire_trap',
+			name: "Fire Trap",
+			type: SPELL_TYPES.TRAP_BASIC,
+			element: 'fire',
+			victimShields: [{
+				id: 'fire.fire_trap.vs1',
+				tick: 8,
+				value: 35,
+				sprite: new Sprite('./img/spells/fire_trap/bonus_10x12.png', 10, 12, 1),
+				element: 'fire',
+				isBonus: false
+			}],
+			vrilRequired: 0,
+			cardSprite: new Sprite('./img/spells/fire_trap/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/fire_trap/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		}
 	},
 	water: {
 		WAVE: {
-			id: crypto.randomUUID(),
+			id: 'water.wave',
 			name: "Wave",
 			type: SPELL_TYPES.ATTACK_BASIC,
 			element: 'water',
@@ -268,12 +307,12 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
 		WATER_SHIELD: {
-			id: crypto.randomUUID(),
+			id: 'water.water_shield',
 			name: "Water Shield",
 			type: SPELL_TYPES.SHIELD_BASIC,
 			element: 'water',
 			victimShields: [{
-				id: crypto.randomUUID(),
+				id: 'water.water_shield.vs1',
 				tick: 8,
 				value: -45,
 				sprite: new Sprite('./img/spells/water_shield/bonus_10x12.png', 10, 12, 1),
@@ -286,12 +325,12 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
 		},
 		WEAKNESS: {
-			id: crypto.randomUUID(),
+			id: 'water.weakness',
 			name: "Weakness",
 			type: SPELL_TYPES.JINX_BASIC,
 			element: 'water',
 			victimBlades: [{
-				id: crypto.randomUUID(),
+				id: 'water.weakness.vb1',
 				tick: 8,
 				value: -20,
 				sprite: new Sprite('./img/spells/weakness/bonus_10x12.png', 10, 12, 1),
@@ -304,12 +343,12 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
 		WATER_BLADE: {
-			id: crypto.randomUUID(),
+			id: 'water.water_blade',
 			name: "Water Blade",
 			type: SPELL_TYPES.BLADE_BASIC,
 			element: 'water',
 			victimBlades: [{
-				id: crypto.randomUUID(),
+				id: 'water.water_blade.vb1',
 				tick: 8,
 				value: 30,
 				sprite: new Sprite('./img/spells/water_blade/bonus_10x12.png', 10, 12, 1),
@@ -322,7 +361,7 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
 		},
 		DELUGE: {
-			id: crypto.randomUUID(),
+			id: 'water.deluge',
 			name: "Deluge",
 			type: SPELL_TYPES.ATTACK_BASIC,
 			element: 'water',
@@ -335,7 +374,7 @@ const SPELLS = {
 				}
 			],
 			victimShields: [{
-				id: crypto.randomUUID(),
+				id: 'water.deluge.vs1',
 				tick: 19,
 				value: 15,
 				sprite: new Sprite('./img/spells/deluge/bonus_10x12.png', 10, 12, 1),
@@ -347,10 +386,28 @@ const SPELLS = {
 			spellAnimation: new Sprite('./img/spells/deluge/spell_240x135.png', 240, 135, 20),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
+		WATER_TRAP: {
+			id: 'water.water_trap',
+			name: "Water Trap",
+			type: SPELL_TYPES.TRAP_BASIC,
+			element: 'water',
+			victimShields: [{
+				id: 'water.water_trap.vs1',
+				tick: 8,
+				value: 30,
+				sprite: new Sprite('./img/spells/water_trap/bonus_10x12.png', 10, 12, 1),
+				element: 'water',
+				isBonus: false
+			}],
+			vrilRequired: 0,
+			cardSprite: new Sprite('./img/spells/water_trap/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/water_trap/spell_240x135.png', 240, 135, 12),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		}
 	},
 	earth: {
 		BOULDER: {
-			id: crypto.randomUUID(),
+			id: 'earth.boulder',
 			name: "Boulder",
 			type: SPELL_TYPES.ATTACK_BASIC,
 			element: 'earth',
@@ -368,7 +425,7 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
 		EARTHQUAKE: {
-			id: crypto.randomUUID(),
+			id: 'earth.earthquake',
 			name: "Earthquake",
 			type: SPELL_TYPES.ATTACK_BASIC,
 			element: 'earth',
@@ -386,13 +443,13 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
 		EARTH_SHIELD: {
-			id: crypto.randomUUID(),
+			id: 'earth.earth_shield',
 			name: "Earth Shield",
 			type: SPELL_TYPES.SHIELD_BASIC,
 			element: 'earth',
 			victimShields: [
 				{
-					id: crypto.randomUUID(),
+					id: 'earth.earth_shield.vs1',
 					tick: 7,
 					value: -25,
 					sprite: new Sprite('./img/spells/earth_shield/bonus_air_10x12.png', 10, 12, 1),
@@ -400,7 +457,7 @@ const SPELLS = {
 					isBonus: true
 				},
 				{
-					id: crypto.randomUUID(),
+					id: 'earth.earth_shield.vs2',
 					tick: 9,
 					value: -25,
 					sprite: new Sprite('./img/spells/earth_shield/bonus_fire_10x12.png', 10, 12, 1),
@@ -408,7 +465,7 @@ const SPELLS = {
 					isBonus: true
 				},
 				{
-					id: crypto.randomUUID(),
+					id: 'earth.earth_shield.vs3',
 					tick: 11,
 					value: -25,
 					sprite: new Sprite('./img/spells/earth_shield/bonus_water_10x12.png', 10, 12, 1),
@@ -416,7 +473,7 @@ const SPELLS = {
 					isBonus: true
 				},
 				{
-					id: crypto.randomUUID(),
+					id: 'earth.earth_shield.vs4',
 					tick: 12,
 					value: -25,
 					sprite: new Sprite('./img/spells/earth_shield/bonus_earth_10x12.png', 10, 12, 1),
@@ -430,12 +487,12 @@ const SPELLS = {
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
 		},
 		EARTH_BLADE: {
-			id: crypto.randomUUID(),
+			id: 'earth.earth_blade',
 			name: "Earth Blade",
 			type: SPELL_TYPES.BLADE_BASIC,
 			element: 'earth',
 			victimBlades: [{
-				id: crypto.randomUUID(),
+				id: 'earth.earth_blade.vb1',
 				tick: 8,
 				value: 20,
 				sprite: new Sprite('./img/spells/earth_blade/bonus_10x12.png', 10, 12, 1),
@@ -446,6 +503,50 @@ const SPELLS = {
 			cardSprite: new Sprite('./img/spells/earth_blade/card_48x64.png', 48, 64, 1),
 			spellAnimation: new Sprite('./img/spells/earth_blade/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4)
-		}
+		},
+		EARTH_TRAP: {
+			id: 'earth.earth_trap',
+			name: "Earth Trap",
+			type: SPELL_TYPES.TRAP_BASIC,
+			element: 'earth',
+			victimShields: [{
+				id: 'earth.earth_trap.vs1',
+				tick: 8,
+				value: 20,
+				sprite: new Sprite('./img/spells/earth_trap/bonus_10x12.png', 10, 12, 1),
+				element: 'water',
+				isBonus: false
+			}],
+			vrilRequired: 0,
+			cardSprite: new Sprite('./img/spells/earth_trap/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/earth_trap/spell_240x135.png', 240, 135, 12),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		},
+		BURDEN: {
+			id: 'earth.burden',
+			name: "Burden",
+			type: SPELL_TYPES.TRAP_BASIC,
+			element: 'earth',
+			victimShields: [{
+				id: 'earth.burden.vs1',
+				tick: 8,
+				value: 70,
+				sprite: new Sprite('./img/spells/burden/bonus_10x12.png', 10, 12, 1),
+				element: 'all',
+				isBonus: false
+			}],
+			casterShields: [{
+				id: 'earth.burden.cs1',
+				tick: 10,
+				value: 35,
+				sprite: new Sprite('./img/spells/burden/bonus_10x12.png', 10, 12, 1),
+				element: 'all',
+				isBonus: false
+			}],
+			vrilRequired: 1,
+			cardSprite: new Sprite('./img/spells/burden/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/burden/spell_240x135.png', 240, 135, 12),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		},
 	}
 };

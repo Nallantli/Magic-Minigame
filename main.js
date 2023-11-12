@@ -45,11 +45,13 @@ function generateBattleEntity(entity, AI) {
 		hand.push(card);
 	}
 
+	const hasSuperVril = Math.random() >= entity.superVrilChance;
+
 	return {
 		shields: [],
 		blades: [],
-		vril: 1,
-		superVril: 0,
+		vril: hasSuperVril ? 0 : 1,
+		superVril: hasSuperVril ? 1 : 0,
 		entity,
 		deck,
 		hand,
@@ -57,25 +59,26 @@ function generateBattleEntity(entity, AI) {
 	}
 }
 
-function getEntityFromStateById(sId) {
-	return state.entities.find(({ id }) => id === sId);
-}
-
 function generateBattleState() {
-	const leftEntityIds = [
-		'fire_wizard',
-		'air_wizard',
-		'water_wizard',
-		'earth_wizard'
+	let leftEntities = [
+		...entities.wizards.map(entity => generateBattleEntity(entity, randomAI)),
 	];
-	const rightEntityIds = [
-		'skeleton',
-		'ghost',
-		'phoenix'
+	shuffleArray(leftEntities);
+
+	let rightEntities = [
+		...entities.creatures.map(entity => generateBattleEntity(entity, randomAI))
 	];
+	shuffleArray(rightEntities);
+
 	const battleData = [
-		...leftEntityIds.map(id => generateBattleEntity(getEntityFromStateById(id), randomAI)),
-		...rightEntityIds.map(id => generateBattleEntity(getEntityFromStateById(id), randomAI))
+		generateBattleEntity(state.player, randomAI),
+		leftEntities[0],
+		undefined,
+		undefined,
+		rightEntities[0],
+		rightEntities[1],
+		rightEntities[2],
+		undefined
 	];
 
 	return {
@@ -84,7 +87,7 @@ function generateBattleState() {
 		battleData,
 		selectedCards: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
 		selectedVictims: [[], [], [], [], [], [], [], []],
-		playerIndex: 0,
+		playerIndex: battleData.findIndex(({ entity }) => entity.id === 'player_character'),
 		animationQueue: [new AnimationEngine(getReturnSequence(battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue)],
 		battleIndex: -1
 	};
@@ -134,6 +137,17 @@ function menuGameLoop(timeMs) {
 		},
 		() => state.path = 'DECK');
 
+	makeInteractable(scale(240 - 32), scale(252), scale(64), scale(12),
+		({ x, y, sizeX, sizeY }) => {
+			sprites.CUSTOMIZE_64x12.draw(ctx, x, y, sizeX, sizeY);
+		},
+		({ x, y, sizeX, renderCallback }) => {
+			renderCallback();
+			ctx.fillStyle = 'white';
+			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
+		},
+		() => state.path = 'CUSTOMIZE');
+
 }
 
 function sortDeck(deck) {
@@ -145,27 +159,30 @@ function sortDeck(deck) {
 	});
 }
 
+function drawEntityIcon(entity, i, si) {
+	makeInteractable(scale(16), scale(48) + i * scale(31), scale(32), scale(32),
+		({ x, y, sizeX, sizeY }) => {
+			sprites.ENTITY_SELECT_32x32.draw(ctx, x + scale(5), y, sizeX, sizeY);
+			entity.idleSprite.draw(ctx, x + scale(5), y, sizeX, sizeY);
+		},
+		({ x, y, sizeX, sizeY }) => {
+			sprites.ENTITY_SELECT_32x32.draw(ctx, x, y, sizeX, sizeY);
+			entity.idleSprite.draw(ctx, x, y, sizeX, sizeY);
+		},
+		() => state.deckState.currentIndex = si,
+		{
+			forceHoverOn: () => state.deckState.currentIndex === si
+		});
+}
+
 function deckGameLoop(timeMs) {
 	let toolTips = [];
 
-	const { entities } = state;
-	entities.forEach((entity, i) => {
-		makeInteractable(scale(16), scale(48) + i * scale(31), scale(32), scale(32),
-			({ x, y, sizeX, sizeY }) => {
-				sprites.ENTITY_SELECT_32x32.draw(ctx, x + scale(5), y, sizeX, sizeY);
-				entity.idleSprite.draw(ctx, x + scale(5), y, sizeX, sizeY);
-			},
-			({ x, y, sizeX, sizeY }) => {
-				sprites.ENTITY_SELECT_32x32.draw(ctx, x, y, sizeX, sizeY);
-				entity.idleSprite.draw(ctx, x, y, sizeX, sizeY);
-			},
-			() => state.deckState.currentIndex = i,
-			{
-				forceHoverOn: () => state.deckState.currentIndex === i
-			});
-	});
+	drawEntityIcon(state.player, 0, -1);
 
-	const currentEntity = entities[state.deckState.currentIndex];
+	// entities.forEach((entity, i) => drawEntityIcon(entity, i + 2, i));
+
+	const currentEntity = state.player // state.deckState.currentIndex === -1 ? state.player : entities[state.deckState.currentIndex];
 
 	sprites.ELEMENTS_MINOR_8x8.draw(ctx, scale(52), scale(36), scale(8), scale(8), { iIndex: ELEMENT_COLORS[currentEntity.element] });
 	font.draw(ctx, scale(62), scale(36), scale(6), scale(8), 0, currentEntity.name);
@@ -263,6 +280,134 @@ function deckGameLoop(timeMs) {
 	toolTips.forEach(toolTip => toolTip(ctx));
 }
 
+function customizeGameLoop(timeMs) {
+	state.player.idleSprite.draw(ctx, scale(0), scale(187 - 96), scale(192), scale(192));
+	state.player.castSprite.draw(ctx, scale(128), scale(187 - 96), scale(192), scale(192));
+
+	let updateOutfits = false;
+
+	let customizeList;
+	switch (state.customizeState.currentTab) {
+		case 0:
+			customizeList = HEADS;
+			break;
+		case 1:
+			customizeList = HATS;
+			break;
+		case 2:
+			customizeList = CLOTHES;
+			break;
+		case 3:
+			customizeList = WANDS;
+			break;
+	}
+
+	[0, 1, 2, 3].forEach(i => {
+		makeInteractable(scale(300) + i * scale(31), scale(16), scale(32), scale(32),
+			({ x, y, sizeX, sizeY }) => {
+				sprites.ELEMENT_SELECT_32x32.draw(ctx, x, y + scale(5), sizeX, sizeY);
+				sprites.CUSTOMIZE_ICONS_16x16.draw(ctx, x, y + scale(5), sizeX, sizeY, { iIndex: i });
+			},
+			({ x, y, sizeX, sizeY }) => {
+				sprites.ELEMENT_SELECT_32x32.draw(ctx, x, y, sizeX, sizeY);
+				sprites.CUSTOMIZE_ICONS_16x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: i });
+			},
+			() => state.customizeState.currentTab = i,
+			{
+				forceHoverOn: () => state.customizeState.currentTab === i
+			});
+	});
+
+	sprites.CUSTOMIZE_LIST_136x300.draw(ctx, scale(300), scale(48), scale(136), scale(300));
+
+	Object.values(customizeList).toSorted((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)).forEach((article, i) => {
+		makeInteractable(scale(304), scale(52 + i * 22), scale(128), scale(20),
+			({ x, y, sizeX, sizeY }) => {
+				font.draw(ctx, x + scale(5), y + scale(5), scale(9), scale(12), 0, article.name);
+			},
+			({ x, y, sizeX, sizeY, renderCallback }) => {
+				sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y, scale(3), scale(3));
+				sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y, scale(3), scale(3), { iIndex: 1 });
+				sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y + sizeY - scale(3), scale(3), scale(3), { iIndex: 2 });
+				sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y + sizeY - scale(3), scale(3), scale(3), { iIndex: 3 });
+
+				ctx.fillStyle = "black";
+				ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(3));
+				ctx.fillRect(x + scale(3), y + sizeY - scale(3), sizeX - scale(6), scale(3));
+				ctx.fillRect(x, y + scale(3), scale(3), sizeY - scale(6));
+				ctx.fillRect(x + sizeX - scale(3), y + scale(3), scale(3), sizeY - scale(6));
+				ctx.fillRect(x + scale(3), y + scale(3), sizeX - scale(6), sizeY - scale(6));
+				ctx.fillStyle = "white";
+				ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(1));
+				ctx.fillRect(x + scale(3), y + sizeY - scale(1), sizeX - scale(6), scale(1));
+				ctx.fillRect(x, y + scale(3), scale(1), sizeY - scale(6));
+				ctx.fillRect(x + sizeX - scale(1), y + scale(3), scale(1), sizeY - scale(6));
+				renderCallback();
+			},
+			() => {
+				state.customizeState.current[state.customizeState.currentTab] = article;
+				updateOutfits = true;
+			},
+			{
+				forceHoverOn: () => state.customizeState.current[state.customizeState.currentTab] === article
+			});
+	});
+
+	makeInteractable(scale(168 - 36), scale(300), scale(16), scale(32),
+		({ x, y, sizeX, sizeY }) => sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+		({ x, y, sizeY, renderCallback }) => {
+			renderCallback();
+
+			ctx.fillStyle = 'white';
+			ctx.fillRect(x - scale(6), y, scale(4), sizeY);
+		},
+		() => state.player.element = ELEMENT_ID_LIST[(ELEMENT_COLORS[state.player.element] + 3) % 4]);
+
+	makeInteractable(scale(168 + 20), scale(300), scale(16), scale(32),
+		({ x, y, sizeX, sizeY }) => sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY),
+		({ x, y, sizeX, sizeY, renderCallback }) => {
+			renderCallback();
+
+			ctx.fillStyle = 'white';
+			ctx.fillRect(x + sizeX + scale(2), y, scale(4), sizeY);
+		},
+		() => state.player.element = ELEMENT_ID_LIST[(ELEMENT_COLORS[state.player.element] + 1) % 4]);
+
+	sprites.VICTIM_ARROW_8x16.draw(ctx, scale(168 - 36), scale(300), scale(16), scale(32), { iIndex: 1 });
+	sprites.VICTIM_ARROW_8x16.draw(ctx, scale(168 + 20), scale(300), scale(16), scale(32));
+
+	ELEMENT_ICONS[state.player.element].draw(ctx, scale(168 - 16), scale(300), scale(32), scale(32));
+
+	if (updateOutfits) {
+		state.player.idleSprite = new CompositeSprite([
+			state.customizeState.current[0].idle,
+			state.customizeState.current[2].idle,
+			state.customizeState.current[1].idle
+		], 64, 64, 1);
+		state.player.castSprite = new CompositeSprite([
+			state.customizeState.current[0].cast,
+			state.customizeState.current[2].cast,
+			state.customizeState.current[1].cast,
+			state.customizeState.current[3].cast
+		], 64, 64, 1)
+		state.player.deathSprite = new CompositeSprite([
+			state.customizeState.current[0].death,
+			state.customizeState.current[2].death,
+			state.customizeState.current[1].death
+		], 64, 64, 10);
+	}
+
+	makeInteractable(scale(480 - 32), scale(375 - 32), scale(32), scale(32),
+		({ x, y, sizeX, sizeY }) => sprites.BACK_32x32.draw(ctx, scale(480 - 32), scale(375 - 32), scale(32), scale(32)),
+		({ x, y, sizeX, sizeY, renderCallback }) => {
+			renderCallback();
+
+			ctx.fillStyle = 'white';
+			ctx.fillRect(x - scale(6), y, scale(4), sizeY);
+		},
+		() => state.path = 'MENU');
+}
+
 function gameLoop(timeMs) {
 	ctx.globalAlpha = 1;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -272,6 +417,9 @@ function gameLoop(timeMs) {
 	switch (state.path) {
 		case 'DECK':
 			deckGameLoop(timeMs);
+			break;
+		case 'CUSTOMIZE':
+			customizeGameLoop(timeMs);
 			break;
 		case 'MENU':
 			menuGameLoop(timeMs);

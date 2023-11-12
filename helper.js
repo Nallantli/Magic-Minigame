@@ -159,7 +159,17 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calcul
 			...spell.casterBlades
 		];
 	}
-	battleData[casterIndex].vril -= spell.vrilRequired;
+
+	let vrilLeft = spell.vrilRequired;
+	while (vrilLeft > 1 && battleData[casterIndex].superVril > 0) {
+		battleData[casterIndex].superVril--;
+		vrilLeft -= 2;
+	}
+	if (battleData[casterIndex].vril === 0) {
+		battleData[casterIndex].superVril -= Math.ceil(vrilLeft / 2);
+	} else {
+		battleData[casterIndex].vril -= vrilLeft;
+	}
 	battleData[casterIndex].hand.splice(spellIndex, 1);
 
 	for (let i = 0; i < battleData.length; i++) {
