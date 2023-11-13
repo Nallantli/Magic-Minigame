@@ -361,7 +361,7 @@ function customizeGameLoop(timeMs) {
 			ctx.fillStyle = 'white';
 			ctx.fillRect(x - scale(6), y, scale(4), sizeY);
 		},
-		() => state.player.element = ELEMENT_ID_LIST[(ELEMENT_COLORS[state.player.element] + 3) % 4]);
+		() => state.player.element = ELEMENT_ID_LIST[(ELEMENT_COLORS[state.player.element] + 4) % 5]);
 
 	makeInteractable(scale(168 + 20), scale(300), scale(16), scale(32),
 		({ x, y, sizeX, sizeY }) => sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY),
@@ -371,7 +371,7 @@ function customizeGameLoop(timeMs) {
 			ctx.fillStyle = 'white';
 			ctx.fillRect(x + sizeX + scale(2), y, scale(4), sizeY);
 		},
-		() => state.player.element = ELEMENT_ID_LIST[(ELEMENT_COLORS[state.player.element] + 1) % 4]);
+		() => state.player.element = ELEMENT_ID_LIST[(ELEMENT_COLORS[state.player.element] + 1) % 5]);
 
 	sprites.VICTIM_ARROW_8x16.draw(ctx, scale(168 - 36), scale(300), scale(16), scale(32), { iIndex: 1 });
 	sprites.VICTIM_ARROW_8x16.draw(ctx, scale(168 + 20), scale(300), scale(16), scale(32));

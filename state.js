@@ -19,6 +19,7 @@ let state = {
 			SPELLS.fire.FIRE_BLADE,
 			SPELLS.fire.MAGNIFY
 		],
+		criticalRating: 100,
 		superVrilChance: 0.1,
 		idleSprite: new CompositeSprite([
 			HEADS.SHORT_HAIR.idle,

@@ -52,10 +52,18 @@ function makeToolTip(sizeX, sizeY, render) {
 	};
 }
 
+function criticalChance(cra, crb) {
+	const diff = cra - crb;
+	return ((diff - 32) / (2 * (16 + Math.abs(diff - 32))) + 0.5) * (Math.min(cra, 100) / 100);
+}
+
 function calculateDamages(spell, caster, victim) {
 	if (spell.type !== SPELL_TYPES.ATTACK_ALL && spell.type !== SPELL_TYPES.ATTACK_BASIC) {
 		return {};
 	}
+
+	const isCritical = Math.random() <= criticalChance(caster.entity.criticalRating, victim.entity.criticalRating);
+
 	const shields = victim.shields;
 	const blades = caster.blades;
 	let usedBladeIds = [];
@@ -70,6 +78,7 @@ function calculateDamages(spell, caster, victim) {
 	});
 	let totalUsedShieldIds = [];
 	return {
+		isCritical,
 		usedBladeIds,
 		damages: spell.damages.map(d => {
 			let base = d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage);
@@ -81,6 +90,9 @@ function calculateDamages(spell, caster, victim) {
 					totalUsedShieldIds.push(id);
 				}
 			});
+			if (isCritical) {
+				base *= 2;
+			}
 			return {
 				...d,
 				damage: Math.round(base * baseTilt),

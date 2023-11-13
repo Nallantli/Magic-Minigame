@@ -1,5 +1,5 @@
 
-function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, casterId, casterData, castingCircleId) {
+function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculateDamages) {
 	const elementSparksId = crypto.randomUUID();
 	const spellTypeId = crypto.randomUUID();
 
@@ -178,6 +178,43 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			ease: EASE_TYPES.EASE_OUT
 		}
 	];
+
+	if (calculateDamages.length > 0 && calculateDamages[0].isCritical) {
+		const criticalTextId = crypto.randomUUID();
+		actions = [
+			...actions,
+			{
+				tick: spellCastingStartTick + 14,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: criticalTextId,
+				sprite: font,
+				text: 'CRITICAL',
+				alpha: 1,
+				posX: scale(240 - 6 * 8),
+				posY: scale(64),
+				sizeX: scale(12),
+				sizeY: scale(16),
+				rot: 0,
+				zIndex: 2
+			},
+			{
+				startTick: spellCastingStartTick + 14,
+				endTick: spellCastingStartTick + 24,
+				type: ATYPES.CHANGE_OPACITY,
+				id: criticalTextId,
+				alpha: 0,
+				ease: EASE_TYPES.EASE_OUT
+			},
+			{
+				startTick: spellCastingStartTick + 14,
+				endTick: spellCastingStartTick + 24,
+				type: ATYPES.CHANGE_POSITION_Y,
+				id: criticalTextId,
+				posY: scale(48),
+				ease: EASE_TYPES.EASE_OUT
+			}
+		]
+	}
 
 	if (casterData.entity.castSprite.indices > 1) {
 		actions = [
@@ -954,7 +991,7 @@ function createLeftAttackSequence(battleData, casterIndex, victimIndices, spell,
 	// spell casting
 	actions = [
 		...actions,
-		...createMiddleCastingSequence(true, spellCastingStartTick, spell, casterId, casterData, castingCircleId)
+		...createMiddleCastingSequence(true, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculatedDamages)
 	];
 
 	// spell animation
@@ -1138,7 +1175,7 @@ function createRightAttackSequence(battleData, casterIndex, victimIndices, spell
 	// spell casting
 	actions = [
 		...actions,
-		...createMiddleCastingSequence(false, spellCastingStartTick, spell, casterId, casterData, castingCircleId)
+		...createMiddleCastingSequence(false, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculatedDamages)
 	];
 
 	// spell animation

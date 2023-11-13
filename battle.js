@@ -375,7 +375,7 @@ function battleGameLoop(timeMs) {
 				battleState.selectedCards = [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined];
 				for (let i = 0; i < battleState.battleData.length; i++) {
 					if (battleState.battleData[i] && battleState.battleData[i].entity.health > 0) {
-						if (Math.random() >= battleState.battleData[i].superVrilChance) {
+						if (Math.random() <= battleState.battleData[i].superVrilChance) {
 							battleState.battleData[i].superVril++;
 						} else {
 							battleState.battleData[i].vril++;

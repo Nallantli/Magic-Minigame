@@ -663,7 +663,6 @@ class AnimationEngine {
 				}
 			});
 		}
-		console.log(this.internalActions);
 	}
 
 	doTick() {

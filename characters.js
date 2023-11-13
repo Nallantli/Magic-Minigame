@@ -90,6 +90,7 @@ const entities = {
 				SPELLS.fire.FIRE_BLADE,
 				SPELLS.fire.MAGNIFY,
 			],
+			criticalRating: 100,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/wiz/idle_64x64.png', 64, 64, 1),
 			castSprite: new Sprite('./img/characters/wiz/cast_64x64.png', 64, 64, 1),
@@ -114,6 +115,7 @@ const entities = {
 				SPELLS.air.AIR_BLADE,
 				SPELLS.air.AIR_BLADE,
 			],
+			criticalRating: 120,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/wiz_top_hat/idle_64x64.png', 64, 64, 1),
 			castSprite: new Sprite('./img/characters/wiz_top_hat/cast_64x64.png', 64, 64, 1),
@@ -138,6 +140,7 @@ const entities = {
 				SPELLS.water.WEAKNESS,
 				SPELLS.water.WEAKNESS
 			],
+			criticalRating: 110,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/wiz_baseball/idle_64x64.png', 64, 64, 1),
 			castSprite: new Sprite('./img/characters/wiz_baseball/cast_64x64.png', 64, 64, 1),
@@ -163,6 +166,7 @@ const entities = {
 				SPELLS.earth.EARTH_BLADE,
 				SPELLS.earth.BURDEN
 			],
+			criticalRating: 130,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/wiz_no_hat/idle_64x64.png', 64, 64, 1),
 			castSprite: new Sprite('./img/characters/wiz_no_hat/cast_64x64.png', 64, 64, 1),
@@ -190,6 +194,7 @@ const entities = {
 				SPELLS.earth.EARTH_BLADE,
 				SPELLS.earth.BURDEN
 			],
+			criticalRating: 130,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/skeleton/idle_64x64.png', 64, 64, 16),
 			castSprite: new Sprite('./img/characters/skeleton/cast_64x64.png', 64, 64, 5),
@@ -214,6 +219,7 @@ const entities = {
 				SPELLS.water.WEAKNESS,
 				SPELLS.water.WEAKNESS
 			],
+			criticalRating: 110,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/ghost/idle_64x64.png', 64, 64, 21),
 			castSprite: new Sprite('./img/characters/ghost/cast_64x64.png', 64, 64, 3),
@@ -238,6 +244,7 @@ const entities = {
 				SPELLS.fire.FIRE_BLADE,
 				SPELLS.fire.MAGNIFY,
 			],
+			criticalRating: 100,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/phoenix/idle_64x64.png', 64, 64, 8),
 			castSprite: new Sprite('./img/characters/phoenix/idle_64x64.png', 64, 64, 8),
