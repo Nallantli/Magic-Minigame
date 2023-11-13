@@ -97,6 +97,24 @@ const SPELLS = {
 			spellAnimation: new Sprite('./img/spells/dust_devil/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
+		OVERCAST: {
+			id: 'air.overcast',
+			name: "Overcast",
+			type: SPELL_TYPES.ATTACK_BASIC,
+			element: 'air',
+			damages: [
+				{
+					tick: 9,
+					minDamage: -180,
+					maxDamage: -210,
+					element: 'air'
+				}
+			],
+			vrilRequired: 2,
+			cardSprite: new Sprite('./img/spells/overcast/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/overcast/spell_240x135.png', 240, 135, 25),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		},
 		GENTLE_BREEZE: {
 			id: 'air.gentle_breeze',
 			name: "Gentle Breeze",
