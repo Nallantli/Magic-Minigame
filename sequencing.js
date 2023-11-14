@@ -703,7 +703,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 	calculatedDamages.forEach(({ damages }, i) => {
 		const victimData = victimDatas[i];
 		const victimId = victimIds[i];
-		damages.forEach(({ tick, damage, usedShieldIds, element, steal }) => {
+		damages.forEach(({ tick, damage, usedShieldIds, element, steal, augmented }) => {
 			const damageTextId = crypto.randomUUID();
 
 			victimHealths[i] += damage;
@@ -730,7 +730,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				];
 			});
 
-			const damageString = String(damage);
+			const damageString = `${damage}${augmented !== undefined ? augmented : ''}`;
 
 			const entityPosX = enterLeft ? scale(-8 - (victimDatas.length * 8) + i * 32) : scale(432 - (72 - victimDatas.length * 8) - i * 16);
 			const entitySizeX = scale(128 - i * 16);

@@ -82,7 +82,8 @@ function calculateDamages(spell, caster, victim) {
 		usedBladeIds,
 		damages: spell.damages.map(d => {
 			let base = d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage);
-			let usedShieldIds = []
+			let usedShieldIds = [];
+			let augment = victim.entity?.augments?.[d.element];
 			shields.forEach(({ id, value, element }, i) => {
 				if ((d.element === element || element === 'all') && !totalUsedShieldIds.includes(id)) {
 					base += base * (value / 100);
@@ -95,7 +96,8 @@ function calculateDamages(spell, caster, victim) {
 			}
 			return {
 				...d,
-				damage: Math.round(base * baseTilt),
+				damage: Math.round(base * baseTilt * (augment !== undefined ? augment : 1)),
+				augmented: augment !== undefined ? (augment > 1 ? ' ++' : ' --') : undefined,
 				usedShieldIds
 			};
 		})

@@ -90,6 +90,10 @@ const entities = {
 				SPELLS.fire.FIRE_BLADE,
 				SPELLS.fire.MAGNIFY,
 			],
+			augments: {
+				fire: 0.9,
+				water: 1.1
+			},
 			criticalRating: 100,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/wiz/idle_64x64.png', 64, 64, 1),
@@ -115,6 +119,10 @@ const entities = {
 				SPELLS.air.AIR_BLADE,
 				SPELLS.air.AIR_BLADE,
 			],
+			augments: {
+				air: 0.9,
+				earth: 1.1
+			},
 			criticalRating: 120,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/wiz_top_hat/idle_64x64.png', 64, 64, 1),
@@ -140,6 +148,10 @@ const entities = {
 				SPELLS.water.WEAKNESS,
 				SPELLS.water.WEAKNESS
 			],
+			augments: {
+				water: 0.9,
+				fire: 1.1
+			},
 			criticalRating: 110,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/wiz_baseball/idle_64x64.png', 64, 64, 1),
@@ -166,6 +178,10 @@ const entities = {
 				SPELLS.earth.EARTH_BLADE,
 				SPELLS.earth.BURDEN
 			],
+			augments: {
+				earth: 0.9,
+				air: 1.1
+			},
 			criticalRating: 130,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/wiz_no_hat/idle_64x64.png', 64, 64, 1),
@@ -194,6 +210,10 @@ const entities = {
 				SPELLS.earth.EARTH_BLADE,
 				SPELLS.earth.BURDEN
 			],
+			augments: {
+				earth: 0.8,
+				air: 1.2
+			},
 			criticalRating: 130,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/skeleton/idle_64x64.png', 64, 64, 16),
@@ -219,6 +239,10 @@ const entities = {
 				SPELLS.water.WEAKNESS,
 				SPELLS.water.WEAKNESS
 			],
+			augments: {
+				water: 0.8,
+				fire: 1.2
+			},
 			criticalRating: 110,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/ghost/idle_64x64.png', 64, 64, 21),
@@ -244,6 +268,10 @@ const entities = {
 				SPELLS.fire.FIRE_BLADE,
 				SPELLS.fire.MAGNIFY,
 			],
+			augments: {
+				fire: 0.8,
+				water: 1.2
+			},
 			criticalRating: 100,
 			superVrilChance: 0.1,
 			idleSprite: new Sprite('./img/characters/phoenix/idle_64x64.png', 64, 64, 8),

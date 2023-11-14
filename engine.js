@@ -111,6 +111,9 @@ class NumberText {
 
 	draw(ctx, x, y, sX, sY, iIndex, str) {
 		for (let i = 0; i < str.length; i++) {
+			if (str[i] === ' ') {
+				continue;
+			}
 			ctx.drawImage(this.img, this.sizeX * this.toN(str[i]), iIndex * this.sizeY, this.sizeX, this.sizeY, x + i * sX, y, sX, sY);
 		}
 	}
