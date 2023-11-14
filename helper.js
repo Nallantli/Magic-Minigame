@@ -83,10 +83,15 @@ function calculateDamages(spell, caster, victim) {
 		damages: spell.damages.map(d => {
 			let base = d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage);
 			let usedShieldIds = [];
-			let augment = victim.entity?.augments?.[d.element];
-			shields.forEach(({ id, value, element }, i) => {
-				if ((d.element === element || element === 'all') && !totalUsedShieldIds.includes(id)) {
-					base += base * (value / 100);
+			let currentElement = d.element;
+			shields.forEach(({ id, value, element, elementTo }, i) => {
+				if ((currentElement === element || element === 'all') && !totalUsedShieldIds.includes(id)) {
+					if (value) {
+						base += base * (value / 100);
+					}
+					if (elementTo) {
+						currentElement = elementTo;
+					}
 					usedShieldIds.push({ index: i, id });
 					totalUsedShieldIds.push(id);
 				}
@@ -94,6 +99,7 @@ function calculateDamages(spell, caster, victim) {
 			if (isCritical) {
 				base *= 2;
 			}
+			let augment = victim.entity?.augments?.[currentElement];
 			return {
 				...d,
 				damage: Math.round(base * baseTilt * (augment !== undefined ? augment : 1)),

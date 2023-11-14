@@ -184,6 +184,24 @@ const SPELLS = {
 			cardSprite: new Sprite('./img/spells/air_trap/card_48x64.png', 48, 64, 1),
 			spellAnimation: new Sprite('./img/spells/air_trap/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		},
+		TERRIFEX: {
+			id: 'air.terrifex',
+			name: "Terrifex",
+			type: SPELL_TYPES.TRAP_BASIC,
+			element: 'air',
+			victimShields: [{
+				id: 'air.terrifex.vs1',
+				tick: 8,
+				sprite: new Sprite('./img/spells/terrifex/bonus_10x12.png', 10, 12, 1),
+				element: 'air',
+				elementTo: 'earth', 
+				isBonus: false
+			}],
+			vrilRequired: 0,
+			cardSprite: new Sprite('./img/spells/terrifex/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/terrifex/spell_240x135.png', 240, 135, 12),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		}
 	},
 	fire: {
@@ -301,6 +319,24 @@ const SPELLS = {
 			vrilRequired: 0,
 			cardSprite: new Sprite('./img/spells/fire_trap/card_48x64.png', 48, 64, 1),
 			spellAnimation: new Sprite('./img/spells/fire_trap/spell_240x135.png', 240, 135, 12),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		},
+		AQUIFEX: {
+			id: 'fire.aquifex',
+			name: "Aquifex",
+			type: SPELL_TYPES.TRAP_BASIC,
+			element: 'fire',
+			victimShields: [{
+				id: 'fire.aquifex.vs1',
+				tick: 8,
+				sprite: new Sprite('./img/spells/aquifex/bonus_10x12.png', 10, 12, 1),
+				element: 'fire',
+				elementTo: 'water', 
+				isBonus: false
+			}],
+			vrilRequired: 0,
+			cardSprite: new Sprite('./img/spells/aquifex/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/aquifex/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		}
 	},
@@ -420,6 +456,24 @@ const SPELLS = {
 			vrilRequired: 0,
 			cardSprite: new Sprite('./img/spells/water_trap/card_48x64.png', 48, 64, 1),
 			spellAnimation: new Sprite('./img/spells/water_trap/spell_240x135.png', 240, 135, 12),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		},
+		IGNIFEX: {
+			id: 'water.ignifex',
+			name: "Ignifex",
+			type: SPELL_TYPES.TRAP_BASIC,
+			element: 'water',
+			victimShields: [{
+				id: 'water.ignifex.vs1',
+				tick: 8,
+				sprite: new Sprite('./img/spells/ignifex/bonus_10x12.png', 10, 12, 1),
+				element: 'water',
+				elementTo: 'fire', 
+				isBonus: false
+			}],
+			vrilRequired: 0,
+			cardSprite: new Sprite('./img/spells/ignifex/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/ignifex/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		}
 	},
@@ -566,5 +620,23 @@ const SPELLS = {
 			spellAnimation: new Sprite('./img/spells/burden/spell_240x135.png', 240, 135, 12),
 			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 		},
+		CAELIFEX: {
+			id: 'earth.caelifex',
+			name: "Caelifex",
+			type: SPELL_TYPES.TRAP_BASIC,
+			element: 'earth',
+			victimShields: [{
+				id: 'earth.caelifex.vs1',
+				tick: 8,
+				sprite: new Sprite('./img/spells/caelifex/bonus_10x12.png', 10, 12, 1),
+				element: 'earth',
+				elementTo: 'air', 
+				isBonus: false
+			}],
+			vrilRequired: 0,
+			cardSprite: new Sprite('./img/spells/caelifex/card_48x64.png', 48, 64, 1),
+			spellAnimation: new Sprite('./img/spells/caelifex/spell_240x135.png', 240, 135, 12),
+			canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+		}
 	}
 };

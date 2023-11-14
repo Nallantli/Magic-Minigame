@@ -17,7 +17,8 @@ let state = {
 			SPELLS.fire.FIREBALL,
 			SPELLS.fire.FIRE_BLADE,
 			SPELLS.fire.FIRE_BLADE,
-			SPELLS.fire.MAGNIFY
+			SPELLS.fire.MAGNIFY,
+			SPELLS.fire.AQUIFEX
 		],
 		criticalRating: 100,
 		superVrilChance: 0.1,

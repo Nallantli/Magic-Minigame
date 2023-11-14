@@ -89,6 +89,7 @@ const entities = {
 				SPELLS.fire.FIRE_BLADE,
 				SPELLS.fire.FIRE_BLADE,
 				SPELLS.fire.MAGNIFY,
+				SPELLS.fire.AQUIFEX
 			],
 			augments: {
 				fire: 0.9,
@@ -118,6 +119,7 @@ const entities = {
 				SPELLS.air.GENTLE_BREEZE,
 				SPELLS.air.AIR_BLADE,
 				SPELLS.air.AIR_BLADE,
+				SPELLS.air.TERRIFEX
 			],
 			augments: {
 				air: 0.9,
@@ -146,7 +148,8 @@ const entities = {
 				SPELLS.water.WAVE,
 				SPELLS.water.WATER_BLADE,
 				SPELLS.water.WEAKNESS,
-				SPELLS.water.WEAKNESS
+				SPELLS.water.WEAKNESS,
+				SPELLS.water.IGNIFEX
 			],
 			augments: {
 				water: 0.9,
@@ -176,7 +179,8 @@ const entities = {
 				SPELLS.earth.EARTH_BLADE,
 				SPELLS.earth.EARTH_BLADE,
 				SPELLS.earth.EARTH_BLADE,
-				SPELLS.earth.BURDEN
+				SPELLS.earth.BURDEN,
+				SPELLS.earth.CAELIFEX
 			],
 			augments: {
 				earth: 0.9,
@@ -208,7 +212,8 @@ const entities = {
 				SPELLS.earth.EARTH_BLADE,
 				SPELLS.earth.EARTH_BLADE,
 				SPELLS.earth.EARTH_BLADE,
-				SPELLS.earth.BURDEN
+				SPELLS.earth.BURDEN,
+				SPELLS.earth.CAELIFEX
 			],
 			augments: {
 				earth: 0.8,
@@ -237,7 +242,8 @@ const entities = {
 				SPELLS.water.WAVE,
 				SPELLS.water.WATER_BLADE,
 				SPELLS.water.WEAKNESS,
-				SPELLS.water.WEAKNESS
+				SPELLS.water.WEAKNESS,
+				SPELLS.water.IGNIFEX
 			],
 			augments: {
 				water: 0.8,
@@ -267,6 +273,7 @@ const entities = {
 				SPELLS.fire.FIRE_BLADE,
 				SPELLS.fire.FIRE_BLADE,
 				SPELLS.fire.MAGNIFY,
+				SPELLS.fire.AQUIFEX
 			],
 			augments: {
 				fire: 0.8,
