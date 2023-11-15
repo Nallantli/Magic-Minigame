@@ -7,18 +7,18 @@ let state = {
 		maxHealth: 600,
 		health: 600,
 		deck: [
-			SPELLS.fire.FIRE_SHIELD,
-			SPELLS.fire.FIRE_TRAP,
-			SPELLS.water.WATER_SHIELD,
-			SPELLS.fire.BALEFIRE,
-			SPELLS.fire.BALEFIRE,
-			SPELLS.fire.BALEFIRE,
-			SPELLS.fire.FIREBALL,
-			SPELLS.fire.FIREBALL,
-			SPELLS.fire.FIRE_BLADE,
-			SPELLS.fire.FIRE_BLADE,
-			SPELLS.fire.MAGNIFY,
-			SPELLS.fire.AQUIFEX
+			'fire.fire_shield',
+			'fire.fire_trap',
+			'water.water_shield',
+			'fire.balefire',
+			'fire.balefire',
+			'fire.balefire',
+			'fire.fireball',
+			'fire.fireball',
+			'fire.fire_blade',
+			'fire.fire_blade',
+			'fire.magnify',
+			'fire.aquifex'
 		],
 		criticalRating: 100,
 		superVrilChance: 0.1,
@@ -54,3 +54,5 @@ let state = {
 	},
 	battleState: undefined
 };
+
+const reduceAnimationQueue = () => state.battleState.animationQueue.splice(0, 1);

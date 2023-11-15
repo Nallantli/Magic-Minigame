@@ -1,110 +1,3 @@
-const FPS = 75;
-let TICK_TIME = 15;
-
-const canvas = document.getElementById('main');
-const ctx = canvas.getContext('2d');
-ctx.imageSmoothingEnabled = false;
-
-canvas.addEventListener("mousemove", function (evt) {
-	mousePos = getMousePos(canvas, evt);
-}, false);
-
-canvas.addEventListener("click", function (evt) {
-	clickPos = getMousePos(canvas, evt);
-}, false);
-
-canvas.addEventListener("contextmenu", function (evt) {
-	evt.preventDefault();
-	rightClickPos = getMousePos(canvas, evt);
-}, false);
-
-function getMousePos(canvas, evt) {
-	var rect = canvas.getBoundingClientRect(), // abs. size of element
-		scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
-		scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
-
-	return {
-		x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
-		y: (evt.clientY - rect.top) * scaleY     // been adjusted to be relative to element
-	}
-}
-
-function generateBattleEntity(entity, AI) {
-	const deck = [
-		...entity.deck
-	];
-
-	shuffleArray(deck);
-
-	let hand = [];
-	for (let i = 0; i < 7; i++) {
-		const card = deck.pop();
-		if (!card) {
-			break;
-		}
-		hand.push(card);
-	}
-
-	const hasSuperVril = Math.random() >= entity.superVrilChance;
-
-	return {
-		shields: [],
-		blades: [],
-		vril: hasSuperVril ? 0 : 1,
-		superVril: hasSuperVril ? 1 : 0,
-		entity,
-		deck,
-		hand,
-		AI
-	}
-}
-
-function generateBattleState() {
-	let leftEntities = [
-		...entities.wizards.map(entity => generateBattleEntity(entity, randomAI)),
-	];
-	shuffleArray(leftEntities);
-
-	let rightEntities = [
-		...entities.creatures.map(entity => generateBattleEntity(entity, randomAI))
-	];
-	shuffleArray(rightEntities);
-
-	const battleData = [
-		generateBattleEntity(state.player, randomAI),
-		leftEntities[0],
-		undefined,
-		undefined,
-		rightEntities[0],
-		rightEntities[1],
-		rightEntities[2],
-		undefined
-	];
-
-	return {
-		iterator: 0,
-		startTime: undefined,
-		battleData,
-		selectedCards: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
-		selectedVictims: [[], [], [], [], [], [], [], []],
-		playerIndex: battleData.findIndex(({ entity }) => entity.id === 'player_character'),
-		animationQueue: [new AnimationEngine(getReturnSequence(battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue)],
-		battleIndex: -1
-	};
-}
-
-let mousePos = { x: 0, y: 0 };
-let clickPos = undefined;
-let rightClickPos = undefined;
-
-let mainTrack = new Audio(randomFromList([
-	'./audio/track1.wav',
-	'./audio/track2.wav',
-	'./audio/track3.wav',
-	'./audio/track4.wav'
-]));
-mainTrack.loop = true;
-
 function menuGameLoop(timeMs) {
 	sprites.START_128x48.draw(ctx, scale(240 - 64), scale(187 - 24), scale(128), scale(48), 0, false);
 
@@ -123,6 +16,14 @@ function menuGameLoop(timeMs) {
 				path: 'BATTLE',
 				battleState: generateBattleState()
 			};
+
+			const mainTrack = new Audio(randomFromList([
+				'./audio/track1.wav',
+				'./audio/track2.wav',
+				'./audio/track3.wav',
+				'./audio/track4.wav'
+			]));
+			mainTrack.loop = true;
 			mainTrack.play();
 		});
 
@@ -148,15 +49,6 @@ function menuGameLoop(timeMs) {
 		},
 		() => state.path = 'CUSTOMIZE');
 
-}
-
-function sortDeck(deck) {
-	deck.sort((a, b) => {
-		if (a.element === b.element) {
-			return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
-		}
-		return a.element < b.element ? -1 : (a.element > b.element ? 1 : 0)
-	});
 }
 
 function drawEntityIcon(entity, i, si) {
@@ -194,7 +86,7 @@ function deckGameLoop(timeMs) {
 	for (let i = 0; i < 6; i++) {
 		for (let j = 0; j < 5; j++) {
 			if (deckIndex < deck.length) {
-				const card = deck[deckIndex];
+				const card = getSpell(deck[deckIndex]);
 				makeInteractable(scale(50 + j * 50), scale(50 + i * 50), scale(48), scale(48),
 					({ x, y, sizeX, sizeY }) => {
 						card.cardSprite.draw(ctx, x, y, sizeX, sizeY, { cropY: 48 });
@@ -236,10 +128,10 @@ function deckGameLoop(timeMs) {
 	});
 
 	sprites.DECK_CARDS_164x268.draw(ctx, scale(300), scale(48), scale(164), scale(268));
-	Object.values(SPELLS[state.deckState.currentElement]).forEach((card, i) => {
+	getAllSpellsForElement(state.deckState.currentElement).forEach((card, i) => {
 		makeInteractable(scale(302 + (i % 3) * 50), scale(52 + Math.floor(i / 3) * 66), scale(48), scale(66),
 			({ x, y, sizeX }) => {
-				if (deck.length === 30 || deck.filter(({ id }) => id === card.id).length >= 4) {
+				if (deck.length === 30 || deck.filter(id => id === card.id).length >= 4) {
 					ctx.globalAlpha = 0.5;
 				} else {
 					ctx.globalAlpha = 1;
@@ -259,8 +151,8 @@ function deckGameLoop(timeMs) {
 				));
 			},
 			() => {
-				if (deck.length < 30 && deck.filter(({ id }) => id === card.id).length < 4) {
-					deck.push(card);
+				if (deck.length < 30 && deck.filter(id => id === card.id).length < 4) {
+					deck.push(card.id);
 					sortDeck(deck);
 				}
 			});

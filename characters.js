@@ -78,21 +78,21 @@ const entities = {
 			maxHealth: 500,
 			health: 500,
 			deck: [
-				SPELLS.fire.FIRE_SHIELD,
-				SPELLS.fire.FIRE_TRAP,
-				SPELLS.water.WATER_SHIELD,
-				SPELLS.fire.BALEFIRE,
-				SPELLS.fire.BALEFIRE,
-				SPELLS.fire.BALEFIRE,
-				SPELLS.fire.FIREBALL,
-				SPELLS.fire.FIREBALL,
-				SPELLS.fire.FIRE_BLADE,
-				SPELLS.fire.FIRE_BLADE,
-				SPELLS.fire.MAGNIFY,
-				SPELLS.fire.AQUIFEX
+				'fire.fire_shield',
+				'fire.fire_trap',
+				'water.water_shield',
+				'fire.balefire',
+				'fire.balefire',
+				'fire.balefire',
+				'fire.fireball',
+				'fire.fireball',
+				'fire.fire_blade',
+				'fire.fire_blade',
+				'fire.magnify',
+				'fire.aquifex'
 			],
 			augments: {
-				fire: 0.9,
+				fire: 0.8,
 				water: 1.1
 			},
 			criticalRating: 100,
@@ -108,21 +108,21 @@ const entities = {
 			maxHealth: 600,
 			health: 600,
 			deck: [
-				SPELLS.air.AIR_SHIELD,
-				SPELLS.air.AIR_TRAP,
-				SPELLS.earth.EARTH_SHIELD,
-				SPELLS.air.OVERCAST,
-				SPELLS.air.OVERCAST,
-				SPELLS.air.DUST_DEVIL,
-				SPELLS.air.DUST_DEVIL,
-				SPELLS.air.GENTLE_BREEZE,
-				SPELLS.air.GENTLE_BREEZE,
-				SPELLS.air.AIR_BLADE,
-				SPELLS.air.AIR_BLADE,
-				SPELLS.air.TERRIFEX
+				'air.air_shield',
+				'air.air_trap',
+				'earth.earth_shield',
+				'air.overcast',
+				'air.overcast',
+				'air.dust_devil',
+				'air.dust_devil',
+				'air.gentle_breeze',
+				'air.gentle_breeze',
+				'air.air_blade',
+				'air.air_blade',
+				'air.terrifex'
 			],
 			augments: {
-				air: 0.9,
+				air: 0.8,
 				earth: 1.1
 			},
 			criticalRating: 120,
@@ -138,21 +138,21 @@ const entities = {
 			maxHealth: 550,
 			health: 550,
 			deck: [
-				SPELLS.fire.FIRE_SHIELD,
-				SPELLS.water.WATER_TRAP,
-				SPELLS.water.WATER_SHIELD,
-				SPELLS.water.DELUGE,
-				SPELLS.water.DELUGE,
-				SPELLS.water.DELUGE,
-				SPELLS.water.WAVE,
-				SPELLS.water.WAVE,
-				SPELLS.water.WATER_BLADE,
-				SPELLS.water.WEAKNESS,
-				SPELLS.water.WEAKNESS,
-				SPELLS.water.IGNIFEX
+				'fire.fire_shield',
+				'water.water_trap',
+				'water.water_shield',
+				'water.deluge',
+				'water.deluge',
+				'water.deluge',
+				'water.wave',
+				'water.wave',
+				'water.water_blade',
+				'water.weakness',
+				'water.weakness',
+				'water.ignifex'
 			],
 			augments: {
-				water: 0.9,
+				water: 0.8,
 				fire: 1.1
 			},
 			criticalRating: 110,
@@ -168,22 +168,22 @@ const entities = {
 			maxHealth: 650,
 			health: 650,
 			deck: [
-				SPELLS.air.AIR_SHIELD,
-				SPELLS.earth.EARTH_TRAP,
-				SPELLS.earth.EARTH_SHIELD,
-				SPELLS.earth.EARTH_SHIELD,
-				SPELLS.earth.EARTHQUAKE,
-				SPELLS.earth.EARTHQUAKE,
-				SPELLS.earth.EARTHQUAKE,
-				SPELLS.earth.BOULDER,
-				SPELLS.earth.EARTH_BLADE,
-				SPELLS.earth.EARTH_BLADE,
-				SPELLS.earth.EARTH_BLADE,
-				SPELLS.earth.BURDEN,
-				SPELLS.earth.CAELIFEX
+				'air.air_shield',
+				'earth.earth_trap',
+				'earth.earth_shield',
+				'earth.earth_shield',
+				'earth.earthquake',
+				'earth.earthquake',
+				'earth.earthquake',
+				'earth.boulder',
+				'earth.earth_blade',
+				'earth.earth_blade',
+				'earth.earth_blade',
+				'earth.burden',
+				'earth.caelifex'
 			],
 			augments: {
-				earth: 0.9,
+				earth: 0.8,
 				air: 1.1
 			},
 			criticalRating: 130,
@@ -201,22 +201,22 @@ const entities = {
 			maxHealth: 550,
 			health: 550,
 			deck: [
-				SPELLS.air.AIR_SHIELD,
-				SPELLS.earth.EARTH_TRAP,
-				SPELLS.earth.EARTH_SHIELD,
-				SPELLS.earth.EARTH_SHIELD,
-				SPELLS.earth.EARTHQUAKE,
-				SPELLS.earth.EARTHQUAKE,
-				SPELLS.earth.EARTHQUAKE,
-				SPELLS.earth.BOULDER,
-				SPELLS.earth.EARTH_BLADE,
-				SPELLS.earth.EARTH_BLADE,
-				SPELLS.earth.EARTH_BLADE,
-				SPELLS.earth.BURDEN,
-				SPELLS.earth.CAELIFEX
+				'air.air_shield',
+				'earth.earth_trap',
+				'earth.earth_shield',
+				'earth.earth_shield',
+				'earth.earthquake',
+				'earth.earthquake',
+				'earth.earthquake',
+				'earth.boulder',
+				'earth.earth_blade',
+				'earth.earth_blade',
+				'earth.earth_blade',
+				'earth.burden',
+				'earth.caelifex'
 			],
 			augments: {
-				earth: 0.8,
+				earth: 0.9,
 				air: 1.2
 			},
 			criticalRating: 130,
@@ -232,21 +232,21 @@ const entities = {
 			maxHealth: 400,
 			health: 400,
 			deck: [
-				SPELLS.fire.FIRE_SHIELD,
-				SPELLS.water.WATER_TRAP,
-				SPELLS.water.WATER_SHIELD,
-				SPELLS.water.DELUGE,
-				SPELLS.water.DELUGE,
-				SPELLS.water.DELUGE,
-				SPELLS.water.WAVE,
-				SPELLS.water.WAVE,
-				SPELLS.water.WATER_BLADE,
-				SPELLS.water.WEAKNESS,
-				SPELLS.water.WEAKNESS,
-				SPELLS.water.IGNIFEX
+				'fire.fire_shield',
+				'water.water_trap',
+				'water.water_shield',
+				'water.deluge',
+				'water.deluge',
+				'water.deluge',
+				'water.wave',
+				'water.wave',
+				'water.water_blade',
+				'water.weakness',
+				'water.weakness',
+				'water.ignifex'
 			],
 			augments: {
-				water: 0.8,
+				water: 0.9,
 				fire: 1.2
 			},
 			criticalRating: 110,
@@ -262,21 +262,21 @@ const entities = {
 			maxHealth: 300,
 			health: 300,
 			deck: [
-				SPELLS.fire.FIRE_SHIELD,
-				SPELLS.fire.FIRE_TRAP,
-				SPELLS.water.WATER_SHIELD,
-				SPELLS.fire.BALEFIRE,
-				SPELLS.fire.BALEFIRE,
-				SPELLS.fire.BALEFIRE,
-				SPELLS.fire.FIREBALL,
-				SPELLS.fire.FIREBALL,
-				SPELLS.fire.FIRE_BLADE,
-				SPELLS.fire.FIRE_BLADE,
-				SPELLS.fire.MAGNIFY,
-				SPELLS.fire.AQUIFEX
+				'fire.fire_shield',
+				'fire.fire_trap',
+				'water.water_shield',
+				'fire.balefire',
+				'fire.balefire',
+				'fire.balefire',
+				'fire.fireball',
+				'fire.fireball',
+				'fire.fire_blade',
+				'fire.fire_blade',
+				'fire.magnify',
+				'fire.aquifex'
 			],
 			augments: {
-				fire: 0.8,
+				fire: 0.9,
 				water: 1.2
 			},
 			criticalRating: 100,
@@ -291,7 +291,7 @@ const entities = {
 const randomAI = (index, battleData) => {
 	const entityData = battleData[index];
 	const accessibleCards = entityData.hand
-		.map((card, i) => ({ card, i }))
+		.map((cardId, i) => ({ card: getSpell(cardId), i }))
 		.filter(({ card: { vrilRequired, element } }) => getTotalVril(entityData, element) >= vrilRequired);
 
 	const options = accessibleCards

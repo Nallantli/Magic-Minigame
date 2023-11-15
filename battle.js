@@ -1,14 +1,14 @@
 function drawBattleIdle(battleState) { // battleData, selectedCards, selectedVictims, playerIndex) {
 	let inputData = {};
 	const { battleData, selectedCards, selectedVictims, playerIndex, iterator } = battleState;
-	const selectedPlayerSpell = selectedCards[playerIndex] === undefined ? undefined : battleData[playerIndex].hand[selectedCards[playerIndex]];
+	const selectedPlayerSpell = selectedCards[playerIndex] === undefined ? undefined : getSpell(battleData[playerIndex].hand[selectedCards[playerIndex]]);
 
 	for (let i = 0; i < 4; i++) {
 		const battleEntity = battleData[i];
 		if (!battleEntity) {
 			continue;
 		}
-		const selectedEntitySpell = selectedCards[i] === undefined ? undefined : battleData[i].hand[selectedCards[i]];
+		const selectedEntitySpell = selectedCards[i] === undefined ? undefined : getSpell(battleData[i].hand[selectedCards[i]]);
 
 		if (selectedPlayerSpell === undefined || selectedPlayerSpell.canUseSpellOn(playerIndex, i)) {
 			ctx.globalAlpha = 1;
@@ -145,7 +145,8 @@ function drawCards(battleState) { //playerData, selectedCard) {
 	const startX = scale(240 - playerData.hand.length * 25);
 	let inputData = {};
 
-	playerData.hand.forEach((spell, i) => {
+	playerData.hand.forEach((spellId, i) => {
+		const spell = getSpell(spellId);
 		const hasEnoughVril = getTotalVril(playerData, spell.element) >= spell.vrilRequired;
 		if (hasEnoughVril && selectedCard === undefined || selectedCard === i) {
 			ctx.globalAlpha = 1;
@@ -258,8 +259,6 @@ function getReturnSequence(battleData) {
 	};
 }
 
-const reduceAnimationQueue = () => state.battleState.animationQueue.splice(0, 1);
-
 function battleGameLoop(timeMs) {
 	const { battleState } = state;
 
@@ -365,10 +364,7 @@ function battleGameLoop(timeMs) {
 			battleState.battleIndex = 0;
 		}
 	} else {
-		const postBattle = (casterIndex, victimIndices, spellIndex, calculatedDamages) => {
-			if (casterIndex !== undefined) {
-				battleState.battleData = iterateSpell(casterIndex, victimIndices, spellIndex, battleState.battleData, calculatedDamages);
-			}
+		const postBattle = () => {
 			battleState.battleIndex++;
 			if (battleState.battleIndex === 8) {
 				battleState.selectedVictims = [[], [], [], [], [], [], [], []];
@@ -389,11 +385,11 @@ function battleGameLoop(timeMs) {
 						continue;
 					}
 					while (battleState.battleData[i].hand.length < 7) {
-						const card = battleState.battleData[i].deck.pop();
-						if (!card) {
+						const cardId = battleState.battleData[i].deck.pop();
+						if (!cardId) {
 							break;
 						}
-						battleState.battleData[i].hand.push(card);
+						battleState.battleData[i].hand.push(cardId);
 					}
 				}
 				battleState.battleIndex = -1;
@@ -408,7 +404,7 @@ function battleGameLoop(timeMs) {
 				.filter(i => battleState.battleData[i] !== undefined && battleState.battleData[i].entity.health > 0);
 			if (victimIndices.length > 0 && battleState.battleData[battleState.battleIndex].entity.health > 0) {
 				const spellIndex = battleState.selectedCards[battleState.battleIndex];
-				const spell = battleState.battleData[battleState.battleIndex].hand[spellIndex];
+				const spell = getSpell(battleState.battleData[battleState.battleIndex].hand[spellIndex]);
 				const calculatedDamages = victimIndices
 					.map(i => battleState.battleData[i])
 					.map(victimData => calculateDamages(
@@ -423,7 +419,8 @@ function battleGameLoop(timeMs) {
 					actions: sequence.actions
 				}, TICK_TIME, FPS, canvas, ctx, () => {
 					reduceAnimationQueue();
-					postBattle(battleState.battleIndex, victimIndices, spellIndex, calculatedDamages);
+					battleState.battleData = iterateSpell(battleState.battleIndex, victimIndices, spellIndex, battleState.battleData, calculatedDamages);
+					postBattle();
 				});
 				battleState.animationQueue.push(animation);
 			} else {
@@ -435,33 +432,4 @@ function battleGameLoop(timeMs) {
 	ctx.globalAlpha = 1;
 	ctx.fillStyle = 'white';
 	ctx.fillRect(0, scale(270), scale(480), scale(1));
-}
-
-// easter egg >:)
-function giveMeTheGun() {
-	console.log("https://media.tenor.com/xOefCCemGU4AAAAC/kek.gif");
-	const gun = {
-		id: crypto.randomUUID(),
-		name: "Gun",
-		type: SPELL_TYPES.ATTACK_BASIC,
-		element: 'all',
-		damages: [
-			{
-				tick: 6,
-				damage: -9999,
-				element: 'all'
-			}
-		],
-		vrilRequired: 1,
-		cardSprite: new Sprite('./img/spells/gun/card_48x64.png', 48, 64, 1),
-		spellAnimation: new Sprite('./img/spells/gun/spell_240x135.png', 240, 135, 12),
-		canUseSpellOn: () => true
-	};
-	if (state.battleState) {
-		state.battleState.battleData[state.battleState.playerIndex].hand.push(gun);
-	}
-	SPELLS["all"] = {
-		...SPELLS["all"],
-		GUN: gun
-	};
 }

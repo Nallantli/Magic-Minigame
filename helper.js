@@ -2,6 +2,17 @@ function scale(x) {
 	return x * SCALE_FACTOR;
 }
 
+function getMousePos(canvas, evt) {
+	var rect = canvas.getBoundingClientRect(), // abs. size of element
+		scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
+		scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
+
+	return {
+		x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
+		y: (evt.clientY - rect.top) * scaleY     // been adjusted to be relative to element
+	}
+}
+
 /* Randomize array in-place using Durstenfeld shuffle algorithm */
 function shuffleArray(array) {
 	for (var i = array.length - 1; i > 0; i--) {
@@ -110,6 +121,15 @@ function calculateDamages(spell, caster, victim) {
 	};
 }
 
+function sortDeck(deck) {
+	deck.sort((a, b) => {
+		if (a.element === b.element) {
+			return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
+		}
+		return a.element < b.element ? -1 : (a.element > b.element ? 1 : 0)
+	});
+}
+
 function randomFromList(l) {
 	return l[Math.floor(Math.random() * l.length)];
 }
@@ -123,7 +143,7 @@ function getTotalVril(data, element) {
 }
 
 function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calculatedDamages) {
-	const spell = battleData[casterIndex].hand[spellIndex];
+	const spell = getSpell(battleData[casterIndex].hand[spellIndex]);
 	switch (spell.type) {
 		case SPELL_TYPES.HEALING_BASIC:
 			spell.heals.forEach(({ heal }) => battleData[victimIndices[0]].entity.health += heal);
@@ -202,4 +222,68 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calcul
 		}
 	}
 	return battleData;
+}
+
+function generateBattleEntity(entity, AI) {
+	const deck = [
+		...entity.deck
+	];
+
+	shuffleArray(deck);
+
+	let hand = [];
+	for (let i = 0; i < 7; i++) {
+		const card = deck.pop();
+		if (!card) {
+			break;
+		}
+		hand.push(card);
+	}
+
+	const hasSuperVril = Math.random() >= entity.superVrilChance;
+
+	return {
+		shields: [],
+		blades: [],
+		vril: hasSuperVril ? 0 : 1,
+		superVril: hasSuperVril ? 1 : 0,
+		entity,
+		deck,
+		hand,
+		AI
+	}
+}
+
+function generateBattleState() {
+	let leftEntities = [
+		...entities.wizards.map(entity => generateBattleEntity(entity, randomAI)),
+	];
+	shuffleArray(leftEntities);
+
+	let rightEntities = [
+		...entities.creatures.map(entity => generateBattleEntity(entity, randomAI))
+	];
+	shuffleArray(rightEntities);
+
+	const battleData = [
+		generateBattleEntity(state.player, randomAI),
+		leftEntities[0],
+		undefined,
+		undefined,
+		rightEntities[0],
+		rightEntities[1],
+		rightEntities[2],
+		undefined
+	];
+
+	return {
+		iterator: 0,
+		startTime: undefined,
+		battleData,
+		selectedCards: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
+		selectedVictims: [[], [], [], [], [], [], [], []],
+		playerIndex: battleData.findIndex(({ entity }) => entity.id === 'player_character'),
+		animationQueue: [new AnimationEngine(getReturnSequence(battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue)],
+		battleIndex: -1
+	};
 }

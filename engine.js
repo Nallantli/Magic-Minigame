@@ -1,3 +1,5 @@
+let fastForward = false;
+
 const ATYPES = {
 	INITIALIZE_ENTITY: 'INITIALIZE_ENTITY',
 	REMOVE_ENTITY: 'REMOVE_ENTITY',
@@ -699,23 +701,6 @@ class AnimationEngine {
 					};
 					break;
 				}
-				/*
-				case ATYPES.PLAY_ANIMATION: {
-					const { id } = action;
-					this.tracker[id] = {
-						...this.tracker[id],
-						play: true
-					};
-					break;
-				}
-				case ATYPES.PAUSE_ANIMATION: {
-					const { id } = action;
-					this.tracker[id] = {
-						...this.tracker[id],
-						play: false
-					};
-					break;
-				} */
 				case ATYPES.SET_SPRITE: {
 					const { id, sprite, play, iIndex, text, mirror } = action;
 					this.tracker[id] = {
@@ -795,6 +780,17 @@ class AnimationEngine {
 	}
 
 	runFrame(timeMs) {
+		makeInteractable(scale(480 - 17), scale(1), scale(16), scale(16),
+			({ x, y, sizeX, sizeY }) => {
+				this.ctx.globalAlpha = 0.25;
+				sprites.FF_BUTTON_16x16.draw(this.ctx, x, y, sizeX, sizeY);
+			},
+			({ x, y, sizeX, sizeY }) => sprites.FF_BUTTON_16x16.draw(this.ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+			() => fastForward = !fastForward,
+			{
+				forceHoverOn: () => fastForward == true
+			});
+
 		if (!this.fpsStartTime || timeMs - this.fpsStartTime >= 1000) {
 			this.fpsStartTime = timeMs;
 			this.lastFrameCount = this.frameCount;
@@ -802,8 +798,14 @@ class AnimationEngine {
 		}
 		if (!this.startTime || timeMs - this.startTime >= 1000 / this.fps) {
 			this.doTick();
-			this.startTime = timeMs;
 			this.iterator++;
+			if (fastForward) {
+				if (this.iterator < this.internalActions.length) {
+					this.doTick();
+					this.iterator++;
+				}
+			}
+			this.startTime = timeMs;
 			this.frameCount++;
 		}
 		numberText.draw(this.ctx, scale(1), scale(1), scale(4), scale(6), this.lastFrameCount < this.fps ? 2 : (this.lastFrameCount > this.fps ? 4 : 0), String(this.lastFrameCount));
