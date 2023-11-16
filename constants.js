@@ -9,6 +9,8 @@ ctx.imageSmoothingEnabled = false;
 let mousePos = { x: 0, y: 0 };
 let clickPos = undefined;
 let rightClickPos = undefined;
+let keys = {};
+let keysUp = [];
 
 canvas.addEventListener("mousemove", function (evt) {
 	mousePos = getMousePos(canvas, evt);
@@ -22,6 +24,19 @@ canvas.addEventListener("contextmenu", function (evt) {
 	evt.preventDefault();
 	rightClickPos = getMousePos(canvas, evt);
 }, false);
+
+canvas.addEventListener("keydown", function (evt) {
+	keys[evt.key.toLowerCase()] = true;
+}, false);
+
+canvas.addEventListener("keyup", function (evt) {
+	keys[evt.key.toLowerCase()] = false;
+	keysUp.push(evt.key.toLowerCase());
+}, false);
+
+
+const battleTrack = new Audio('./audio/battle_track.wav');
+battleTrack.loop = true;
 
 const sprites = {
 	// PLACEHOLDERS
@@ -56,8 +71,15 @@ const sprites = {
 	CUSTOMIZE_ICONS_16x16: new Sprite('./img/customize_icons_16x16.png', 16, 16, 4),
 	CUSTOMIZE_LIST_136x300: new Sprite('./img/customize_list_136x300.png', 136, 300, 1),
 	FF_BUTTON_16x16: new Sprite('./img/ff_button_16x16.png', 16, 16, 2),
+	YOU_DIED_160x64: new Sprite('./img/you_died_160x64.png', 160, 64, 1),
+	GROUND_32x32: new Sprite('./img/maps/tiles/ground.png', 32, 32, 1),
+	HEAL_COIN_16x16: new Sprite('./img/heal_count_16x16.png', 16, 16, 8),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
+};
+
+const tiles = {
+	BRICK: new Tile('./img/maps/tiles/brick.png', 32, 32)
 };
 
 const numberText = new NumberText('./img/numbers_4x6.png', 4, 6);

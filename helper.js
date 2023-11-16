@@ -240,7 +240,7 @@ function generateBattleEntity(entity, AI) {
 		hand.push(card);
 	}
 
-	const hasSuperVril = Math.random() >= entity.superVrilChance;
+	const hasSuperVril = Math.random() <= entity.superVrilChance;
 
 	return {
 		shields: [],
@@ -254,27 +254,34 @@ function generateBattleEntity(entity, AI) {
 	}
 }
 
-function generateBattleState() {
-	let leftEntities = [
-		...entities.wizards.map(entity => generateBattleEntity(entity, randomAI)),
+function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
+	let leftBattleEntities = [
+		...leftEntities.map(entity => generateBattleEntity(entity, randomAI)),
 	];
-	shuffleArray(leftEntities);
+	shuffleArray(leftBattleEntities);
 
-	let rightEntities = [
-		...entities.creatures.map(entity => generateBattleEntity(entity, randomAI))
+	let rightBattleEntities = [
+		...rightEntities.map(entity => generateBattleEntity(entity, randomAI))
 	];
-	shuffleArray(rightEntities);
+	shuffleArray(rightBattleEntities);
 
-	const battleData = [
-		generateBattleEntity(state.player, randomAI),
-		leftEntities[0],
-		undefined,
-		undefined,
-		rightEntities[0],
-		rightEntities[1],
-		rightEntities[2],
-		undefined
-	];
+	let battleData = [];
+	for (let i = 0; i < 4; i++) {
+		if (i < leftBattleEntities.length) {
+			battleData.push(leftBattleEntities[i]);
+		} else {
+			battleData.push(undefined);
+		}
+	}
+	for (let i = 0; i < 4; i++) {
+		if (i < rightBattleEntities.length) {
+			battleData.push(rightBattleEntities[i]);
+		} else {
+			battleData.push(undefined);
+		}
+	}
+	
+	state.animationQueue.push(new AnimationEngine(getReturnSequence(battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 
 	return {
 		iterator: 0,
@@ -283,7 +290,8 @@ function generateBattleState() {
 		selectedCards: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
 		selectedVictims: [[], [], [], [], [], [], [], []],
 		playerIndex: battleData.findIndex(({ entity }) => entity.id === 'player_character'),
-		animationQueue: [new AnimationEngine(getReturnSequence(battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue)],
-		battleIndex: -1
+		battleIndex: -1,
+		onWin,
+		onLose
 	};
 }

@@ -538,7 +538,7 @@ registerSpell({
 		tick: 8,
 		value: 20,
 		sprite: new Sprite('./img/spells/earth_trap/bonus_10x12.png', 10, 12, 1),
-		element: 'water',
+		element: 'earth',
 		isBonus: false
 	}],
 	vrilRequired: 0,

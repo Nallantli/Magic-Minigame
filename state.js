@@ -1,5 +1,12 @@
 let state = {
+	iterator: 0,
 	path: 'MENU',
+	player: {
+		...randomFromList(entityDirectory.wizards),
+		id: 'player_character',
+		name: 'Player'
+	},
+	/*
 	player: {
 		id: 'player_character',
 		name: 'Player',
@@ -24,26 +31,26 @@ let state = {
 		superVrilChance: 0.1,
 		idleSprite: new CompositeSprite([
 			HEADS.SHORT_HAIR.idle,
-			CLOTHES.PLAIN_CLOTHES.idle,
+			CLOTHES.ROBE.idle,
 			HATS.WIZARD_HAT.idle
 		], 64, 64, 1),
 		castSprite: new CompositeSprite([
 			HEADS.SHORT_HAIR.cast,
-			CLOTHES.PLAIN_CLOTHES.cast,
+			CLOTHES.ROBE.cast,
 			HATS.WIZARD_HAT.cast,
 			WANDS.BASIC_WAND.cast
 		], 64, 64, 1),
 		deathSprite: new CompositeSprite([
 			HEADS.SHORT_HAIR.death,
-			CLOTHES.PLAIN_CLOTHES.death,
+			CLOTHES.ROBE.death,
 			HATS.WIZARD_HAT.death
 		], 64, 64, 10),
-	},
+	},*/
 	customizeState: {
 		current: [
 			HEADS.SHORT_HAIR,
 			HATS.WIZARD_HAT,
-			CLOTHES.PLAIN_CLOTHES,
+			CLOTHES.ROBE,
 			WANDS.BASIC_WAND
 		],
 		currentTab: 0
@@ -52,7 +59,8 @@ let state = {
 		currentIndex: -1,
 		currentElement: 'air'
 	},
-	battleState: undefined
+	battleState: undefined,
+	animationQueue: []
 };
 
-const reduceAnimationQueue = () => state.battleState.animationQueue.splice(0, 1);
+const reduceAnimationQueue = () => state.animationQueue.splice(0, 1);

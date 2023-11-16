@@ -1,6 +1,6 @@
-function drawBattleIdle(battleState) { // battleData, selectedCards, selectedVictims, playerIndex) {
+function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, selectedVictims, playerIndex) {
 	let inputData = {};
-	const { battleData, selectedCards, selectedVictims, playerIndex, iterator } = battleState;
+	const { battleData, selectedCards, selectedVictims, playerIndex } = battleState;
 	const selectedPlayerSpell = selectedCards[playerIndex] === undefined ? undefined : getSpell(battleData[playerIndex].hand[selectedCards[playerIndex]]);
 
 	for (let i = 0; i < 4; i++) {
@@ -260,22 +260,12 @@ function getReturnSequence(battleData) {
 }
 
 function battleGameLoop(timeMs) {
-	const { battleState } = state;
-
-	if (!battleState.startTime || timeMs - battleState.startTime >= 1000 / TICK_TIME) {
-		battleState.startTime = timeMs;
-		battleState.iterator++;
-	}
-
-	if (!battleState.battleData[battleState.playerIndex]) {
-		battleState.playerIndex++;
-	}
+	const { battleState, iterator } = state;
+	const { onWin, onLose } = battleState;
 
 	let inputData = {};
 
-	if (battleState.animationQueue.length > 0) {
-		battleState.animationQueue[0].runFrame(timeMs);
-	} else if (battleState.battleIndex === -1) {
+	if (battleState.battleIndex === -1) {
 		battleState.battleData.forEach((battleEntity, i) => {
 			if (!battleEntity) {
 				return;
@@ -293,8 +283,13 @@ function battleGameLoop(timeMs) {
 		inputData = {
 			...inputData,
 			...drawCards(battleState), // battleData.left[0], selectedCards[playerIndex])
-			...drawBattleIdle(battleState) // battleData, selectedCards, selectedVictims, playerIndex)
+			...drawBattleIdle(battleState, iterator) // battleData, selectedCards, selectedVictims, playerIndex)
 		};
+
+		ctx.globalAlpha = 1;
+		ctx.fillStyle = 'white';
+		ctx.fillRect(0, scale(270), scale(480), scale(1));
+
 		// handle input
 		if (inputData.selectedCard !== undefined) {
 			battleState.selectedCards[battleState.playerIndex] = inputData.selectedCard;
@@ -360,7 +355,7 @@ function battleGameLoop(timeMs) {
 				]
 			};
 
-			battleState.animationQueue.push(new AnimationEngine(withdrawAnimationData, TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+			state.animationQueue.push(new AnimationEngine(withdrawAnimationData, TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 			battleState.battleIndex = 0;
 		}
 	} else {
@@ -393,7 +388,13 @@ function battleGameLoop(timeMs) {
 					}
 				}
 				battleState.battleIndex = -1;
-				battleState.animationQueue.push(new AnimationEngine(getReturnSequence(battleState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+				if (battleState.battleData[0] === undefined) {
+					onLose();
+				} else if (battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== undefined).length === 0) {
+					onWin();
+				} else {
+					state.animationQueue.push(new AnimationEngine(getReturnSequence(battleState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+				}
 			}
 		};
 
@@ -422,14 +423,10 @@ function battleGameLoop(timeMs) {
 					battleState.battleData = iterateSpell(battleState.battleIndex, victimIndices, spellIndex, battleState.battleData, calculatedDamages);
 					postBattle();
 				});
-				battleState.animationQueue.push(animation);
+				state.animationQueue.push(animation);
 			} else {
 				postBattle();
 			}
 		}
 	}
-
-	ctx.globalAlpha = 1;
-	ctx.fillStyle = 'white';
-	ctx.fillRect(0, scale(270), scale(480), scale(1));
 }

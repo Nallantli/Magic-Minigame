@@ -69,14 +69,14 @@ const HEADS = {
 };
 
 
-const entities = {
+const entityDirectory = {
 	wizards: [
 		{
 			id: 'fire_wizard',
 			name: 'Wizard Wizard',
 			element: 'fire',
-			maxHealth: 500,
-			health: 500,
+			maxHealth: 600,
+			health: 600,
 			deck: [
 				'fire.fire_shield',
 				'fire.fire_trap',
@@ -105,8 +105,8 @@ const entities = {
 			id: 'air_wizard',
 			name: 'Top Hat Wizard',
 			element: 'air',
-			maxHealth: 600,
-			health: 600,
+			maxHealth: 700,
+			health: 700,
 			deck: [
 				'air.air_shield',
 				'air.air_trap',
@@ -135,8 +135,8 @@ const entities = {
 			id: 'water_wizard',
 			name: 'Baseball Wizard',
 			element: 'water',
-			maxHealth: 550,
-			health: 550,
+			maxHealth: 650,
+			health: 650,
 			deck: [
 				'fire.fire_shield',
 				'water.water_trap',
@@ -165,8 +165,8 @@ const entities = {
 			id: 'earth_wizard',
 			name: 'Hatless Wizard',
 			element: 'earth',
-			maxHealth: 650,
-			health: 650,
+			maxHealth: 750,
+			health: 750,
 			deck: [
 				'air.air_shield',
 				'earth.earth_trap',
@@ -198,8 +198,8 @@ const entities = {
 			id: 'skeleton',
 			name: 'Skeleton',
 			element: 'earth',
-			maxHealth: 550,
-			health: 550,
+			maxHealth: 450,
+			health: 450,
 			deck: [
 				'air.air_shield',
 				'earth.earth_trap',
@@ -229,8 +229,8 @@ const entities = {
 			id: 'ghost',
 			name: 'Ghost',
 			element: 'water',
-			maxHealth: 400,
-			health: 400,
+			maxHealth: 350,
+			health: 350,
 			deck: [
 				'fire.fire_shield',
 				'water.water_trap',
