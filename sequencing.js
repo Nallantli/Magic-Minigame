@@ -32,7 +32,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			sprite: sprites.CASTING_CIRCLE_START_48x24,
 			alpha: 0,
 			posX: scale(240 - 48),
-			posY: scale(210),
+			posY: scale(218),
 			sizeX: scale(96),
 			sizeY: scale(48),
 			rot: 0,
@@ -45,7 +45,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			endTick: spellCastingStartTick + 9,
 			type: ATYPES.CHANGE_POSITION_Y,
 			id: castingCircleId,
-			posY: scale(202),
+			posY: scale(210),
 			ease: EASE_TYPES.EASE_OUT
 		},
 		{
@@ -1322,4 +1322,46 @@ function createRightAttackSequence(battleData, casterIndex, victimIndices, spell
 		length: cleanUpStartTick + 8,
 		actions
 	};
+}
+
+function createCardDropSequence(spell) {
+	return [
+		{
+			tick: 0,
+			type: ATYPES.INITIALIZE_ENTITY,
+			id: 'spell_card',
+			sprite: spell.cardSprite,
+			alpha: 1,
+			posX: scale(240),
+			posY: scale(187 - 96),
+			sizeX: 0,
+			sizeY: scale(192),
+			rot: 0,
+			zIndex: 0,
+		},
+		{
+			startTick: 0,
+			endTick: 7,
+			type: ATYPES.CHANGE_POSITION_X,
+			id: 'spell_card',
+			posX: scale(240 - 77),
+			ease: EASE_TYPES.CONSTANT
+		},
+		{
+			startTick: 0,
+			endTick: 7,
+			type: ATYPES.CHANGE_SIZE_X,
+			id: 'spell_card',
+			sizeX: scale(144),
+			ease: EASE_TYPES.CONSTANT
+		},
+		{
+			startTick: 7,
+			endTick: 9,
+			type: ATYPES.CHANGE_POSITION_Y,
+			id: 'spell_card',
+			posY: scale(375),
+			ease: EASE_TYPES.EASE_IN
+		}
+	];
 }

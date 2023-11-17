@@ -39,26 +39,29 @@ function makeInteractable(x, y, sizeX, sizeY, render, hoverRender, onPress, opti
 	}
 }
 
+function drawBox(ctx, x, y, sizeX, sizeY) {
+	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y, scale(3), scale(3));
+	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y, scale(3), scale(3), { iIndex: 1 });
+	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y + sizeY - scale(3), scale(3), scale(3), { iIndex: 2 });
+	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y + sizeY - scale(3), scale(3), scale(3), { iIndex: 3 });
+
+	ctx.fillStyle = "black";
+	ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(3));
+	ctx.fillRect(x + scale(3), y + sizeY - scale(3), sizeX - scale(6), scale(3));
+	ctx.fillRect(x, y + scale(3), scale(3), sizeY - scale(6));
+	ctx.fillRect(x + sizeX - scale(3), y + scale(3), scale(3), sizeY - scale(6));
+	ctx.fillRect(x + scale(3), y + scale(3), sizeX - scale(6), sizeY - scale(6));
+	ctx.fillStyle = "white";
+	ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(1));
+	ctx.fillRect(x + scale(3), y + sizeY - scale(1), sizeX - scale(6), scale(1));
+	ctx.fillRect(x, y + scale(3), scale(1), sizeY - scale(6));
+	ctx.fillRect(x + sizeX - scale(1), y + scale(3), scale(1), sizeY - scale(6));
+}
+
 function makeToolTip(sizeX, sizeY, render) {
 	const { x, y } = mousePos;
 	return (ctx) => {
-		sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y, scale(3), scale(3));
-		sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y, scale(3), scale(3), { iIndex: 1 });
-		sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y + sizeY - scale(3), scale(3), scale(3), { iIndex: 2 });
-		sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y + sizeY - scale(3), scale(3), scale(3), { iIndex: 3 });
-
-		ctx.fillStyle = "black";
-		ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(3));
-		ctx.fillRect(x + scale(3), y + sizeY - scale(3), sizeX - scale(6), scale(3));
-		ctx.fillRect(x, y + scale(3), scale(3), sizeY - scale(6));
-		ctx.fillRect(x + sizeX - scale(3), y + scale(3), scale(3), sizeY - scale(6));
-		ctx.fillRect(x + scale(3), y + scale(3), sizeX - scale(6), sizeY - scale(6));
-		ctx.fillStyle = "white";
-		ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(1));
-		ctx.fillRect(x + scale(3), y + sizeY - scale(1), sizeX - scale(6), scale(1));
-		ctx.fillRect(x, y + scale(3), scale(1), sizeY - scale(6));
-		ctx.fillRect(x + sizeX - scale(1), y + scale(3), scale(1), sizeY - scale(6));
-
+		drawBox(ctx, x, y, sizeX, sizeY);
 		render({ x, y, sizeX, sizeY });
 	};
 }
@@ -280,7 +283,7 @@ function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
 			battleData.push(undefined);
 		}
 	}
-	
+
 	state.animationQueue.push(new AnimationEngine(getReturnSequence(battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 
 	return {
@@ -289,7 +292,7 @@ function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
 		battleData,
 		selectedCards: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
 		selectedVictims: [[], [], [], [], [], [], [], []],
-		playerIndex: battleData.findIndex(({ entity }) => entity.id === 'player_character'),
+		playerIndex: battleData.findIndex(battleEntity => battleEntity !== undefined && battleEntity.entity.id === 'player_character'),
 		battleIndex: -1,
 		onWin,
 		onLose

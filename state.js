@@ -1,4 +1,5 @@
 let state = {
+	knownSpells: level1Spells,
 	iterator: 0,
 	path: 'MENU',
 	player: {
@@ -60,7 +61,9 @@ let state = {
 		currentElement: 'air'
 	},
 	battleState: undefined,
-	animationQueue: []
+	animationQueue: [],
+	overlayAnimationQueue: []
 };
 
 const reduceAnimationQueue = () => state.animationQueue.splice(0, 1);
+const reduceOverlayAnimationQueue = () => state.overlayAnimationQueue.splice(0, 1);

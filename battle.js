@@ -388,9 +388,11 @@ function battleGameLoop(timeMs) {
 					}
 				}
 				battleState.battleIndex = -1;
-				if (battleState.battleData[0] === undefined) {
+				if (battleState.battleData[battleState.playerIndex] === undefined) {
 					onLose();
-				} else if (battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== undefined).length === 0) {
+				} else if (
+					(battleState.playerIndex < 4 && battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== undefined).length === 0)
+					|| (battleState.playerIndex >= 4 && battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== undefined).length === 0)) {
 					onWin();
 				} else {
 					state.animationQueue.push(new AnimationEngine(getReturnSequence(battleState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));

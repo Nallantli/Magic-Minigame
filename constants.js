@@ -73,6 +73,10 @@ const sprites = {
 	FF_BUTTON_16x16: new Sprite('./img/ff_button_16x16.png', 16, 16, 2),
 	YOU_DIED_160x64: new Sprite('./img/you_died_160x64.png', 160, 64, 1),
 	GROUND_32x32: new Sprite('./img/maps/tiles/ground.png', 32, 32, 1),
+	PLANKS_32x32: new Sprite('./img/maps/tiles/planks.png', 32, 32, 1),
+	LOCKED_DOOR_32x32: new Sprite('./img/maps/tiles/locked_door.png', 32, 32, 1),
+	UNLOCKED_DOOR_32x32: new Sprite('./img/maps/tiles/unlocked_door.png', 32, 32, 1),
+	STAIRS_32x32: new Sprite('./img/maps/tiles/stairs.png', 32, 32, 1),
 	HEAL_COIN_16x16: new Sprite('./img/heal_count_16x16.png', 16, 16, 8),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
@@ -119,3 +123,11 @@ const ELEMENT_ID_LIST = [
 	'water',
 	'earth'
 ];
+
+const ELEMENT_CARD_ITEMS = {
+	'all': new Sprite('./img/aether_card_item_16x16.png', 16, 16, 18),
+	'air': new Sprite('./img/air_card_item_16x16.png', 16, 16, 18),
+	'fire': new Sprite('./img/fire_card_item_16x16.png', 16, 16, 18),
+	'water': new Sprite('./img/water_card_item_16x16.png', 16, 16, 18),
+	'earth': new Sprite('./img/earth_card_item_16x16.png', 16, 16, 18),
+};

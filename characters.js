@@ -75,28 +75,22 @@ const entityDirectory = {
 			id: 'fire_wizard',
 			name: 'Wizard Wizard',
 			element: 'fire',
-			maxHealth: 600,
-			health: 600,
+			maxHealth: 400,
+			health: 400,
 			deck: [
 				'fire.fire_shield',
-				'fire.fire_trap',
 				'water.water_shield',
-				'fire.balefire',
-				'fire.balefire',
-				'fire.balefire',
 				'fire.fireball',
 				'fire.fireball',
-				'fire.fire_blade',
-				'fire.fire_blade',
-				'fire.magnify',
-				'fire.aquifex'
+				'fire.fireball',
+				'fire.fireball',
 			],
 			augments: {
 				fire: 0.8,
 				water: 1.1
 			},
-			criticalRating: 100,
-			superVrilChance: 0.1,
+			criticalRating: 0,
+			superVrilChance: 0,
 			idleSprite: new Sprite('./img/characters/wiz/idle_64x64.png', 64, 64, 1),
 			castSprite: new Sprite('./img/characters/wiz/cast_64x64.png', 64, 64, 1),
 			deathSprite: new Sprite('./img/characters/wiz/death_64x64.png', 64, 64, 8)
@@ -105,28 +99,22 @@ const entityDirectory = {
 			id: 'air_wizard',
 			name: 'Top Hat Wizard',
 			element: 'air',
-			maxHealth: 700,
-			health: 700,
+			maxHealth: 480,
+			health: 480,
 			deck: [
 				'air.air_shield',
-				'air.air_trap',
 				'earth.earth_shield',
-				'air.overcast',
-				'air.overcast',
-				'air.dust_devil',
-				'air.dust_devil',
-				'air.gentle_breeze',
-				'air.gentle_breeze',
-				'air.air_blade',
-				'air.air_blade',
-				'air.terrifex'
+				'air.updraft',
+				'air.updraft',
+				'air.updraft',
+				'air.updraft',
 			],
 			augments: {
 				air: 0.8,
 				earth: 1.1
 			},
-			criticalRating: 120,
-			superVrilChance: 0.1,
+			criticalRating: 0,
+			superVrilChance: 0,
 			idleSprite: new Sprite('./img/characters/wiz_top_hat/idle_64x64.png', 64, 64, 1),
 			castSprite: new Sprite('./img/characters/wiz_top_hat/cast_64x64.png', 64, 64, 1),
 			deathSprite: new Sprite('./img/characters/wiz_top_hat/death_64x64.png', 64, 64, 19)
@@ -135,28 +123,22 @@ const entityDirectory = {
 			id: 'water_wizard',
 			name: 'Baseball Wizard',
 			element: 'water',
-			maxHealth: 650,
-			health: 650,
+			maxHealth: 440,
+			health: 440,
 			deck: [
-				'fire.fire_shield',
-				'water.water_trap',
 				'water.water_shield',
-				'water.deluge',
-				'water.deluge',
-				'water.deluge',
+				'fire.fire_shield',
 				'water.wave',
 				'water.wave',
-				'water.water_blade',
-				'water.weakness',
-				'water.weakness',
-				'water.ignifex'
+				'water.wave',
+				'water.wave',
 			],
 			augments: {
 				water: 0.8,
 				fire: 1.1
 			},
-			criticalRating: 110,
-			superVrilChance: 0.1,
+			criticalRating: 0,
+			superVrilChance: 0,
 			idleSprite: new Sprite('./img/characters/wiz_baseball/idle_64x64.png', 64, 64, 1),
 			castSprite: new Sprite('./img/characters/wiz_baseball/cast_64x64.png', 64, 64, 1),
 			deathSprite: new Sprite('./img/characters/wiz_baseball/death_64x64.png', 64, 64, 7)
@@ -165,29 +147,22 @@ const entityDirectory = {
 			id: 'earth_wizard',
 			name: 'Hatless Wizard',
 			element: 'earth',
-			maxHealth: 750,
-			health: 750,
+			maxHealth: 520,
+			health: 520,
 			deck: [
+				'earth.earth_shield',
 				'air.air_shield',
-				'earth.earth_trap',
-				'earth.earth_shield',
-				'earth.earth_shield',
-				'earth.earthquake',
-				'earth.earthquake',
-				'earth.earthquake',
 				'earth.boulder',
-				'earth.earth_blade',
-				'earth.earth_blade',
-				'earth.earth_blade',
-				'earth.burden',
-				'earth.caelifex'
+				'earth.boulder',
+				'earth.boulder',
+				'earth.boulder',
 			],
 			augments: {
 				earth: 0.8,
 				air: 1.1
 			},
-			criticalRating: 130,
-			superVrilChance: 0.1,
+			criticalRating: 0,
+			superVrilChance: 0,
 			idleSprite: new Sprite('./img/characters/wiz_no_hat/idle_64x64.png', 64, 64, 1),
 			castSprite: new Sprite('./img/characters/wiz_no_hat/cast_64x64.png', 64, 64, 1),
 			deathSprite: new Sprite('./img/characters/wiz_no_hat/death_64x64.png', 64, 64, 12)
@@ -287,6 +262,178 @@ const entityDirectory = {
 		}
 	]
 };
+
+const level1Creatures = [
+	{
+		id: 'earth_skeleton_lv1',
+		name: 'Skeleton',
+		element: 'earth',
+		maxHealth: 150,
+		health: 150,
+		deck: [
+			'earth.boulder',
+			'earth.boulder',
+			'earth.boulder',
+			'air.updraft',
+		],
+		augments: {
+			earth: 0.9,
+			air: 1.2
+		},
+		criticalRating: 0,
+		superVrilChance: 0,
+		idleSprite: new Sprite('./img/characters/skeleton/idle_64x64.png', 64, 64, 16),
+		castSprite: new Sprite('./img/characters/skeleton/cast_64x64.png', 64, 64, 5),
+		deathSprite: new Sprite('./img/characters/skeleton/death_64x64.png', 64, 64, 7)
+	},
+	{
+		id: 'fire_skeleton_lv1',
+		name: 'Skeleton',
+		element: 'fire',
+		maxHealth: 120,
+		health: 120,
+		deck: [
+			'fire.fireball',
+			'fire.fireball',
+			'fire.fireball',
+			'water.wave',
+		],
+		augments: {
+			fire: 0.9,
+			water: 1.2
+		},
+		criticalRating: 0,
+		superVrilChance: 0,
+		idleSprite: new Sprite('./img/characters/skeleton/idle_64x64.png', 64, 64, 16),
+		castSprite: new Sprite('./img/characters/skeleton/cast_64x64.png', 64, 64, 5),
+		deathSprite: new Sprite('./img/characters/skeleton/death_64x64.png', 64, 64, 7)
+	},
+	{
+		id: 'air_skeleton_lv1',
+		name: 'Skeleton',
+		element: 'air',
+		maxHealth: 140,
+		health: 140,
+		deck: [
+			'air.updraft',
+			'air.updraft',
+			'air.updraft',
+			'earth.boulder',
+		],
+		augments: {
+			air: 0.9,
+			earth: 1.2
+		},
+		criticalRating: 0,
+		superVrilChance: 0,
+		idleSprite: new Sprite('./img/characters/skeleton/idle_64x64.png', 64, 64, 16),
+		castSprite: new Sprite('./img/characters/skeleton/cast_64x64.png', 64, 64, 5),
+		deathSprite: new Sprite('./img/characters/skeleton/death_64x64.png', 64, 64, 7)
+	},
+	{
+		id: 'water_skeleton_lv1',
+		name: 'Skeleton',
+		element: 'water',
+		maxHealth: 130,
+		health: 130,
+		deck: [
+			'water.wave',
+			'water.wave',
+			'water.wave',
+			'fire.fireball',
+		],
+		augments: {
+			water: 0.9,
+			fire: 1.2
+		},
+		criticalRating: 0,
+		superVrilChance: 0,
+		idleSprite: new Sprite('./img/characters/skeleton/idle_64x64.png', 64, 64, 16),
+		castSprite: new Sprite('./img/characters/skeleton/cast_64x64.png', 64, 64, 5),
+		deathSprite: new Sprite('./img/characters/skeleton/death_64x64.png', 64, 64, 7)
+	}
+];
+
+const level2Creatures = [
+	{
+		id: 'earth_skeleton_lv2',
+		name: 'Skilled Skeleton',
+		element: 'earth',
+		maxHealth: 250,
+		health: 250,
+		deck: [
+			'air.air_shield',
+			'earth.earth_blade',
+			'earth.earth_shield',
+			'earth.boulder',
+			'earth.boulder',
+			'earth.boulder',
+			'earth.boulder',
+			'earth.burden',
+		],
+		augments: {
+			earth: 0.8,
+			air: 1.2
+		},
+		criticalRating: 50,
+		superVrilChance: 0.1,
+		idleSprite: new Sprite('./img/characters/skeleton/idle_64x64.png', 64, 64, 16),
+		castSprite: new Sprite('./img/characters/skeleton/cast_64x64.png', 64, 64, 5),
+		deathSprite: new Sprite('./img/characters/skeleton/death_64x64.png', 64, 64, 7)
+	},
+	{
+		id: 'water_ghost_lv2',
+		name: 'Ghost',
+		element: 'water',
+		maxHealth: 210,
+		health: 210,
+		deck: [
+			'fire.fire_shield',
+			'water.water_shield',
+			'water.wave',
+			'water.wave',
+			'water.wave',
+			'water.wave',
+			'water.water_blade',
+			'water.weakness',
+		],
+		augments: {
+			water: 0.8,
+			fire: 1.2
+		},
+		criticalRating: 40,
+		superVrilChance: 0.1,
+		idleSprite: new Sprite('./img/characters/ghost/idle_64x64.png', 64, 64, 21),
+		castSprite: new Sprite('./img/characters/ghost/cast_64x64.png', 64, 64, 3),
+		deathSprite: new Sprite('./img/characters/ghost/death_64x64.png', 64, 64, 12)
+	},
+	{
+		id: 'air_ghost_lv2',
+		name: 'Ghost',
+		element: 'air',
+		maxHealth: 230,
+		health: 230,
+		deck: [
+			'earth.earth_shield',
+			'air.air_shield',
+			'air.updraft',
+			'air.updraft',
+			'air.updraft',
+			'air.updraft',
+			'air.air_blade',
+			'air.gentle_breeze',
+		],
+		augments: {
+			air: 0.8,
+			earth: 1.2
+		},
+		criticalRating: 30,
+		superVrilChance: 0.1,
+		idleSprite: new Sprite('./img/characters/ghost/idle_64x64.png', 64, 64, 21),
+		castSprite: new Sprite('./img/characters/ghost/cast_64x64.png', 64, 64, 3),
+		deathSprite: new Sprite('./img/characters/ghost/death_64x64.png', 64, 64, 12)
+	},
+]
 
 const randomAI = (index, battleData) => {
 	const entityData = battleData[index];

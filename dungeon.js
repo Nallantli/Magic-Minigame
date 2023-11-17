@@ -93,6 +93,8 @@ function divideRoom(room, minRoomSizeX, minRoomSizeY, maxRoomSizeX, maxRoomSizeY
 		const randomRight = randomFromList(rightSisterRooms);
 		const intersection = calculateIntersection([randomLeft.y, randomLeft.y + randomLeft.sizeY], [randomRight.y, randomRight.y + randomRight.sizeY]);
 		crossing = {
+			leftId: randomLeft.id,
+			rightId: randomRight.id,
 			x: room.x + newSizeX,
 			y: intersection.start + Math.floor(intersection.size / 2)
 		};
@@ -121,6 +123,8 @@ function divideRoom(room, minRoomSizeX, minRoomSizeY, maxRoomSizeX, maxRoomSizeY
 		const randomRight = randomFromList(rightSisterRooms);
 		const intersection = calculateIntersection([randomLeft.x, randomLeft.x + randomLeft.sizeX], [randomRight.x, randomRight.x + randomRight.sizeX]);
 		crossing = {
+			leftId: randomLeft.id,
+			rightId: randomRight.id,
 			x: intersection.start + Math.floor(intersection.size / 2),
 			y: room.y + newSizeY,
 		};

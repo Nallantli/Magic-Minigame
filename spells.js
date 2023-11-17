@@ -4,8 +4,8 @@ function registerSpell(spell) {
 	spellDirectory[spell.id] = spell;
 }
 
-function getAllSpellsForElement(soughtElement) {
-	return Object.values(spellDirectory).filter(({ element }) => element === soughtElement);
+function getAllSpellsForElement(directory, soughtElement) {
+	return Object.values(spellDirectory).filter(({ element, id }) => directory.includes(id) && element === soughtElement);
 }
 
 function getSpell(id) {
@@ -20,12 +20,12 @@ registerSpell({
 	damages: [
 		{
 			tick: 8,
-			minDamage: -80,
-			maxDamage: -100,
+			minDamage: -230,
+			maxDamage: -290,
 			element: 'air'
 		}
 	],
-	vrilRequired: 2,
+	vrilRequired: 3,
 	cardSprite: new Sprite('./img/spells/dust_devil/card_48x64.png', 48, 64, 1),
 	spellAnimation: new Sprite('./img/spells/dust_devil/spell_240x135.png', 240, 135, 12),
 	canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
@@ -592,6 +592,69 @@ registerSpell({
 	spellAnimation: new Sprite('./img/spells/caelifex/spell_240x135.png', 240, 135, 12),
 	canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 });
+
+registerSpell({
+	id: 'air.updraft',
+	name: "Updraft",
+	type: SPELL_TYPES.ATTACK_BASIC,
+	element: 'air',
+	damages: [
+		{
+			tick: 8,
+			minDamage: -95,
+			maxDamage: -110,
+			element: 'air'
+		}
+	],
+	vrilRequired: 1,
+	cardSprite: new Sprite('./img/spells/updraft/card_48x64.png', 48, 64, 1),
+	spellAnimation: new Sprite('./img/spells/updraft/spell_240x135.png', 240, 135, 12),
+	canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+});
+
+const level1Spells = [
+	'air.air_shield',
+	'air.updraft',
+	'fire.fire_shield',
+	'fire.fireball',
+	'water.water_shield',
+	'water.wave',
+	'earth.earth_shield',
+	'earth.boulder'
+];
+
+const level2Spells = [
+	'air.air_blade',
+	'air.gentle_breeze',
+	'fire.fire_blade',
+	'fire.magnify',
+	'water.water_blade',
+	'water.weakness',
+	'earth.earth_blade',
+	'earth.burden'
+];
+
+const level3Spells = [
+	'air.air_trap',
+	'air.overcast',
+	'fire.fire_trap',
+	'fire.balefire',
+	'water.water_trap',
+	// need water attack
+	'earth.earth_trap',
+	'earth.earthquake'
+];
+
+const level4Spells = [
+	'air.terrifex',
+	'air.dust_devil',
+	'fire.aquifex',
+	// need fire attack
+	'water.ignifex',
+	'water.deluge',
+	'earth.caelifex',
+	// need earth attack
+];
 
 // easter egg >:)
 function giveMeTheGun() {
