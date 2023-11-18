@@ -11,7 +11,7 @@ function menuGameLoop(timeMs) {
 			ctx.fillRect(x, y + scale(52), sizeX, scale(4));
 		},
 		() => {
-			generateLevel1(timeMs);
+			generateBattleState(timeMs);
 			printMap(state.mapState.map);
 			state = {
 				...state,
@@ -435,8 +435,8 @@ function generateLevel2(timeMs) {
 		}
 		const coinAmount = 1 + Math.round(Math.random() * 3);
 		for (let j = 0; j < coinAmount; j++) {
-			const x = room.x + Math.ceil((room.sizeX - 2) * Math.random()) + 1;
-			const y = room.y + Math.ceil((room.sizeY - 2) * Math.random()) + 1;
+			const x = room.x + (room.sizeX - 2) * Math.random() + 2;
+			const y = room.y + (room.sizeY - 2) * Math.random() + 2;
 
 			items.push({
 				id: crypto.randomUUID(),
@@ -458,8 +458,8 @@ function generateLevel2(timeMs) {
 	shuffleArray(level3SpellsToDistribute);
 	level3SpellsToDistribute.forEach((spell, i) => {
 		const room = freeRoomsWithOneCrossing[i % freeRoomsWithOneCrossing.length];
-		const x = room.x + Math.ceil((room.sizeX - 2) * Math.random()) + 1;
-		const y = room.y + Math.ceil((room.sizeY - 2) * Math.random()) + 1;
+		const x = room.x + (room.sizeX - 2) * Math.random() + 2;
+		const y = room.y + (room.sizeY - 2) * Math.random() + 2;
 		items.push({
 			id: crypto.randomUUID(),
 			x,
@@ -526,8 +526,8 @@ function generateLevel1(timeMs) {
 		}
 		const coinAmount = 1 + Math.round(Math.random() * 3);
 		for (let j = 0; j < coinAmount; j++) {
-			const x = room.x + Math.ceil((room.sizeX - 2) * Math.random()) + 1;
-			const y = room.y + Math.ceil((room.sizeY - 2) * Math.random()) + 1;
+			const x = room.x + (room.sizeX - 2) * Math.random() + 2;
+			const y = room.y + (room.sizeY - 2) * Math.random() + 2;
 
 			items.push({
 				id: crypto.randomUUID(),
@@ -549,8 +549,8 @@ function generateLevel1(timeMs) {
 	shuffleArray(level2SpellsToDistribute);
 	level2SpellsToDistribute.forEach((spell, i) => {
 		const room = freeRoomsWithOneCrossing[i % freeRoomsWithOneCrossing.length];
-		const x = room.x + Math.ceil((room.sizeX - 2) * Math.random()) + 1;
-		const y = room.y + Math.ceil((room.sizeY - 2) * Math.random()) + 1;
+		const x = room.x + (room.sizeX - 2) * Math.random() + 2;
+		const y = room.y + (room.sizeY - 2) * Math.random() + 2;
 		items.push({
 			id: crypto.randomUUID(),
 			x,
@@ -729,6 +729,9 @@ function mapGameLoop(timeMs) {
 					if (state.player.health < state.player.maxHealth) {
 						state.player.health = Math.min(state.player.health + item.value, state.player.maxHealth);
 						removeItemIds.push(item.id);
+						const newItemSound = new Audio('./audio/item.wav');
+						newItemSound.volume = 0.1;
+						newItemSound.play();
 					}
 					break;
 				case 'spell_card':
@@ -738,6 +741,9 @@ function mapGameLoop(timeMs) {
 					}, TICK_TIME, FPS, canvas, ctx, reduceOverlayAnimationQueue));
 					removeItemIds.push(item.id);
 					state.knownSpells.push(item.spell);
+					const newItemSound = new Audio('./audio/item.wav');
+					newItemSound.volume = 0.1;
+					newItemSound.play();
 					break;
 			}
 		});
