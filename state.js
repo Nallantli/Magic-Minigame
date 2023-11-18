@@ -1,7 +1,8 @@
 let state = {
 	knownSpells: level1Spells,
+	level: 1,
 	iterator: 0,
-	path: 'MENU',
+	path: 'LEVEL',
 	player: {
 		...randomFromList(entityDirectory.wizards),
 		id: 'player_character',

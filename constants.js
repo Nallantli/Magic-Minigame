@@ -38,6 +38,9 @@ canvas.addEventListener("keyup", function (evt) {
 const battleTrack = new Audio('./audio/battle_track.wav');
 battleTrack.loop = true;
 
+const levelUpSound = new Audio('./audio/level_up.wav');
+levelUpSound.volume = 0.1;
+
 const sprites = {
 	// PLACEHOLDERS
 	_96x64: new Sprite('./img/_96x64.png', 96, 64, 1),

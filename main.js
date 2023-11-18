@@ -19,18 +19,16 @@ function menuGameLoop(timeMs) {
 			};
 		});
 
-	/*
-makeInteractable(scale(240 - 32), scale(232), scale(64), scale(12),
-	({ x, y, sizeX, sizeY }) => {
-		sprites.EDIT_DECKS_64x12.draw(ctx, x, y, sizeX, sizeY);
-	},
-	({ x, y, sizeX, renderCallback }) => {
-		renderCallback();
-		ctx.fillStyle = 'white';
-		ctx.fillRect(x, y + scale(14), sizeX, scale(4))
-	},
-	() => state.path = 'DECK');
-	*/
+	makeInteractable(scale(240 - 32), scale(232), scale(64), scale(12),
+		({ x, y, sizeX, sizeY }) => {
+			sprites.EDIT_DECKS_64x12.draw(ctx, x, y, sizeX, sizeY);
+		},
+		({ x, y, sizeX, renderCallback }) => {
+			renderCallback();
+			ctx.fillStyle = 'white';
+			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
+		},
+		() => state.path = 'DECK');
 
 	/* makeInteractable(scale(240 - 32), scale(252), scale(64), scale(12),
 		({ x, y, sizeX, sizeY }) => {
@@ -474,7 +472,6 @@ function generateLevel2(timeMs) {
 	});
 
 	state.mapState = {
-		level: 2,
 		rooms,
 		map,
 		crossings,
@@ -566,7 +563,6 @@ function generateLevel1(timeMs) {
 	});
 
 	state.mapState = {
-		level: 1,
 		rooms,
 		map,
 		crossings,
@@ -806,10 +802,12 @@ function mapGameLoop(timeMs) {
 	}
 
 	if (Math.abs(state.mapState.exitStairs.x - state.mapState.entities[playerCharacterIndex].x) + Math.abs(state.mapState.exitStairs.y - state.mapState.entities[playerCharacterIndex].y) < 1) {
-		switch (state.mapState.level) {
+		switch (state.level) {
 			case 1:
+				state.path = 'LEVEL';
+				state.level = 2;
+				levelUpSound.play();
 				keys = {};
-				generateLevel2();
 				state.player.maxHealth *= 1.25;
 				state.player.health = state.player.maxHealth;
 				state.player.criticalRating += 40;
@@ -836,6 +834,41 @@ function loseGameLoop(timeMs) {
 			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
 		},
 		() => state.path = 'MENU');
+}
+
+function levelGameLoop(timeMs) {
+	const levelText = `LEVEL ${state.level}`
+	font.draw(ctx, scale(240 - levelText.length * 12), scale(128), scale(24), scale(32), 0, levelText);
+
+	makeInteractable(scale(240 - 5 * 3), scale(192), scale(6 * 5), scale(12),
+		({ x, y, sizeX, sizeY }) => {
+			font.draw(ctx, x, y, scale(6), scale(8), 0, 'Start');
+		},
+		({ x, y, sizeX, renderCallback }) => {
+			renderCallback();
+			ctx.fillStyle = 'white';
+			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
+		},
+		() => {
+			switch (state.level) {
+				case 1:
+					generateLevel1(timeMs);
+					printMap(state.mapState.map);
+					state = {
+						...state,
+						path: 'MAP'
+					};
+					break;
+				case 2:
+					generateLevel2(timeMs);
+					printMap(state.mapState.map);
+					state = {
+						...state,
+						path: 'MAP'
+					};
+					break;
+			}
+		});
 }
 
 function gameLoop(timeMs) {
@@ -870,6 +903,9 @@ function gameLoop(timeMs) {
 				break;
 			case 'LOSE':
 				loseGameLoop(timeMs);
+				break;
+			case 'LEVEL':
+				levelGameLoop(timeMs);
 				break;
 		}
 	}
