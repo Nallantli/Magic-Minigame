@@ -294,8 +294,7 @@ registerSpell({
 			tick: 8,
 			minDamage: -110,
 			maxDamage: -130,
-			element: 'water',
-			steal: .5
+			element: 'water'
 		}
 	],
 	vrilRequired: 1,
