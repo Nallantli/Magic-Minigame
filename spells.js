@@ -612,6 +612,26 @@ registerSpell({
 	canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 });
 
+registerSpell({
+	id: 'water.baitfish',
+	name: "Baitfish",
+	type: SPELL_TYPES.ATTACK_BASIC,
+	element: 'water',
+	damages: [
+		{
+			tick: 10,
+			minDamage: -160,
+			maxDamage: -190,
+			element: 'water',
+			steal: .5
+		}
+	],
+	vrilRequired: 2,
+	cardSprite: new Sprite('./img/spells/baitfish/card_48x64.png', 48, 64, 1),
+	spellAnimation: new Sprite('./img/spells/baitfish/spell_240x135.png', 240, 135, 16),
+	canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+});
+
 const level1Spells = [
 	'air.air_shield',
 	'air.updraft',
@@ -640,7 +660,7 @@ const level3Spells = [
 	'fire.fire_trap',
 	'fire.balefire',
 	'water.water_trap',
-	// need water attack
+	'water.baitfish',
 	'earth.earth_trap',
 	'earth.earthquake'
 ];
