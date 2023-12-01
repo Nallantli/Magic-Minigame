@@ -433,7 +433,64 @@ const level2Creatures = [
 		castSprite: new Sprite('./img/characters/ghost/cast_64x64.png', 64, 64, 3),
 		deathSprite: new Sprite('./img/characters/ghost/death_64x64.png', 64, 64, 12)
 	},
-]
+];
+
+const level3Creatures = [
+	{
+		id: 'earth_goomborb_lv3',
+		name: 'Goomborb',
+		element: 'earth',
+		maxHealth: 350,
+		health: 350,
+		deck: [
+			'air.air_shield',
+			'earth.earth_blade',
+			'earth.earth_shield',
+			'earth.boulder',
+			'earth.boulder',
+			'earth.burden',
+			'earth.earth_trap',
+			'earth.earthquake',
+			'earth.earthquake'
+		],
+		augments: {
+			earth: 0.9,
+			air: 1.2
+		},
+		criticalRating: 80,
+		superVrilChance: 0.2,
+		idleSprite: new Sprite('./img/characters/goomborb/idle_64x64.png', 64, 64, 10),
+		castSprite: new Sprite('./img/characters/goomborb/cast_64x64.png', 64, 64, 2),
+		deathSprite: new Sprite('./img/characters/goomborb/death_64x64.png', 64, 64, 7)
+	},
+	{
+		id: 'fire_phoenix_lv3',
+		name: 'Phoenix',
+		element: 'fire',
+		maxHealth: 300,
+		health: 300,
+		deck: [
+			'water.water_shield',
+			'fire.fire_shield',
+			'fire.fire_blade',
+			'fire.fireball',
+			'fire.fireball',
+			'fire.magnify',
+			'fire.fire_trap',
+			'fire.balefire',
+			'fire.balefire',
+		],
+		augments: {
+			fire: 0.9,
+			water: 1.2
+		},
+		criticalRating: 60,
+		superVrilChance: 0.2,
+		idleSprite: new Sprite('./img/characters/phoenix/idle_64x64.png', 64, 64, 8),
+		castSprite: new Sprite('./img/characters/phoenix/idle_64x64.png', 64, 64, 8),
+		deathSprite: new Sprite('./img/characters/phoenix/death_64x64.png', 64, 64, 10)
+	}
+];
 
 const randomAI = (index, battleData) => {
 	const entityData = battleData[index];

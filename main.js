@@ -371,6 +371,122 @@ function getStartAndEndRooms(rooms, map, crossings) {
 	}
 }
 
+function generateLevel3(timeMs) {
+	const { rooms, map, crossings } = generateDungeon(30, 30, 5, 5, 10, 10);
+	const { startingRoom, endRoomCrossing, endingRoom, exitStairs, roomsWithOneCrossing } = getStartAndEndRooms(rooms, map, crossings);
+
+	let enemyRooms = rooms.filter(({ x, y, sizeX, sizeY, id }) => sizeX * sizeY > 15 && !(x === 0 && y === 0) && id !== startingRoom.id && id !== endingRoom.id);
+	shuffleArray(enemyRooms);
+
+	let enemies = [];
+	let roomWithEnemiesIds = [];
+	for (let i = 0; i < 6; i++) {
+		const room = enemyRooms.pop();
+		if (!room) {
+			break;
+		}
+		roomWithEnemiesIds.push(room.id);
+		if (room.sizeX * room.sizeY > 40) {
+			enemies.push({
+				id: `enemy.${i}-1.${room.id}`,
+				x: room.x + room.sizeX / 2 - 0.5,
+				y: room.y + room.sizeY / 2 - 0.5,
+				mirror: Math.random() <= 0.5,
+				roomId: room.id,
+				model: {
+					...randomFromList(level3Creatures),
+					id: crypto.randomUUID()
+				}
+			});
+			enemies.push({
+				id: `enemy.${i}-2.${room.id}`,
+				x: room.x + room.sizeX / 2 + 1.5,
+				y: room.y + room.sizeY / 2 + 1.5,
+				mirror: Math.random() <= 0.5,
+				roomId: room.id,
+				model: {
+					...randomFromList(level3Creatures),
+					id: crypto.randomUUID()
+				}
+			});
+		} else {
+			enemies.push({
+				id: `enemy.${i}.${room.id}`,
+				x: room.x + room.sizeX / 2 + 0.5,
+				y: room.y + room.sizeY / 2 + 0.5,
+				mirror: Math.random() <= 0.5,
+				roomId: room.id,
+				model: {
+					...randomFromList(level3Creatures),
+					id: crypto.randomUUID()
+				}
+			});
+		}
+	}
+
+	let freeRooms = rooms.filter(room => !roomWithEnemiesIds.includes(room.id) && room.id !== startingRoom.id && room.id !== endingRoom.id);
+	shuffleArray(freeRooms);
+
+	let items = [];
+	for (let i = 0; i < 5; i++) {
+		const room = freeRooms.pop();
+		if (!room) {
+			break;
+		}
+		const coinAmount = 1 + Math.round(Math.random() * 3);
+		for (let j = 0; j < coinAmount; j++) {
+			const x = room.x + (room.sizeX - 2) * Math.random() + 2;
+			const y = room.y + (room.sizeY - 2) * Math.random() + 2;
+
+			items.push({
+				id: crypto.randomUUID(),
+				x,
+				y,
+				type: 'heal_coin',
+				value: 50,
+				roomId: room.id,
+				sprite: sprites.HEAL_COIN_16x16
+			});
+		}
+	}
+
+	let freeRoomsWithOneCrossing = roomsWithOneCrossing.filter(({ id }) => id !== startingRoom.id && id !== endingRoom.id);
+	shuffleArray(freeRoomsWithOneCrossing);
+	const level4SpellsToDistribute = [
+		...level4Spells
+	];
+	shuffleArray(level4SpellsToDistribute);
+	level4SpellsToDistribute.forEach((spell, i) => {
+		const room = freeRoomsWithOneCrossing[i % freeRoomsWithOneCrossing.length];
+		const x = room.x + (room.sizeX - 2) * Math.random() + 2;
+		const y = room.y + (room.sizeY - 2) * Math.random() + 2;
+		items.push({
+			id: crypto.randomUUID(),
+			x,
+			y,
+			type: 'spell_card',
+			spell,
+			roomId: room.id,
+			sprite: ELEMENT_CARD_ITEMS[getSpell(spell).element]
+		});
+	});
+
+	state.mapState = {
+		rooms,
+		map,
+		crossings,
+		lastTimeMs: timeMs,
+		tileSize: 32,
+		endRoomCrossing,
+		exitStairs,
+		entities: [
+			{ id: 'player_character', x: startingRoom.x + 2, y: startingRoom.y + 2, mirror: false },
+			...enemies
+		],
+		items
+	};
+}
+
 function generateLevel2(timeMs) {
 	const { rooms, map, crossings } = generateDungeon(30, 30, 5, 5, 10, 10);
 	const { startingRoom, endRoomCrossing, endingRoom, exitStairs, roomsWithOneCrossing } = getStartAndEndRooms(rooms, map, crossings);
@@ -819,6 +935,16 @@ function mapGameLoop(timeMs) {
 				state.player.criticalRating += 40;
 				state.player.superVrilChance += 0.1;
 				break;
+			case 2:
+				state.path = 'LEVEL';
+				state.level = 3;
+				levelUpSound.play();
+				keys = {};
+				state.player.maxHealth *= 1.25;
+				state.player.health = state.player.maxHealth;
+				state.player.criticalRating += 40;
+				state.player.superVrilChance += 0.1;
+				break;
 		}
 	}
 
@@ -867,6 +993,14 @@ function levelGameLoop(timeMs) {
 					break;
 				case 2:
 					generateLevel2(timeMs);
+					printMap(state.mapState.map);
+					state = {
+						...state,
+						path: 'MAP'
+					};
+					break;
+				case 3:
+					generateLevel3(timeMs);
 					printMap(state.mapState.map);
 					state = {
 						...state,
