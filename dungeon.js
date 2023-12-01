@@ -177,8 +177,8 @@ function generateDungeon(mapSizeX, mapSizeY, minRoomSizeX, minRoomSizeY, maxRoom
 function printMap(map) {
 	let s = '';
 
-	for (let i = 0; i < 50; i++) {
-		for (let j = 0; j < 50; j++) {
+	for (let i = 0; i < map.length; i++) {
+		for (let j = 0; j < map[i].length; j++) {
 			if (map[i][j] === 1) {
 				s += '██';
 			}

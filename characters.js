@@ -492,6 +492,41 @@ const level3Creatures = [
 	}
 ];
 
+const boss1 = {
+		id: 'boss_skull',
+		name: 'King Skull',
+		element: 'earth',
+		maxHealth: 600,
+		health: 600,
+		deck: [
+			'earth.earth_blade',
+			'earth.earth_blade',
+			'earth.earth_shield',
+			'earth.earth_shield',
+			'earth.boulder',
+			'earth.boulder',
+			'air.gentle_breeze',
+			'earth.burden',
+			'fire.magnify',
+			'water.weakness',
+			'earth.earth_trap',
+			'earth.earth_trap',
+			'earth.earthquake',
+			'earth.earthquake',
+			'earth.earthquake',
+			'earth.earthquake'
+		],
+		augments: {
+			earth: 0.8,
+			air: 1.3
+		},
+		criticalRating: 80,
+		superVrilChance: 0.3,
+		idleSprite: new Sprite('./img/characters/skull/idle_64x64.png', 64, 64, 10),
+		castSprite: new Sprite('./img/characters/skull/cast_64x64.png', 64, 64, 6),
+		deathSprite: new Sprite('./img/characters/skull/death_64x64.png', 64, 64, 13)
+}
+
 const randomAI = (index, battleData) => {
 	const entityData = battleData[index];
 	const accessibleCards = entityData.hand

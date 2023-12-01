@@ -694,6 +694,73 @@ function generateLevel1(timeMs) {
 	};
 }
 
+function generateBossRoom(timeMs) {
+	const map = [
+		[0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
+		[0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+		[0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+		[0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+		[1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1]
+	];
+	const rooms = [
+		{
+			x: 4,
+			y: 0,
+			id: `boss_room`,
+			sizeX: 9,
+			sizeY: 9,
+		},
+		{
+			x: 10,
+			y: 3,
+			sizeX: 4,
+			sizeY: 4,
+			id: `entry_room`,
+		}
+	];
+	const crossings = [
+		{
+			leftId: 'boss_room',
+			rightId: 'entry_room',
+			x: 4,
+			y: 5
+		}
+	];
+
+
+	for (let i = 1; i < 4; i++) {
+		for (let j = 4; j < 7; j++) {
+			map[i][j] = -1;
+		}
+	}
+
+	state.mapState = {
+		rooms,
+		map,
+		crossings,
+		lastTimeMs: timeMs,
+		tileSize: 32,
+		endRoomCrossing: {
+			x: 14,
+			y: 5
+		},
+		entities: [
+			{ id: 'player_character', x: 2, y: 5, mirror: false },
+			{ id: 'boss', x: 10, y: 5, roomId: 'boss_room', model: boss1 }
+		]
+	};
+}
+
 function mapGameLoop(timeMs) {
 	const playerCharacterIndex = state.mapState.entities.findIndex(({ id }) => id === 'player_character');
 	const passedTimeMs = timeMs - state.mapState.lastTimeMs;
@@ -733,7 +800,7 @@ function mapGameLoop(timeMs) {
 		}
 	}
 
-	const { tileSize, entities, items } = state.mapState;
+	const { tileSize, entities, items = [] } = state.mapState;
 
 	let entitiesNear = entities.filter(entity => {
 		if (entity.id === 'player_character') {
@@ -937,32 +1004,18 @@ function mapGameLoop(timeMs) {
 		};
 	}
 
-	if (Math.abs(state.mapState.exitStairs.x - state.mapState.entities[playerCharacterIndex].x) + Math.abs(state.mapState.exitStairs.y - state.mapState.entities[playerCharacterIndex].y) < 1) {
-		switch (state.level) {
-			case 1:
-				walkingTrack.pause();
-				walkingTrack.currentTime = 0;
-				state.path = 'LEVEL';
-				state.level = 2;
-				levelUpSound.play();
-				keys = {};
-				state.player.maxHealth *= 1.25;
-				state.player.health = state.player.maxHealth;
-				state.player.criticalRating += 40;
-				state.player.superVrilChance += 0.1;
-				break;
-			case 2:
-				walkingTrack.pause();
-				walkingTrack.currentTime = 0;
-				state.path = 'LEVEL';
-				state.level = 3;
-				levelUpSound.play();
-				keys = {};
-				state.player.maxHealth *= 1.25;
-				state.player.health = state.player.maxHealth;
-				state.player.criticalRating += 40;
-				state.player.superVrilChance += 0.1;
-				break;
+	if (state.mapState.exitStairs) {
+		if (Math.abs(state.mapState.exitStairs.x - state.mapState.entities[playerCharacterIndex].x) + Math.abs(state.mapState.exitStairs.y - state.mapState.entities[playerCharacterIndex].y) < 1) {
+			state.level++;
+			walkingTrack.pause();
+			walkingTrack.currentTime = 0;
+			state.path = 'LEVEL';
+			levelUpSound.play();
+			keys = {};
+			state.player.maxHealth *= 1.25;
+			state.player.health = state.player.maxHealth;
+			state.player.criticalRating += 40;
+			state.player.superVrilChance += 0.1;
 		}
 	}
 
@@ -1004,29 +1057,22 @@ function levelGameLoop(timeMs) {
 			switch (state.level) {
 				case 1:
 					generateLevel1(timeMs);
-					printMap(state.mapState.map);
-					state = {
-						...state,
-						path: 'MAP'
-					};
 					break;
 				case 2:
 					generateLevel2(timeMs);
-					printMap(state.mapState.map);
-					state = {
-						...state,
-						path: 'MAP'
-					};
 					break;
 				case 3:
 					generateLevel3(timeMs);
-					printMap(state.mapState.map);
-					state = {
-						...state,
-						path: 'MAP'
-					};
+					break;
+				case 4:
+					generateBossRoom(timeMs);
 					break;
 			}
+			printMap(state.mapState.map);
+			state = {
+				...state,
+				path: 'MAP'
+			};
 		});
 }
 
