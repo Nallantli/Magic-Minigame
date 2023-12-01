@@ -698,5 +698,10 @@ function giveMeTheGun() {
 	if (state.battleState) {
 		state.battleState.battleData[state.battleState.playerIndex].hand.push(gun.id);
 	}
+	state.knownSpells.push(gun.id);
 	registerSpell(gun);
+}
+
+function giveMeAllSpells() {
+	state.knownSpells = Object.keys(spellDirectory);
 }
