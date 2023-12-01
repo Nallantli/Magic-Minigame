@@ -201,7 +201,11 @@ function drawCards(battleState) { //playerData, selectedCard) {
 			ctx.fillStyle = 'white';
 			ctx.fillRect(x, y + scale(18), sizeX, scale(4));
 		},
-		() => inputData.selectedCard = 'PASS');
+		() => {
+			if (selectedCard === undefined) {
+				inputData.selectedCard = 'PASS';
+			}
+		});
 
 	return inputData;
 }
