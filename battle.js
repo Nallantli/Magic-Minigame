@@ -15,7 +15,11 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 			makeInteractable(scale(2), i * scale(67) + scale(2), scale(160), scale(65),
 				() => { },
 				({ x, y, sizeX, sizeY }) => selectedPlayerSpell !== undefined && sprites.PLACARD_160x65.draw(ctx, x, y, sizeX, sizeY),
-				() => inputData.selectedVictims = [i]);
+				() => {
+					if (selectedPlayerSpell !== undefined && selectedPlayerSpell.canUseSpellOn(playerIndex, i)) {
+						inputData.selectedVictims = [i];
+					}
+				});
 		} else {
 			ctx.globalAlpha = 0.25;
 		}
@@ -91,7 +95,11 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 			makeInteractable(scale(480 - 162), i_offset * scale(67) + scale(2), scale(160), scale(65),
 				() => { },
 				({ x, y, sizeX, sizeY }) => selectedPlayerSpell !== undefined && sprites.PLACARD_RIGHT_160x65.draw(ctx, x, y, sizeX, sizeY),
-				() => inputData.selectedVictims = [i]);
+				() => {
+					if (selectedPlayerSpell !== undefined && selectedPlayerSpell.canUseSpellOn(playerIndex, i)) {
+						inputData.selectedVictims = [i];
+					}
+				});
 		} else {
 			ctx.globalAlpha = 0.25;
 		}
