@@ -86,7 +86,8 @@ const sprites = {
 };
 
 const tiles = {
-	BRICK: new Tile('./img/maps/tiles/brick.png', 32, 32)
+	BRICK: new Tile('./img/maps/tiles/brick.png', 32, 32),
+	SINITIC: new Tile('./img/maps/tiles/sinitic.png', 32, 32)
 };
 
 const numberText = new NumberText('./img/numbers_4x6.png', 4, 6);

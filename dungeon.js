@@ -143,7 +143,7 @@ function divideRoom(room, minRoomSizeX, minRoomSizeY, maxRoomSizeX, maxRoomSizeY
 	};
 }
 
-function generateDungeon(mapSizeX, mapSizeY, minRoomSizeX, minRoomSizeY, maxRoomSizeX, maxRoomSizeY) {
+function generateDungeon(mapSizeX, mapSizeY, minRoomSizeX, minRoomSizeY, maxRoomSizeX, maxRoomSizeY, wallSpriteIndex) {
 	let room =
 		{ x: 0, y: 0, sizeX: mapSizeX - 1, sizeY: mapSizeY - 1 };
 	const { rooms, crossings } = divideRoom(room, minRoomSizeX, minRoomSizeY, maxRoomSizeX, maxRoomSizeY);
@@ -158,16 +158,16 @@ function generateDungeon(mapSizeX, mapSizeY, minRoomSizeX, minRoomSizeY, maxRoom
 
 	rooms.forEach(room => {
 		for (let i = 0; i < room.sizeX; i++) {
-			map[room.x + i][room.y] = 1;
-			map[room.x + i][room.y + room.sizeY] = 1;
+			map[room.x + i][room.y] = wallSpriteIndex;
+			map[room.x + i][room.y + room.sizeY] = wallSpriteIndex;
 		}
 		for (let i = 0; i < room.sizeY; i++) {
-			map[room.x][room.y + i] = 1;
-			map[room.x + room.sizeX][room.y + i] = 1;
+			map[room.x][room.y + i] = wallSpriteIndex;
+			map[room.x + room.sizeX][room.y + i] = wallSpriteIndex;
 		}
 	});
 
-	map[mapSizeX - 1][mapSizeY - 1] = 1;
+	map[mapSizeX - 1][mapSizeY - 1] = wallSpriteIndex;
 
 	crossings.filter(crossing => crossing !== undefined).forEach(({ x, y }) => map[x][y] = 0);
 

@@ -372,7 +372,7 @@ function getStartAndEndRooms(rooms, map, crossings) {
 }
 
 function generateLevel3(timeMs) {
-	const { rooms, map, crossings } = generateDungeon(30, 30, 5, 5, 10, 10);
+	const { rooms, map, crossings } = generateDungeon(30, 30, 5, 5, 10, 10, 1);
 	const { startingRoom, endRoomCrossing, endingRoom, exitStairs, roomsWithOneCrossing } = getStartAndEndRooms(rooms, map, crossings);
 
 	let enemyRooms = rooms.filter(({ x, y, sizeX, sizeY, id }) => sizeX * sizeY > 15 && !(x === 0 && y === 0) && id !== startingRoom.id && id !== endingRoom.id);
@@ -488,7 +488,7 @@ function generateLevel3(timeMs) {
 }
 
 function generateLevel2(timeMs) {
-	const { rooms, map, crossings } = generateDungeon(30, 30, 5, 5, 10, 10);
+	const { rooms, map, crossings } = generateDungeon(30, 30, 5, 5, 10, 10, 4);
 	const { startingRoom, endRoomCrossing, endingRoom, exitStairs, roomsWithOneCrossing } = getStartAndEndRooms(rooms, map, crossings);
 
 	let enemyRooms = rooms.filter(({ x, y, sizeX, sizeY, id }) => sizeX * sizeY > 15 && !(x === 0 && y === 0) && id !== startingRoom.id && id !== endingRoom.id);
@@ -604,7 +604,7 @@ function generateLevel2(timeMs) {
 }
 
 function generateLevel1(timeMs) {
-	const { rooms, map, crossings } = generateDungeon(30, 30, 5, 5, 10, 10);
+	const { rooms, map, crossings } = generateDungeon(30, 30, 5, 5, 10, 10, 1);
 	const { startingRoom, endRoomCrossing, endingRoom, exitStairs, roomsWithOneCrossing } = getStartAndEndRooms(rooms, map, crossings);
 
 	let enemyRooms = rooms.filter(({ x, y, sizeX, sizeY, id }) => sizeX * sizeY > 15 && !(x === 0 && y === 0) && id !== startingRoom.id && id !== endingRoom.id);
@@ -776,7 +776,7 @@ function mapGameLoop(timeMs) {
 					case 0:
 						sprites.GROUND_32x32.draw(ctx, scale((i - cameraPosX) * tileSize), scale((j - cameraPosY) * tileSize), scale(tileSize), scale(tileSize));
 						break;
-					case 1:
+					case 1: {
 						const neighborArray = [
 							getTileAt(state.mapState.map, i, j - 1) === tile,
 							getTileAt(state.mapState.map, i - 1, j) === tile,
@@ -785,6 +785,17 @@ function mapGameLoop(timeMs) {
 						];
 						tiles.BRICK.draw(ctx, scale((i - cameraPosX) * tileSize), scale((j - cameraPosY) * tileSize), scale(tileSize), scale(tileSize), neighborArray);
 						break;
+					}
+					case 4: {
+						const neighborArray = [
+							getTileAt(state.mapState.map, i, j - 1) === tile,
+							getTileAt(state.mapState.map, i - 1, j) === tile,
+							getTileAt(state.mapState.map, i + 1, j) === tile,
+							getTileAt(state.mapState.map, i, j + 1) === tile,
+						];
+						tiles.SINITIC.draw(ctx, scale((i - cameraPosX) * tileSize), scale((j - cameraPosY) * tileSize), scale(tileSize), scale(tileSize), neighborArray);
+						break;
+					}
 					case 2:
 						sprites.LOCKED_DOOR_32x32.draw(ctx, scale((i - cameraPosX) * tileSize), scale((j - cameraPosY) * tileSize), scale(tileSize), scale(tileSize));
 						break;
@@ -965,7 +976,7 @@ function loseGameLoop(timeMs) {
 			ctx.fillStyle = 'white';
 			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
 		},
-		() => state.path = 'MENU');
+		() => state.path = 'LEVEL');
 }
 
 function levelGameLoop(timeMs) {
