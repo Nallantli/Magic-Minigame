@@ -882,6 +882,8 @@ function mapGameLoop(timeMs) {
 		const entitiesInRoom = entities.filter(entity => entity.roomId === roomId).map(({ model }) => model);
 		const goLeft = Math.random() <= 0.5;
 		console.log(entitiesInRoom);
+		walkingTrack.pause();
+		walkingTrack.currentTime = 0;
 		battleTrack.play();
 		state = {
 			...state,
@@ -890,6 +892,7 @@ function mapGameLoop(timeMs) {
 				() => {
 					battleTrack.pause();
 					battleTrack.currentTime = 0;
+					walkingTrack.play();
 					console.log("you win!");
 					state.mapState.entities = state.mapState.entities.filter(entity => entity.roomId !== roomId);
 					if (state.mapState.entities.length === 1) {
@@ -937,6 +940,8 @@ function mapGameLoop(timeMs) {
 	if (Math.abs(state.mapState.exitStairs.x - state.mapState.entities[playerCharacterIndex].x) + Math.abs(state.mapState.exitStairs.y - state.mapState.entities[playerCharacterIndex].y) < 1) {
 		switch (state.level) {
 			case 1:
+				walkingTrack.pause();
+				walkingTrack.currentTime = 0;
 				state.path = 'LEVEL';
 				state.level = 2;
 				levelUpSound.play();
@@ -947,6 +952,8 @@ function mapGameLoop(timeMs) {
 				state.player.superVrilChance += 0.1;
 				break;
 			case 2:
+				walkingTrack.pause();
+				walkingTrack.currentTime = 0;
 				state.path = 'LEVEL';
 				state.level = 3;
 				levelUpSound.play();
@@ -993,6 +1000,7 @@ function levelGameLoop(timeMs) {
 			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
 		},
 		() => {
+			walkingTrack.play();
 			switch (state.level) {
 				case 1:
 					generateLevel1(timeMs);

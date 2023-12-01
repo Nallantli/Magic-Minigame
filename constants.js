@@ -38,6 +38,10 @@ canvas.addEventListener("keyup", function (evt) {
 const battleTrack = new Audio('./audio/battle_track.wav');
 battleTrack.loop = true;
 
+const walkingTrack = new Audio('./audio/cave.wav');
+walkingTrack.loop = true;
+walkingTrack.volume = 0.5;
+
 const levelUpSound = new Audio('./audio/level_up.wav');
 levelUpSound.volume = 0.1;
 
