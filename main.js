@@ -502,42 +502,17 @@ function generateLevel2(timeMs) {
 			break;
 		}
 		roomWithEnemiesIds.push(room.id);
-		if (room.sizeX * room.sizeY > 40) {
-			enemies.push({
-				id: `enemy.${i}-1.${room.id}`,
-				x: room.x + room.sizeX / 2 - 0.5,
-				y: room.y + room.sizeY / 2 - 0.5,
-				mirror: Math.random() <= 0.5,
-				roomId: room.id,
-				model: {
-					...randomFromList(level2Creatures),
-					id: crypto.randomUUID()
-				}
-			});
-			enemies.push({
-				id: `enemy.${i}-2.${room.id}`,
-				x: room.x + room.sizeX / 2 + 1.5,
-				y: room.y + room.sizeY / 2 + 1.5,
-				mirror: Math.random() <= 0.5,
-				roomId: room.id,
-				model: {
-					...randomFromList(level2Creatures),
-					id: crypto.randomUUID()
-				}
-			});
-		} else {
-			enemies.push({
-				id: `enemy.${i}.${room.id}`,
-				x: room.x + room.sizeX / 2 + 0.5,
-				y: room.y + room.sizeY / 2 + 0.5,
-				mirror: Math.random() <= 0.5,
-				roomId: room.id,
-				model: {
-					...randomFromList(level2Creatures),
-					id: crypto.randomUUID()
-				}
-			});
-		}
+		enemies.push({
+			id: `enemy.${i}.${room.id}`,
+			x: room.x + room.sizeX / 2 + 0.5,
+			y: room.y + room.sizeY / 2 + 0.5,
+			mirror: Math.random() <= 0.5,
+			roomId: room.id,
+			model: {
+				...randomFromList(level2Creatures),
+				id: crypto.randomUUID()
+			}
+		});
 	}
 
 	let freeRooms = rooms.filter(room => !roomWithEnemiesIds.includes(room.id) && room.id !== startingRoom.id && room.id !== endingRoom.id);
