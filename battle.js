@@ -1,4 +1,4 @@
-function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, selectedVictims, playerIndex) {
+function drawBattleField(battleState, iterator) { // battleData, selectedCards, selectedVictims, playerIndex) {
 	let inputData = {};
 	const { battleData, selectedCards, selectedVictims, playerIndex } = battleState;
 	const selectedPlayerSpell = selectedCards[playerIndex] === undefined ? undefined : getSpell(battleData[playerIndex].hand[selectedCards[playerIndex]]);
@@ -8,7 +8,6 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 		if (!battleEntity) {
 			continue;
 		}
-		const selectedEntitySpell = selectedCards[i] === undefined ? undefined : getSpell(battleData[i].hand[selectedCards[i]]);
 
 		if (selectedPlayerSpell === undefined || canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 			ctx.globalAlpha = 1;
@@ -21,7 +20,11 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 					}
 				});
 		} else {
-			ctx.globalAlpha = 0.25;
+			if (selectedVictims[playerIndex].length > 0) {
+				ctx.globalAlpha = 1;
+			} else {
+				ctx.globalAlpha = 0.25;
+			}
 		}
 
 		const { shields, blades, vril, superVril, entity } = battleEntity;
@@ -61,24 +64,27 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 			sprites.VRIL_4x4.draw(ctx, scale(6), (i + 1) * scale(67) - (j + superVril) * scale(6) - scale(10), scale(4), scale(4), { iIndex: ELEMENT_COLORS[entity.element] });
 		}
 
-		if (selectedEntitySpell) {
-			getCardSprite(selectedEntitySpell).draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
-			if (selectedVictims[i].length > 0) {
-				const index = selectedVictims[i];
-				selectedVictims[i].forEach(index => {
-					if (index < 4) {
-						numberText.draw(ctx, scale(170), i * scale(67) + scale(49), scale(8), scale(12), 0, String(index + 1));
-						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(182), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
-					} else {
-						numberText.draw(ctx, scale(182), i * scale(67) + scale(49), scale(8), scale(12), 0, String(index - 3));
-						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(170), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
-					}
-				});
+		if (playerIndex < 4) {
+			const selectedEntitySpell = selectedCards[i] === undefined ? undefined : getSpell(battleData[i].hand[selectedCards[i]]);
+			if (selectedEntitySpell) {
+				getCardSprite(selectedEntitySpell).draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
+				if (selectedVictims[i].length > 0) {
+					const index = selectedVictims[i];
+					selectedVictims[i].forEach(index => {
+						if (index < 4) {
+							numberText.draw(ctx, scale(170), i * scale(67) + scale(49), scale(8), scale(12), 0, String(index + 1));
+							sprites.VICTIM_ARROW_8x16.draw(ctx, scale(182), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
+						} else {
+							numberText.draw(ctx, scale(182), i * scale(67) + scale(49), scale(8), scale(12), 0, String(index - 3));
+							sprites.VICTIM_ARROW_8x16.draw(ctx, scale(170), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
+						}
+					});
+				}
 			}
-		}
 
-		if (selectedCards[i] === 'PASS') {
-			sprites.PASS_24x32.draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
+			if (selectedCards[i] === 'PASS') {
+				sprites.PASS_24x32.draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
+			}
 		}
 	}
 
@@ -101,7 +107,11 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 					}
 				});
 		} else {
-			ctx.globalAlpha = 0.25;
+			if (selectedVictims[playerIndex].length > 0) {
+				ctx.globalAlpha = 1;
+			} else {
+				ctx.globalAlpha = 0.25;
+			}
 		}
 
 		const { shields, blades, vril, superVril, entity } = battleEntity;
@@ -140,13 +150,36 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 		for (let j = 0; j < vril; j++) {
 			sprites.VRIL_4x4.draw(ctx, scale(480 - 10), (i_offset + 1) * scale(67) - (j + superVril) * scale(6) - scale(10), scale(4), scale(4), { iIndex: ELEMENT_COLORS[entity.element] });
 		}
+
+		if (playerIndex >= 4) {
+			const selectedEntitySpell = selectedCards[i] === undefined ? undefined : getSpell(battleData[i].hand[selectedCards[i]]);
+			if (selectedEntitySpell) {
+				getCardSprite(selectedEntitySpell).draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
+				if (selectedVictims[i].length > 0) {
+					const index = selectedVictims[i];
+					selectedVictims[i].forEach(index => {
+						if (index < 4) {
+							numberText.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, String(index + 1));
+							sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
+						} else {
+							numberText.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, String(index - 3));
+							sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
+						}
+					});
+				}
+			}
+
+			if (selectedCards[i] === 'PASS') {
+				sprites.PASS_24x32.draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
+			}
+		}
 	}
 
 	return inputData;
 }
 
 function drawCards(battleState) { //playerData, selectedCard) {
-	const { selectedCards, playerIndex, battleData } = battleState;
+	const { selectedCards, playerIndex, battleData, selectedVictims } = battleState;
 	const playerData = battleData[playerIndex];
 	const selectedCard = selectedCards[playerIndex];
 
@@ -159,7 +192,11 @@ function drawCards(battleState) { //playerData, selectedCard) {
 		if (hasEnoughVril && selectedCard === undefined || selectedCard === i) {
 			ctx.globalAlpha = 1;
 		} else {
-			ctx.globalAlpha = 0.25;
+			if (selectedVictims[playerIndex].length > 0) {
+				ctx.globalAlpha = 1;
+			} else {
+				ctx.globalAlpha = 0.25;
+			}
 		}
 
 		makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
@@ -271,51 +308,63 @@ function getReturnSequence(battleData) {
 	};
 }
 
-function battleGameLoop(timeMs) {
+function drawBattleIdle(state) {
 	const { battleState, iterator } = state;
+
+	const inputData = {
+		...drawCards(battleState),
+		...drawBattleField(battleState, iterator)
+	};
+
+	ctx.globalAlpha = 1;
+	ctx.fillStyle = 'white';
+	ctx.fillRect(0, scale(270), scale(480), scale(1));
+
+	return inputData;
+}
+
+function areAllPlayersReady(battleState) {
+	for (let i = 0; i < battleState.battleData.length; i++) {
+		if (battleState.battleData[i] === undefined) {
+			continue;
+		}
+		if (battleState.selectedCards[i] === undefined || battleState.selectedVictims[i].length === 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function handleInput(battleState, inputData) {
+	// handle input
+	if (inputData.selectedCard !== undefined) {
+		battleState.selectedCards[battleState.playerIndex] = inputData.selectedCard;
+	}
+	if (inputData.selectedVictims !== undefined) {
+		battleState.selectedVictims[battleState.playerIndex] = inputData.selectedVictims;
+	}
+	if (inputData.discardCard !== undefined) {
+		battleState.battleData[battleState.playerIndex].hand.splice(inputData.discardCard, 1);
+	}
+	if (rightClickPos) {
+		if (battleState.selectedCards[battleState.playerIndex] !== undefined && battleState.selectedVictims[battleState.playerIndex].length === 0) {
+			battleState.selectedCards[battleState.playerIndex] = undefined;
+		} else if (battleState.selectedVictims[battleState.playerIndex].length > 0) {
+			battleState.selectedVictims[battleState.playerIndex] = [];
+		}
+	}
+}
+
+function battleGameLoop(timeMs) {
+	const { battleState } = state;
 	const { onWin, onLose } = battleState;
 
 	let inputData = {};
 
 	if (battleState.battleIndex === -1) {
-		battleState.battleData.forEach((battleEntity, i) => {
-			if (!battleEntity) {
-				return;
-			}
-			if (battleState.selectedCards[i] !== undefined) {
-				return;
-			}
-			if (battleState.playerIndex !== i && battleEntity.AI) {
-				const { selectedCard, selectedVictims } = battleEntity.AI(i, battleState.battleData);
-				battleState.selectedCards[i] = selectedCard;
-				battleState.selectedVictims[i] = selectedVictims;
-			}
-		});
+		inputData = { inputData, ...drawBattleIdle(state) };
 
-		inputData = {
-			...inputData,
-			...drawCards(battleState), // battleData.left[0], selectedCards[playerIndex])
-			...drawBattleIdle(battleState, iterator) // battleData, selectedCards, selectedVictims, playerIndex)
-		};
-
-		ctx.globalAlpha = 1;
-		ctx.fillStyle = 'white';
-		ctx.fillRect(0, scale(270), scale(480), scale(1));
-
-		// handle input
-		if (inputData.selectedCard !== undefined) {
-			battleState.selectedCards[battleState.playerIndex] = inputData.selectedCard;
-		}
-		if (inputData.selectedVictims !== undefined) {
-			battleState.selectedVictims[battleState.playerIndex] = inputData.selectedVictims;
-		}
-		if (inputData.discardCard !== undefined) {
-			battleState.battleData[battleState.playerIndex].hand.splice(inputData.discardCard, 1);
-		}
-		if (rightClickPos && battleState.selectedCards[battleState.playerIndex] !== undefined) {
-			battleState.selectedCards[battleState.playerIndex] = undefined;
-		}
-		if (battleState.selectedCards[battleState.playerIndex] === 'PASS' || battleState.selectedVictims[battleState.playerIndex].length > 0) {
+		if (areAllPlayersReady(battleState)) {
 			const withdrawAnimationData = {
 				ticks: 10,
 				actions: [
@@ -370,6 +419,8 @@ function battleGameLoop(timeMs) {
 			state.animationQueue.push(new AnimationEngine(withdrawAnimationData, TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 			battleState.battleIndex = 0;
 		}
+
+		handleInput(battleState, inputData);
 	} else {
 		const postBattle = () => {
 			battleState.battleIndex++;
@@ -408,6 +459,7 @@ function battleGameLoop(timeMs) {
 					onWin();
 				} else {
 					state.animationQueue.push(new AnimationEngine(getReturnSequence(battleState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+					selectCardsForAI(battleState);
 				}
 			}
 		};

@@ -259,7 +259,7 @@ function generateBattleEntity(entity, AI) {
 
 function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
 	let leftBattleEntities = [
-		...leftEntities.map(entity => generateBattleEntity(entity, randomAI)),
+		...leftEntities.map(entity => generateBattleEntity(entity, randomAI))
 	];
 	shuffleArray(leftBattleEntities);
 
@@ -286,7 +286,7 @@ function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
 
 	state.animationQueue.push(new AnimationEngine(getReturnSequence(battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 
-	return {
+	const battleState = {
 		iterator: 0,
 		startTime: undefined,
 		battleData,
@@ -297,4 +297,20 @@ function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
 		onWin,
 		onLose
 	};
+
+	selectCardsForAI(battleState);
+	return battleState;
+}
+
+function selectCardsForAI(battleState) {
+	battleState.battleData.forEach((battleEntity, i) => {
+		if (!battleEntity) {
+			return;
+		}
+		if (battleState.playerIndex !== i && battleEntity.AI) {
+			const { selectedCard, selectedVictims } = battleEntity.AI(i, battleState.battleData);
+			battleState.selectedCards[i] = selectedCard;
+			battleState.selectedVictims[i] = selectedVictims;
+		}
+	});
 }
