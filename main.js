@@ -81,7 +81,7 @@ function deckGameLoop(timeMs) {
 				const card = getSpell(deck[deckIndex]);
 				makeInteractable(scale(50 + j * 50), scale(50 + i * 50), scale(48), scale(48),
 					({ x, y, sizeX, sizeY }) => {
-						card.cardSprite.draw(ctx, x, y, sizeX, sizeY, { cropY: 48 });
+						getCardSprite(card).draw(ctx, x, y, sizeX, sizeY, { cropY: 48 });
 					},
 					({ x, y, sizeX, sizeY, renderCallback }) => {
 						renderCallback();
@@ -90,7 +90,7 @@ function deckGameLoop(timeMs) {
 							scale(78),
 							scale(114),
 							({ x, y }) => {
-								card.cardSprite.draw(ctx, x + scale(3), y + scale(3), scale(72), scale(96));
+								getCardSprite(card).draw(ctx, x + scale(3), y + scale(3), scale(72), scale(96));
 								font.draw(ctx, x + scale(4), y + scale(102), scale(6), scale(8), ELEMENT_COLORS[card.element], card.name);
 							}
 						));
@@ -128,7 +128,7 @@ function deckGameLoop(timeMs) {
 				} else {
 					ctx.globalAlpha = 1;
 				}
-				card.cardSprite.draw(ctx, x, y, sizeX, scale(64));
+				getCardSprite(card).draw(ctx, x, y, sizeX, scale(64));
 			},
 			({ x, y, sizeX, renderCallback }) => {
 				renderCallback();
@@ -137,7 +137,7 @@ function deckGameLoop(timeMs) {
 					scale(78),
 					scale(114),
 					({ x, y }) => {
-						card.cardSprite.draw(ctx, x + scale(3), y + scale(3), scale(72), scale(96));
+						getCardSprite(card).draw(ctx, x + scale(3), y + scale(3), scale(72), scale(96));
 						font.draw(ctx, x + scale(4), y + scale(102), scale(6), scale(8), ELEMENT_COLORS[card.element], card.name);
 					}
 				));
@@ -852,11 +852,12 @@ function mapGameLoop(timeMs) {
 		}
 	}
 	ctx.globalAlpha = 1;
-	const healthString = String(state.player.health);
-	numberText.draw(ctx, scale(16), scale(22), scale(4), scale(6), 0, healthString);
+	const healthString = `${state.player.health}/${state.player.maxHealth}`;
+	font.draw(ctx, scale(16), scale(16), scale(6), scale(8), 0, '<Health>');
+	numberText.draw(ctx, scale(122 - healthString.length * 4), scale(18), scale(4), scale(6), 0, healthString);
 	const healthBarWidth = Math.round(106 * state.player.health / state.player.maxHealth);
 	ctx.fillStyle = 'white';
-	ctx.fillRect(scale(16), scale(16), scale(healthBarWidth), scale(4));
+	ctx.fillRect(scale(16), scale(24), scale(healthBarWidth), scale(4));
 
 	items.forEach(item => {
 		if (item.x > Math.floor(cameraPosX) && item.x < Math.ceil(cameraPosX + (480 / state.mapState.tileSize))

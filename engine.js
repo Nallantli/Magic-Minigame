@@ -106,8 +106,10 @@ class NumberText {
 				return 11;
 			case '%':
 				return 12;
-			default:
+			case '/':
 				return 13;
+			default:
+				return 14;
 		}
 	}
 

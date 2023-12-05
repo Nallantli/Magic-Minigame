@@ -1,0 +1,595 @@
+{
+	"air.dust_devil": {
+		"id": "air.dust_devil",
+		"name": "Dust Devil",
+		"type": "ATTACK_ALL",
+		"element": "air",
+		"damages": [
+			{
+				"tick": 8,
+				"minDamage": -230,
+				"maxDamage": -290,
+				"element": "air"
+			}
+		],
+		"vrilRequired": 3,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"air.overcast": {
+		"id": "air.overcast",
+		"name": "Overcast",
+		"type": "ATTACK_BASIC",
+		"element": "air",
+		"damages": [
+			{
+				"tick": 9,
+				"minDamage": -180,
+				"maxDamage": -210,
+				"element": "air"
+			}
+		],
+		"vrilRequired": 2,
+		"frames": 25,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"air.gentle_breeze": {
+		"id": "air.gentle_breeze",
+		"name": "Gentle Breeze",
+		"type": "HEALING_BASIC",
+		"element": "air",
+		"heals": [
+			{
+				"tick": 8,
+				"heal": 250
+			}
+		],
+		"vrilRequired": 2,
+		"frames": 12,
+		"spellUseType": "TO_ALLIES"
+	},
+	"air.air_shield": {
+		"id": "air.air_shield",
+		"name": "Air Shield",
+		"type": "SHIELD_BASIC",
+		"element": "air",
+		"victimShields": [
+			{
+				"id": "air.air_shield.vs1",
+				"tick": 8,
+				"value": -50,
+				"element": "air",
+				"isBonus": true
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ALLIES"
+	},
+	"air.air_blade": {
+		"id": "air.air_blade",
+		"name": "Air Blade",
+		"type": "BLADE_BASIC",
+		"element": "air",
+		"victimBlades": [
+			{
+				"id": "air.air_blade.vb1",
+				"tick": 8,
+				"value": 25,
+				"element": "air",
+				"isBonus": true
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ALLIES"
+	},
+	"air.air_trap": {
+		"id": "air.air_trap",
+		"name": "Air Trap",
+		"type": "TRAP_BASIC",
+		"element": "air",
+		"victimShields": [
+			{
+				"id": "air.air_trap.vs1",
+				"tick": 8,
+				"value": 25,
+				"element": "air",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"air.terrifex": {
+		"id": "air.terrifex",
+		"name": "Terrifex",
+		"type": "TRAP_BASIC",
+		"element": "air",
+		"victimShields": [
+			{
+				"id": "air.terrifex.vs1",
+				"tick": 8,
+				"element": "air",
+				"elementTo": "earth",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"fire.fireball": {
+		"id": "fire.fireball",
+		"name": "Fireball",
+		"type": "ATTACK_BASIC",
+		"element": "fire",
+		"damages": [
+			{
+				"tick": 8,
+				"minDamage": -100,
+				"maxDamage": -140,
+				"element": "fire"
+			}
+		],
+		"vrilRequired": 1,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"fire.balefire": {
+		"id": "fire.balefire",
+		"name": "Balefire",
+		"type": "ATTACK_BASIC",
+		"element": "fire",
+		"damages": [
+			{
+				"tick": 14,
+				"minDamage": -220,
+				"maxDamage": -250,
+				"element": "fire"
+			}
+		],
+		"vrilRequired": 2,
+		"frames": 19,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"fire.fire_shield": {
+		"id": "fire.fire_shield",
+		"name": "Fire Shield",
+		"type": "SHIELD_BASIC",
+		"element": "fire",
+		"victimShields": [
+			{
+				"id": "fire.fire_shield.vs1",
+				"tick": 8,
+				"value": -40,
+				"element": "fire",
+				"isBonus": true
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ALLIES"
+	},
+	"fire.fire_blade": {
+		"id": "fire.fire_blade",
+		"name": "Fire Blade",
+		"type": "BLADE_BASIC",
+		"element": "fire",
+		"victimBlades": [
+			{
+				"id": "fire.fire_blade.vb1",
+				"tick": 8,
+				"value": 35,
+				"element": "fire",
+				"isBonus": true
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ALLIES"
+	},
+	"fire.magnify": {
+		"id": "fire.magnify",
+		"name": "Magnify",
+		"type": "JINX_BASIC",
+		"element": "fire",
+		"victimBlades": [
+			{
+				"id": "fire.magnify.vb1",
+				"tick": 8,
+				"value": 30,
+				"element": "all",
+				"isBonus": true
+			}
+		],
+		"casterBlades": [
+			{
+				"id": "fire.magnify.cb1",
+				"tick": 10,
+				"value": 50,
+				"element": "all",
+				"isBonus": true
+			}
+		],
+		"vrilRequired": 1,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"fire.fire_trap": {
+		"id": "fire.fire_trap",
+		"name": "Fire Trap",
+		"type": "TRAP_BASIC",
+		"element": "fire",
+		"victimShields": [
+			{
+				"id": "fire.fire_trap.vs1",
+				"tick": 8,
+				"value": 35,
+				"element": "fire",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"fire.aquifex": {
+		"id": "fire.aquifex",
+		"name": "Aquifex",
+		"type": "TRAP_BASIC",
+		"element": "fire",
+		"victimShields": [
+			{
+				"id": "fire.aquifex.vs1",
+				"tick": 8,
+				"element": "fire",
+				"elementTo": "water",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"water.wave": {
+		"id": "water.wave",
+		"name": "Wave",
+		"type": "ATTACK_BASIC",
+		"element": "water",
+		"damages": [
+			{
+				"tick": 8,
+				"minDamage": -110,
+				"maxDamage": -130,
+				"element": "water"
+			}
+		],
+		"vrilRequired": 1,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"water.water_shield": {
+		"id": "water.water_shield",
+		"name": "Water Shield",
+		"type": "SHIELD_BASIC",
+		"element": "water",
+		"victimShields": [
+			{
+				"id": "water.water_shield.vs1",
+				"tick": 8,
+				"value": -45,
+				"element": "water",
+				"isBonus": true
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ALLIES"
+	},
+	"water.weakness": {
+		"id": "water.weakness",
+		"name": "Weakness",
+		"type": "JINX_BASIC",
+		"element": "water",
+		"victimBlades": [
+			{
+				"id": "water.weakness.vb1",
+				"tick": 8,
+				"value": -20,
+				"element": "all",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"water.water_blade": {
+		"id": "water.water_blade",
+		"name": "Water Blade",
+		"type": "BLADE_BASIC",
+		"element": "water",
+		"victimBlades": [
+			{
+				"id": "water.water_blade.vb1",
+				"tick": 8,
+				"value": 30,
+				"element": "water",
+				"isBonus": true
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ALLIES"
+	},
+	"water.deluge": {
+		"id": "water.deluge",
+		"name": "Deluge",
+		"type": "ATTACK_BASIC",
+		"element": "water",
+		"damages": [
+			{
+				"tick": 12,
+				"minDamage": -240,
+				"maxDamage": -280,
+				"element": "water"
+			}
+		],
+		"victimShields": [
+			{
+				"id": "water.deluge.vs1",
+				"tick": 19,
+				"value": 15,
+				"element": "water",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 3,
+		"frames": 20,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"water.water_trap": {
+		"id": "water.water_trap",
+		"name": "Water Trap",
+		"type": "TRAP_BASIC",
+		"element": "water",
+		"victimShields": [
+			{
+				"id": "water.water_trap.vs1",
+				"tick": 8,
+				"value": 30,
+				"element": "water",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"water.ignifex": {
+		"id": "water.ignifex",
+		"name": "Ignifex",
+		"type": "TRAP_BASIC",
+		"element": "water",
+		"victimShields": [
+			{
+				"id": "water.ignifex.vs1",
+				"tick": 8,
+				"element": "water",
+				"elementTo": "fire",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"earth.boulder": {
+		"id": "earth.boulder",
+		"name": "Boulder",
+		"type": "ATTACK_BASIC",
+		"element": "earth",
+		"damages": [
+			{
+				"tick": 8,
+				"maxDamage": -100,
+				"minDamage": -90,
+				"element": "earth"
+			}
+		],
+		"vrilRequired": 1,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"earth.earthquake": {
+		"id": "earth.earthquake",
+		"name": "Earthquake",
+		"type": "ATTACK_BASIC",
+		"element": "earth",
+		"damages": [
+			{
+				"tick": 10,
+				"maxDamage": -200,
+				"minDamage": -170,
+				"element": "earth"
+			}
+		],
+		"vrilRequired": 2,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"earth.earth_shield": {
+		"id": "earth.earth_shield",
+		"name": "Earth Shield",
+		"type": "SHIELD_BASIC",
+		"element": "earth",
+		"victimShields": [
+			{
+				"id": "earth.earth_shield.vs1",
+				"tick": 7,
+				"value": -25,
+				"element": "air",
+				"isBonus": true
+			},
+			{
+				"id": "earth.earth_shield.vs2",
+				"tick": 9,
+				"value": -25,
+				"element": "fire",
+				"isBonus": true
+			},
+			{
+				"id": "earth.earth_shield.vs3",
+				"tick": 11,
+				"value": -25,
+				"element": "water",
+				"isBonus": true
+			},
+			{
+				"id": "earth.earth_shield.vs4",
+				"tick": 12,
+				"value": -25,
+				"element": "earth",
+				"isBonus": true
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 15,
+		"spellUseType": "TO_ALLIES"
+	},
+	"earth.earth_blade": {
+		"id": "earth.earth_blade",
+		"name": "Earth Blade",
+		"type": "BLADE_BASIC",
+		"element": "earth",
+		"victimBlades": [
+			{
+				"id": "earth.earth_blade.vb1",
+				"tick": 8,
+				"value": 20,
+				"element": "earth",
+				"isBonus": true
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ALLIES"
+	},
+	"earth.earth_trap": {
+		"id": "earth.earth_trap",
+		"name": "Earth Trap",
+		"type": "TRAP_BASIC",
+		"element": "earth",
+		"victimShields": [
+			{
+				"id": "earth.earth_trap.vs1",
+				"tick": 8,
+				"value": 20,
+				"element": "earth",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"earth.burden": {
+		"id": "earth.burden",
+		"name": "Burden",
+		"type": "TRAP_BASIC",
+		"element": "earth",
+		"victimShields": [
+			{
+				"id": "earth.burden.vs1",
+				"tick": 8,
+				"value": 70,
+				"element": "all",
+				"isBonus": false
+			}
+		],
+		"casterShields": [
+			{
+				"id": "earth.burden.cs1",
+				"tick": 10,
+				"value": 35,
+				"element": "all",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 1,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"earth.caelifex": {
+		"id": "earth.caelifex",
+		"name": "Caelifex",
+		"type": "TRAP_BASIC",
+		"element": "earth",
+		"victimShields": [
+			{
+				"id": "earth.caelifex.vs1",
+				"tick": 8,
+				"element": "earth",
+				"elementTo": "air",
+				"isBonus": false
+			}
+		],
+		"vrilRequired": 0,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"air.updraft": {
+		"id": "air.updraft",
+		"name": "Updraft",
+		"type": "ATTACK_BASIC",
+		"element": "air",
+		"damages": [
+			{
+				"tick": 8,
+				"minDamage": -95,
+				"maxDamage": -110,
+				"element": "air"
+			}
+		],
+		"vrilRequired": 1,
+		"frames": 12,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"water.baitfish": {
+		"id": "water.baitfish",
+		"name": "Baitfish",
+		"type": "ATTACK_BASIC",
+		"element": "water",
+		"damages": [
+			{
+				"tick": 10,
+				"minDamage": -160,
+				"maxDamage": -190,
+				"element": "water",
+				"steal": 0.5
+			}
+		],
+		"vrilRequired": 2,
+		"frames": 16,
+		"spellUseType": "TO_ENEMIES"
+	},
+	"fire.mortar": {
+		"id": "fire.mortar",
+		"name": "Mortar",
+		"type": "ATTACK_ALL",
+		"element": "fire",
+		"damages": [
+			{
+				"tick": 13,
+				"minDamage": -300,
+				"maxDamage": -320,
+				"element": "fire"
+			}
+		],
+		"vrilRequired": 3,
+		"frames": 18,
+		"spellUseType": "TO_ENEMIES"
+	}
+}

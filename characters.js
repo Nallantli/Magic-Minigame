@@ -540,7 +540,7 @@ const randomAI = (index, battleData) => {
 			d: battleData
 				.map((e, i) => ({ e, selectedVictim: i }))
 				.filter(({ e }) => e !== undefined)
-				.filter(({ selectedVictim }) => card.canUseSpellOn(index, selectedVictim))
+				.filter(({ selectedVictim }) => canUseSpellOn(card, index, selectedVictim))
 		}))
 		.map(({ d, i }) => ({ selectedCard: i, options: d.map(({ selectedVictim }) => selectedVictim) }))
 		.filter(({ options }) => options.length > 0);
@@ -558,7 +558,7 @@ const randomAI = (index, battleData) => {
 	const selectedCardOptions = randomFromList(options);
 	let selectedVictims = [];
 	if (entityData.hand[selectedCardOptions.selectedCard].type === SPELL_TYPES.ATTACK_ALL) {
-		selectedVictims = battleData.map((e, i) => ({ e, i })).filter(({ e, i }) => e !== undefined && entityData.hand[selectedCardOptions.selectedCard].canUseSpellOn(index, i)).map(({ i }) => i);
+		selectedVictims = battleData.map((e, i) => ({ e, i })).filter(({ e, i }) => e !== undefined && canUseSpellOn(entityData.hand[selectedCardOptions.selectedCard], index, i)).map(({ i }) => i);
 	} else {
 		selectedVictims = [randomFromList(selectedCardOptions.options)];
 	}

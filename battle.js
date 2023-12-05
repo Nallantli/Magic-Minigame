@@ -10,13 +10,13 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 		}
 		const selectedEntitySpell = selectedCards[i] === undefined ? undefined : getSpell(battleData[i].hand[selectedCards[i]]);
 
-		if (selectedPlayerSpell === undefined || selectedPlayerSpell.canUseSpellOn(playerIndex, i)) {
+		if (selectedPlayerSpell === undefined || canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 			ctx.globalAlpha = 1;
 			makeInteractable(scale(2), i * scale(67) + scale(2), scale(160), scale(65),
 				() => { },
 				({ x, y, sizeX, sizeY }) => selectedPlayerSpell !== undefined && sprites.PLACARD_160x65.draw(ctx, x, y, sizeX, sizeY),
 				() => {
-					if (selectedPlayerSpell !== undefined && selectedPlayerSpell.canUseSpellOn(playerIndex, i)) {
+					if (selectedPlayerSpell !== undefined && canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 						inputData.selectedVictims = [i];
 					}
 				});
@@ -26,9 +26,9 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 
 		const { shields, blades, vril, superVril, entity } = battleEntity;
 
-		shields.forEach(({ value, sprite, element }, j) => {
+		shields.forEach(({ value, id, element }, j) => {
 			makeInteractable(scale(57) + j * scale(12), i * scale(67) + scale(28), scale(10), scale(12),
-				({ x, y, sizeX, sizeY }) => sprite.draw(ctx, x, y, sizeX, sizeY),
+				({ x, y, sizeX, sizeY }) => spellSpriteDirectory[id].draw(ctx, x, y, sizeX, sizeY),
 				({ x, y, renderCallback }) => {
 					renderCallback();
 					const str = `${value > 0 ? '+' : ''}${value}%`;
@@ -36,9 +36,9 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 				});
 		});
 
-		blades.forEach(({ value, sprite, element }, j) => {
+		blades.forEach(({ value, id, element }, j) => {
 			makeInteractable(scale(57) + j * scale(12), i * scale(67) + scale(50), scale(10), scale(12),
-				({ x, y, sizeX, sizeY }) => sprite.draw(ctx, x, y, sizeX, sizeY),
+				({ x, y, sizeX, sizeY }) => spellSpriteDirectory[id].draw(ctx, x, y, sizeX, sizeY),
 				({ x, y, renderCallback }) => {
 					renderCallback();
 					const str = `${value > 0 ? '+' : ''}${value}%`;
@@ -62,7 +62,7 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 		}
 
 		if (selectedEntitySpell) {
-			selectedEntitySpell.cardSprite.draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
+			getCardSprite(selectedEntitySpell).draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
 			if (selectedVictims[i].length > 0) {
 				const index = selectedVictims[i];
 				selectedVictims[i].forEach(index => {
@@ -90,13 +90,13 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 			continue;
 		}
 
-		if (selectedPlayerSpell === undefined || selectedPlayerSpell.canUseSpellOn(playerIndex, i)) {
+		if (selectedPlayerSpell === undefined || canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 			ctx.globalAlpha = 1;
 			makeInteractable(scale(480 - 162), i_offset * scale(67) + scale(2), scale(160), scale(65),
 				() => { },
 				({ x, y, sizeX, sizeY }) => selectedPlayerSpell !== undefined && sprites.PLACARD_RIGHT_160x65.draw(ctx, x, y, sizeX, sizeY),
 				() => {
-					if (selectedPlayerSpell !== undefined && selectedPlayerSpell.canUseSpellOn(playerIndex, i)) {
+					if (selectedPlayerSpell !== undefined && canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 						inputData.selectedVictims = [i];
 					}
 				});
@@ -106,9 +106,9 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 
 		const { shields, blades, vril, superVril, entity } = battleEntity;
 
-		shields.forEach(({ value, sprite, element }, j) => {
+		shields.forEach(({ value, id, element }, j) => {
 			makeInteractable(scale(480 - 67) - j * scale(12), i_offset * scale(67) + scale(28), scale(10), scale(12),
-				({ x, y, sizeX, sizeY }) => sprite.draw(ctx, x, y, sizeX, sizeY),
+				({ x, y, sizeX, sizeY }) => spellSpriteDirectory[id].draw(ctx, x, y, sizeX, sizeY),
 				({ x, y, renderCallback }) => {
 					renderCallback();
 					const str = `${value > 0 ? '+' : ''}${value}%`;
@@ -116,9 +116,9 @@ function drawBattleIdle(battleState, iterator) { // battleData, selectedCards, s
 				});
 		});
 
-		blades.forEach(({ value, sprite, element }, j) => {
+		blades.forEach(({ value, id, element }, j) => {
 			makeInteractable(scale(480 - 67) - j * scale(12), i_offset * scale(67) + scale(50), scale(10), scale(12),
-				({ x, y, sizeX, sizeY }) => sprite.draw(ctx, x, y, sizeX, sizeY),
+				({ x, y, sizeX, sizeY }) => spellSpriteDirectory[id].draw(ctx, x, y, sizeX, sizeY),
 				({ x, y, renderCallback }) => {
 					renderCallback();
 					const str = `${value > 0 ? '+' : ''}${value}%`;
@@ -163,7 +163,7 @@ function drawCards(battleState) { //playerData, selectedCard) {
 		}
 
 		makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
-			({ x, y, sizeX, sizeY }) => spell.cardSprite.draw(ctx, x, y, sizeX, sizeY, 0),
+			({ x, y, sizeX, sizeY }) => getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY, 0),
 			({ x, y, sizeX, renderCallback }) => {
 				renderCallback();
 				if (hasEnoughVril) {

@@ -233,7 +233,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 function createLeftBladeCastingSequence(blades, baseId, iteratorOffset, startTick, useTick) {
 	let actions = [];
 
-	blades.forEach(({ id, sprite, tick, isBonus }, i) => {
+	blades.forEach(({ id, tick, isBonus }, i) => {
 		const i_offset = i + iteratorOffset;
 		actions = [
 			...actions,
@@ -241,7 +241,7 @@ function createLeftBladeCastingSequence(blades, baseId, iteratorOffset, startTic
 				tick: startTick + (useTick ? tick : 0),
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: `${baseId}.${i_offset}.${id}`,
-				sprite: sprite,
+				sprite: spellSpriteDirectory[id],
 				alpha: 0,
 				posX: scale(6) + scale(24 * i_offset),
 				posY: scale(318),
@@ -287,7 +287,7 @@ function createLeftBladeCastingSequence(blades, baseId, iteratorOffset, startTic
 function createLeftShieldCastingSequence(shields, baseId, iteratorOffset, startTick, useTick, posX, posY) {
 	let actions = [];
 
-	shields.forEach(({ id, sprite, tick, isBonus }, i) => {
+	shields.forEach(({ id, tick, isBonus }, i) => {
 		const i_offset = i + iteratorOffset;
 		actions = [
 			...actions,
@@ -295,7 +295,7 @@ function createLeftShieldCastingSequence(shields, baseId, iteratorOffset, startT
 				tick: startTick + (useTick ? tick : 0),
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: `${baseId}.${i_offset}.${id}`,
-				sprite: sprite,
+				sprite: spellSpriteDirectory[id],
 				alpha: 0,
 				posX: posX + scale(24 * i_offset),
 				posY: posY + scale(8),
@@ -340,7 +340,7 @@ function createLeftShieldCastingSequence(shields, baseId, iteratorOffset, startT
 function createRightShieldCastingSequence(shields, baseId, iteratorOffset, startTick, useTick, posX, posY) {
 	let actions = [];
 
-	shields.map((s, j) => ({ s, j })).toReversed().forEach(({ s: { id, sprite, tick, isBonus }, j }, i) => {
+	shields.map((s, j) => ({ s, j })).toReversed().forEach(({ s: { id, tick, isBonus }, j }, i) => {
 		const i_offset = i + iteratorOffset;
 		const j_offset = j + iteratorOffset;
 		actions = [
@@ -349,7 +349,7 @@ function createRightShieldCastingSequence(shields, baseId, iteratorOffset, start
 				tick: startTick + (useTick ? tick : 0),
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: `${baseId}.${j_offset}.${id}`,
-				sprite: sprite,
+				sprite: spellSpriteDirectory[id],
 				alpha: 0,
 				posX: posX - scale(24 * i_offset),
 				posY: posY + scale(8),
@@ -395,7 +395,7 @@ function createRightShieldCastingSequence(shields, baseId, iteratorOffset, start
 function createRightBladeCastingSequence(blades, baseId, iteratorOffset, startTick, useTick) {
 	let actions = [];
 
-	blades.map((s, j) => ({ s, j })).toReversed().forEach(({ s: { id, sprite, tick, isBonus }, j }, i) => {
+	blades.map((s, j) => ({ s, j })).toReversed().forEach(({ s: { id, tick, isBonus }, j }, i) => {
 		const i_offset = i + iteratorOffset;
 		const j_offset = j + iteratorOffset;
 		actions = [
@@ -404,7 +404,7 @@ function createRightBladeCastingSequence(blades, baseId, iteratorOffset, startTi
 				tick: startTick + (useTick ? tick : 0),
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: `${baseId}.${j_offset}.${id}`,
-				sprite: sprite,
+				sprite: spellSpriteDirectory[id],
 				alpha: 0,
 				posX: scale(480 - 26) - scale(24 * i_offset),
 				posY: scale(318),
@@ -834,13 +834,13 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 			actions = [
 				...actions,
 				{
-					tick: spellAnimationStartTick + 5 + spell.spellAnimation.indices + 2,
+					tick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2,
 					type: ATYPES.PLAY_SOUND,
 					audio: new Audio('./audio/death.wav'),
 					volume: 0.1
 				},
 				{
-					tick: spellAnimationStartTick + 5 + spell.spellAnimation.indices + 2,
+					tick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2,
 					id: victimId,
 					type: ATYPES.SET_SPRITE,
 					sprite: victimData.entity.deathSprite,
@@ -848,7 +848,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 					mirror: !enterLeft
 				},
 				{
-					tick: spellAnimationStartTick + 5 + spell.spellAnimation.indices + 2 + buffer,
+					tick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2 + buffer,
 					id: victimId,
 					type: ATYPES.PAUSE_ANIMATION
 				}
@@ -859,7 +859,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 	victimIds.forEach(victimId => {
 		actions = [
 			...actions,
-			...createEntityExitSequence(enterLeft, spellAnimationStartTick + 5 + spell.spellAnimation.indices + 2 + buffer, victimId)
+			...createEntityExitSequence(enterLeft, spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2 + buffer, victimId)
 		];
 	});
 
@@ -945,8 +945,8 @@ function createMiddleVictimSequence(mirror, spellAnimationStartTick, victimId, v
 			ease: EASE_TYPES.CONSTANT
 		},
 		{
-			startTick: spellAnimationStartTick + 5 + spell.spellAnimation.indices + 2,
-			endTick: spellAnimationStartTick + 5 + spell.spellAnimation.indices + 7,
+			startTick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2,
+			endTick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 7,
 			id: victimId,
 			type: ATYPES.CHANGE_POSITION_Y,
 			posY: scale(270),
@@ -1004,7 +1004,7 @@ function createLeftAttackSequence(battleData, casterIndex, victimIndices, spell,
 			tick: spellAnimationStartTick + ((battleData[victimIndices[0]].entity.id === casterData.entity.id) ? 0 : 5),
 			type: ATYPES.INITIALIZE_ENTITY,
 			id: spellId,
-			sprite: spell.spellAnimation,
+			sprite: getSpellSprite(spell),
 			alpha: 1,
 			posX: 0,
 			posY: 0,
@@ -1128,10 +1128,10 @@ function createLeftAttackSequence(battleData, casterIndex, victimIndices, spell,
 			break;
 		}
 	}
-	const cleanUpStartTick = spellAnimationStartTick + 5 + spell.spellAnimation.indices + buffer;
+	const cleanUpStartTick = spellAnimationStartTick + 5 + getSpellSprite(spell).indices + buffer;
 	actions = [
 		...actions,
-		...createCleanUpSequence(true, spellAnimationStartTick + 5 + spell.spellAnimation.indices, cleanUpStartTick, spellId, casterId, castingCircleId, casterData)
+		...createCleanUpSequence(true, spellAnimationStartTick + 5 + getSpellSprite(spell).indices, cleanUpStartTick, spellId, casterId, castingCircleId, casterData)
 	];
 	return {
 		length: cleanUpStartTick + 8,
@@ -1188,7 +1188,7 @@ function createRightAttackSequence(battleData, casterIndex, victimIndices, spell
 			tick: spellAnimationStartTick + ((battleData[victimIndices[0]].entity.id === casterData.entity.id) ? 0 : 5),
 			type: ATYPES.INITIALIZE_ENTITY,
 			id: spellId,
-			sprite: spell.spellAnimation,
+			sprite: getSpellSprite(spell),
 			alpha: 1,
 			posX: 0,
 			posY: 0,
@@ -1313,10 +1313,10 @@ function createRightAttackSequence(battleData, casterIndex, victimIndices, spell
 			break;
 		}
 	}
-	const cleanUpStartTick = spellAnimationStartTick + 5 + spell.spellAnimation.indices + buffer;
+	const cleanUpStartTick = spellAnimationStartTick + 5 + getSpellSprite(spell).indices + buffer;
 	actions = [
 		...actions,
-		...createCleanUpSequence(false, spellAnimationStartTick + 5 + spell.spellAnimation.indices, cleanUpStartTick, spellId, casterId, castingCircleId, casterData)
+		...createCleanUpSequence(false, spellAnimationStartTick + 5 + getSpellSprite(spell).indices, cleanUpStartTick, spellId, casterId, castingCircleId, casterData)
 	];
 	return {
 		length: cleanUpStartTick + 8,
@@ -1330,7 +1330,7 @@ function createCardDropSequence(spell) {
 			tick: 0,
 			type: ATYPES.INITIALIZE_ENTITY,
 			id: 'spell_card',
-			sprite: spell.cardSprite,
+			sprite: getCardSprite(spell),
 			alpha: 1,
 			posX: scale(240),
 			posY: scale(187 - 96),
