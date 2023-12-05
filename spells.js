@@ -632,8 +632,8 @@ registerSpell({
 });
 
 registerSpell({
-	id: 'fire.eruption',
-	name: "Eruption",
+	id: 'fire.mortar',
+	name: "Mortar",
 	type: SPELL_TYPES.ATTACK_ALL,
 	element: 'fire',
 	damages: [
@@ -645,8 +645,8 @@ registerSpell({
 		}
 	],
 	vrilRequired: 3,
-	cardSprite: new Sprite('./img/spells/eruption/card_48x64.png', 48, 64, 1),
-	spellAnimation: new Sprite('./img/spells/eruption/spell_240x135.png', 240, 135, 18),
+	cardSprite: new Sprite('./img/spells/mortar/card_48x64.png', 48, 64, 1),
+	spellAnimation: new Sprite('./img/spells/mortar/spell_240x135.png', 240, 135, 18),
 	canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 });
 
@@ -687,7 +687,7 @@ const level4Spells = [
 	'air.terrifex',
 	'air.dust_devil',
 	'fire.aquifex',
-	'fire.eruption',
+	'fire.mortar',
 	'water.ignifex',
 	'water.deluge',
 	'earth.caelifex',
