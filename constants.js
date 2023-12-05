@@ -34,9 +34,9 @@ canvas.addEventListener("keyup", function (evt) {
 	keysUp.push(evt.key.toLowerCase());
 }, false);
 
+let battleTrack = undefined;
 
-const battleTrack = new Audio('./audio/battle_track.wav');
-battleTrack.loop = true;
+const defaultBattleTrack = new Audio('./audio/battle_track.wav');
 
 const walkingTrack = new Audio('./audio/cave.wav');
 walkingTrack.loop = true;

@@ -631,6 +631,25 @@ registerSpell({
 	canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 });
 
+registerSpell({
+	id: 'fire.eruption',
+	name: "Eruption",
+	type: SPELL_TYPES.ATTACK_ALL,
+	element: 'fire',
+	damages: [
+		{
+			tick: 13,
+			minDamage: -300,
+			maxDamage: -320,
+			element: 'fire'
+		}
+	],
+	vrilRequired: 3,
+	cardSprite: new Sprite('./img/spells/eruption/card_48x64.png', 48, 64, 1),
+	spellAnimation: new Sprite('./img/spells/eruption/spell_240x135.png', 240, 135, 18),
+	canUseSpellOn: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
+});
+
 const level1Spells = [
 	'air.air_shield',
 	'air.updraft',
@@ -668,7 +687,7 @@ const level4Spells = [
 	'air.terrifex',
 	'air.dust_devil',
 	'fire.aquifex',
-	// need fire attack
+	'fire.eruption',
 	'water.ignifex',
 	'water.deluge',
 	'earth.caelifex',

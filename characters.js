@@ -524,7 +524,8 @@ const boss1 = {
 		superVrilChance: 0.3,
 		idleSprite: new Sprite('./img/characters/skull/idle_64x64.png', 64, 64, 10),
 		castSprite: new Sprite('./img/characters/skull/cast_64x64.png', 64, 64, 6),
-		deathSprite: new Sprite('./img/characters/skull/death_64x64.png', 64, 64, 13)
+		deathSprite: new Sprite('./img/characters/skull/death_64x64.png', 64, 64, 13),
+		track: new Audio('./audio/boss_track.wav')
 }
 
 const randomAI = (index, battleData) => {

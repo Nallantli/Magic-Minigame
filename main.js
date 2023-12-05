@@ -926,6 +926,13 @@ function mapGameLoop(timeMs) {
 		console.log(entitiesInRoom);
 		walkingTrack.pause();
 		walkingTrack.currentTime = 0;
+		const audioEntity = entitiesInRoom.find(({ track }) => track !== undefined);
+		if (audioEntity) {
+			battleTrack = audioEntity.track;
+		} else {
+			battleTrack = defaultBattleTrack;
+		}
+		battleTrack.loop = true;
 		battleTrack.play();
 		state = {
 			...state,
