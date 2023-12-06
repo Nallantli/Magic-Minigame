@@ -1,3 +1,5 @@
+const serverUrl = 'ws://5.161.177.22:8080';
+
 const SCALE_FACTOR = 4;
 const FPS = 75;
 let TICK_TIME = 15;
@@ -58,6 +60,7 @@ const sprites = {
 	SUPER_VRIL_4x4: new Sprite('./img/super_vril_4x4.png', 4, 4, 5),
 	ELEMENTS_MINOR_8x8: new Sprite('./img/elements_minor_8x8.png', 8, 8, 5),
 	PLACARD_160x65: new Sprite('./img/placard_160x65.png', 160, 65, 1),
+	PLACARD_EMPTY_160x65: new Sprite('./img/placard_empty_160x65.png', 160, 65, 1),
 	PLACARD_RIGHT_160x65: new Sprite('./img/placard_right_160x65.png', 160, 65, 1),
 	VICTIM_ARROW_8x16: new Sprite('./img/victim_arrow_8x16.png', 8, 16, 2),
 	PASS_39x16: new Sprite('./img/pass_39x16.png', 39, 16, 1),
@@ -85,6 +88,7 @@ const sprites = {
 	UNLOCKED_DOOR_32x32: new Sprite('./img/maps/tiles/unlocked_door.png', 32, 32, 1),
 	STAIRS_32x32: new Sprite('./img/maps/tiles/stairs.png', 32, 32, 1),
 	HEAL_COIN_16x16: new Sprite('./img/heal_count_16x16.png', 16, 16, 8),
+	READY_UP_62x11: new Sprite('./img/ready_up_62x11.png', 62, 11, 2),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
 };

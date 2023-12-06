@@ -430,7 +430,7 @@
 				"id": "earth.earth_shield.vs1",
 				"tick": 7,
 				"value": -25,
-				"element": "air",
+				"element": "earth",
 				"isBonus": true
 			},
 			{
@@ -451,7 +451,7 @@
 				"id": "earth.earth_shield.vs4",
 				"tick": 12,
 				"value": -25,
-				"element": "earth",
+				"element": "air",
 				"isBonus": true
 			}
 		],

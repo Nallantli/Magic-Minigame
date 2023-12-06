@@ -123,7 +123,7 @@ function giveMeTheGun() {
 		spellUseType: 'TO_ALL'
 	};
 	if (state.battleState) {
-		state.battleState.battleData[state.battleState.playerIndex].hand.push(gun.id);
+		state.battleState.turnState.battleData[state.battleState.playerIndex].hand.push(gun.id);
 	}
 	state.knownSpells.push(gun.id);
 	registerSpell(gun);

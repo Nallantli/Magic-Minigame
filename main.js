@@ -11,12 +11,64 @@ function menuGameLoop(timeMs) {
 			ctx.fillRect(x, y + scale(52), sizeX, scale(4));
 		},
 		() => {
-			generateBattleState(timeMs);
-			printMap(state.mapState.map);
+			const socket = new WebSocket(serverUrl);
 			state = {
 				...state,
-				path: 'MAP'
+				battleState: {
+					...state.battleState,
+					playerIndex: 0,
+					socket
+				}
 			};
+			socket.addEventListener('open', () => {
+				socket.send(JSON.stringify({
+					action: 'CREATE_GAME',
+					entity: state.player
+				}));
+			});
+			socket.addEventListener('message', event => {
+				const data = JSON.parse(event.data);
+				console.log(data);
+				switch (data.action) {
+					case 'BATTLE_ANIMATION_DATA': {
+						const { animationData, finalTurnState } = data;
+						animationData.forEach(({ turnState, victimIndices, spell, calculatedDamages }, i) => {
+							const sequence = turnState.battleIndex < 4
+								? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0)
+								: createRightAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0);
+							const animation = new AnimationEngine({
+								ticks: sequence.length,
+								actions: sequence.actions
+							}, TICK_TIME, FPS, canvas, ctx, () => {
+								reduceAnimationQueue();
+								if (i === animationData.length - 1) {
+									state.animationQueue.push(new AnimationEngine(getReturnSequence(finalTurnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+									state = {
+										...state,
+										battleState: {
+											...state.battleState,
+											turnState: finalTurnState
+										}
+									};
+								}
+							});
+							state.animationQueue.push(animation);
+						});
+						break;
+					}
+					case 'STATE_UPDATE': {
+						state = {
+							...state,
+							battleState: {
+								...state.battleState,
+								...data
+							},
+							path: 'MP_BATTLE'
+						}
+						break;
+					}
+				}
+			})
 		});
 
 	makeInteractable(scale(240 - 32), scale(232), scale(64), scale(12),
@@ -47,11 +99,11 @@ function drawEntityIcon(entity, i, si) {
 	makeInteractable(scale(16), scale(48) + i * scale(31), scale(32), scale(32),
 		({ x, y, sizeX, sizeY }) => {
 			sprites.ENTITY_SELECT_32x32.draw(ctx, x + scale(5), y, sizeX, sizeY);
-			entity.idleSprite.draw(ctx, x + scale(5), y, sizeX, sizeY);
+			getIdleSprite(entity).draw(ctx, x + scale(5), y, sizeX, sizeY);
 		},
 		({ x, y, sizeX, sizeY }) => {
 			sprites.ENTITY_SELECT_32x32.draw(ctx, x, y, sizeX, sizeY);
-			entity.idleSprite.draw(ctx, x, y, sizeX, sizeY);
+			getIdleSprite(entity).draw(ctx, x, y, sizeX, sizeY);
 		},
 		() => state.deckState.currentIndex = si,
 		{
@@ -168,134 +220,6 @@ function deckGameLoop(timeMs) {
 	}
 }
 
-function customizeGameLoop(timeMs) {
-	state.player.idleSprite.draw(ctx, scale(0), scale(187 - 96), scale(192), scale(192));
-	state.player.castSprite.draw(ctx, scale(128), scale(187 - 96), scale(192), scale(192));
-
-	let updateOutfits = false;
-
-	let customizeList;
-	switch (state.customizeState.currentTab) {
-		case 0:
-			customizeList = HEADS;
-			break;
-		case 1:
-			customizeList = HATS;
-			break;
-		case 2:
-			customizeList = CLOTHES;
-			break;
-		case 3:
-			customizeList = WANDS;
-			break;
-	}
-
-	[0, 1, 2, 3].forEach(i => {
-		makeInteractable(scale(300) + i * scale(31), scale(16), scale(32), scale(32),
-			({ x, y, sizeX, sizeY }) => {
-				sprites.ELEMENT_SELECT_32x32.draw(ctx, x, y + scale(5), sizeX, sizeY);
-				sprites.CUSTOMIZE_ICONS_16x16.draw(ctx, x, y + scale(5), sizeX, sizeY, { iIndex: i });
-			},
-			({ x, y, sizeX, sizeY }) => {
-				sprites.ELEMENT_SELECT_32x32.draw(ctx, x, y, sizeX, sizeY);
-				sprites.CUSTOMIZE_ICONS_16x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: i });
-			},
-			() => state.customizeState.currentTab = i,
-			{
-				forceHoverOn: () => state.customizeState.currentTab === i
-			});
-	});
-
-	sprites.CUSTOMIZE_LIST_136x300.draw(ctx, scale(300), scale(48), scale(136), scale(300));
-
-	Object.values(customizeList).toSorted((a, b) => a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)).forEach((article, i) => {
-		makeInteractable(scale(304), scale(52 + i * 22), scale(128), scale(20),
-			({ x, y, sizeX, sizeY }) => {
-				font.draw(ctx, x + scale(5), y + scale(5), scale(9), scale(12), 0, article.name);
-			},
-			({ x, y, sizeX, sizeY, renderCallback }) => {
-				sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y, scale(3), scale(3));
-				sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y, scale(3), scale(3), { iIndex: 1 });
-				sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y + sizeY - scale(3), scale(3), scale(3), { iIndex: 2 });
-				sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y + sizeY - scale(3), scale(3), scale(3), { iIndex: 3 });
-
-				ctx.fillStyle = "black";
-				ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(3));
-				ctx.fillRect(x + scale(3), y + sizeY - scale(3), sizeX - scale(6), scale(3));
-				ctx.fillRect(x, y + scale(3), scale(3), sizeY - scale(6));
-				ctx.fillRect(x + sizeX - scale(3), y + scale(3), scale(3), sizeY - scale(6));
-				ctx.fillRect(x + scale(3), y + scale(3), sizeX - scale(6), sizeY - scale(6));
-				ctx.fillStyle = "white";
-				ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(1));
-				ctx.fillRect(x + scale(3), y + sizeY - scale(1), sizeX - scale(6), scale(1));
-				ctx.fillRect(x, y + scale(3), scale(1), sizeY - scale(6));
-				ctx.fillRect(x + sizeX - scale(1), y + scale(3), scale(1), sizeY - scale(6));
-				renderCallback();
-			},
-			() => {
-				state.customizeState.current[state.customizeState.currentTab] = article;
-				updateOutfits = true;
-			},
-			{
-				forceHoverOn: () => state.customizeState.current[state.customizeState.currentTab] === article
-			});
-	});
-
-	makeInteractable(scale(168 - 36), scale(300), scale(16), scale(32),
-		({ x, y, sizeX, sizeY }) => sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
-		({ x, y, sizeY, renderCallback }) => {
-			renderCallback();
-
-			ctx.fillStyle = 'white';
-			ctx.fillRect(x - scale(6), y, scale(4), sizeY);
-		},
-		() => state.player.element = ELEMENT_ID_LIST[(ELEMENT_COLORS[state.player.element] + 4) % 5]);
-
-	makeInteractable(scale(168 + 20), scale(300), scale(16), scale(32),
-		({ x, y, sizeX, sizeY }) => sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY),
-		({ x, y, sizeX, sizeY, renderCallback }) => {
-			renderCallback();
-
-			ctx.fillStyle = 'white';
-			ctx.fillRect(x + sizeX + scale(2), y, scale(4), sizeY);
-		},
-		() => state.player.element = ELEMENT_ID_LIST[(ELEMENT_COLORS[state.player.element] + 1) % 5]);
-
-	sprites.VICTIM_ARROW_8x16.draw(ctx, scale(168 - 36), scale(300), scale(16), scale(32), { iIndex: 1 });
-	sprites.VICTIM_ARROW_8x16.draw(ctx, scale(168 + 20), scale(300), scale(16), scale(32));
-
-	ELEMENT_ICONS[state.player.element].draw(ctx, scale(168 - 16), scale(300), scale(32), scale(32));
-
-	if (updateOutfits) {
-		state.player.idleSprite = new CompositeSprite([
-			state.customizeState.current[0].idle,
-			state.customizeState.current[2].idle,
-			state.customizeState.current[1].idle
-		], 64, 64, 1);
-		state.player.castSprite = new CompositeSprite([
-			state.customizeState.current[0].cast,
-			state.customizeState.current[2].cast,
-			state.customizeState.current[1].cast,
-			state.customizeState.current[3].cast
-		], 64, 64, 1)
-		state.player.deathSprite = new CompositeSprite([
-			state.customizeState.current[0].death,
-			state.customizeState.current[2].death,
-			state.customizeState.current[1].death
-		], 64, 64, 10);
-	}
-
-	makeInteractable(scale(480 - 32), scale(375 - 32), scale(32), scale(32),
-		({ x, y, sizeX, sizeY }) => sprites.BACK_32x32.draw(ctx, scale(480 - 32), scale(375 - 32), scale(32), scale(32)),
-		({ x, y, sizeX, sizeY, renderCallback }) => {
-			renderCallback();
-
-			ctx.fillStyle = 'white';
-			ctx.fillRect(x - scale(6), y, scale(4), sizeY);
-		},
-		() => state.path = 'MENU');
-}
-
 function getTileAt(map, x, y) {
 	if (x >= 0 && x < map.length && y >= 0 && y < map[0].length) {
 		return map[x][y];
@@ -394,7 +318,7 @@ function generateLevel3(timeMs) {
 				mirror: Math.random() <= 0.5,
 				roomId: room.id,
 				model: {
-					...randomFromList(level3Creatures),
+					...randomFromList(level3CreatureIds.map(getEntity)),
 					id: crypto.randomUUID()
 				}
 			});
@@ -405,7 +329,7 @@ function generateLevel3(timeMs) {
 				mirror: Math.random() <= 0.5,
 				roomId: room.id,
 				model: {
-					...randomFromList(level3Creatures),
+					...randomFromList(level3CreatureIds.map(getEntity)),
 					id: crypto.randomUUID()
 				}
 			});
@@ -417,7 +341,7 @@ function generateLevel3(timeMs) {
 				mirror: Math.random() <= 0.5,
 				roomId: room.id,
 				model: {
-					...randomFromList(level3Creatures),
+					...randomFromList(level3CreatureIds.map(getEntity)),
 					id: crypto.randomUUID()
 				}
 			});
@@ -480,7 +404,7 @@ function generateLevel3(timeMs) {
 		endRoomCrossing,
 		exitStairs,
 		entities: [
-			{ id: 'player_character', x: startingRoom.x + 2, y: startingRoom.y + 2, mirror: false },
+			{ id: state.player.id, x: startingRoom.x + 2, y: startingRoom.y + 2, mirror: false },
 			...enemies
 		],
 		items
@@ -509,7 +433,7 @@ function generateLevel2(timeMs) {
 			mirror: Math.random() <= 0.5,
 			roomId: room.id,
 			model: {
-				...randomFromList(level2Creatures),
+				...randomFromList(level2CreatureIds.map(getEntity)),
 				id: crypto.randomUUID()
 			}
 		});
@@ -571,7 +495,7 @@ function generateLevel2(timeMs) {
 		endRoomCrossing,
 		exitStairs,
 		entities: [
-			{ id: 'player_character', x: startingRoom.x + 2, y: startingRoom.y + 2, mirror: false },
+			{ id: state.player.id, x: startingRoom.x + 2, y: startingRoom.y + 2, mirror: false },
 			...enemies
 		],
 		items
@@ -600,7 +524,7 @@ function generateLevel1(timeMs) {
 			mirror: Math.random() <= 0.5,
 			roomId: room.id,
 			model: {
-				...randomFromList(level1Creatures),
+				...randomFromList(level1CreatureIds.map(getEntity)),
 				id: crypto.randomUUID()
 			}
 		});
@@ -662,7 +586,7 @@ function generateLevel1(timeMs) {
 		endRoomCrossing,
 		exitStairs,
 		entities: [
-			{ id: 'player_character', x: startingRoom.x + 2, y: startingRoom.y + 2, mirror: false },
+			{ id: state.player.id, x: startingRoom.x + 2, y: startingRoom.y + 2, mirror: false },
 			...enemies
 		],
 		items
@@ -730,14 +654,14 @@ function generateBossRoom(timeMs) {
 			y: 5
 		},
 		entities: [
-			{ id: 'player_character', x: 2, y: 5, mirror: false },
-			{ id: 'boss', x: 10, y: 5, roomId: 'boss_room', model: boss1 }
+			{ id: state.player.id, x: 2, y: 5, mirror: false },
+			{ id: 'boss_skull', x: 10, y: 5, roomId: 'boss_room', model: getEntity('boss_skull') }
 		]
 	};
 }
 
 function mapGameLoop(timeMs) {
-	const playerCharacterIndex = state.mapState.entities.findIndex(({ id }) => id === 'player_character');
+	const playerCharacterIndex = state.mapState.entities.findIndex(({ id }) => id === state.player.id);
 	const passedTimeMs = timeMs - state.mapState.lastTimeMs;
 	state.mapState.lastTimeMs = timeMs;
 
@@ -778,7 +702,7 @@ function mapGameLoop(timeMs) {
 	const { tileSize, entities, items = [] } = state.mapState;
 
 	let entitiesNear = entities.filter(entity => {
-		if (entity.id === 'player_character') {
+		if (entity.id === state.player.id) {
 			return false;
 		}
 		if (Math.abs(entity.x - state.mapState.entities[playerCharacterIndex].x) <= 1
@@ -872,7 +796,7 @@ function mapGameLoop(timeMs) {
 
 	entities.forEach(entity => {
 		let model;
-		if (entity.id === 'player_character') {
+		if (entity.id === state.player.id) {
 			model = state.player;
 		} else {
 			model = entity.model;
@@ -882,7 +806,7 @@ function mapGameLoop(timeMs) {
 			const knownIndex = floodVisible.findIndex(({ x, y }) => x === Math.floor(entity.x) && y === Math.floor(entity.y));
 			if (knownIndex !== -1) {
 				ctx.globalAlpha = floodVisible[knownIndex].dist < cutoff ? 1 : (1 - ((floodVisible[knownIndex].dist - cutoff) / cutoff));
-				model.idleSprite.draw(ctx, scale((entity.x - cameraPosX - 1) * tileSize), scale((entity.y - cameraPosY - 1) * tileSize), scale(tileSize * 2), scale(tileSize * 2), { mirror: entity.mirror, iIndex: state.iterator });
+				getIdleSprite(model).draw(ctx, scale((entity.x - cameraPosX - 1) * tileSize), scale((entity.y - cameraPosY - 1) * tileSize), scale(tileSize * 2), scale(tileSize * 2), { mirror: entity.mirror, iIndex: state.iterator });
 
 				drawBox(ctx, scale((entity.x - cameraPosX) * tileSize - model.name.length * 3 - 6), scale((entity.y - cameraPosY - 1) * tileSize - 9), scale(model.name.length * 6 + 14), scale(13));
 				sprites.ELEMENTS_MINOR_8x8.draw(ctx, scale((entity.x - cameraPosX) * tileSize - model.name.length * 3 - 3), scale((entity.y - cameraPosY - 1) * tileSize - 6), scale(8), scale(8), { iIndex: ELEMENT_COLORS[model.element] });
@@ -1077,14 +1001,14 @@ function gameLoop(timeMs) {
 			case 'DECK':
 				deckGameLoop(timeMs);
 				break;
-			case 'CUSTOMIZE':
-				customizeGameLoop(timeMs);
-				break;
 			case 'MENU':
 				menuGameLoop(timeMs);
 				break;
 			case 'BATTLE':
 				battleGameLoop(timeMs);
+				break;
+			case 'MP_BATTLE':
+				mpBattleGameLoop(timeMs);
 				break;
 			case 'MAP':
 				mapGameLoop(timeMs);

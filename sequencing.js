@@ -21,8 +21,8 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			tick: spellCastingStartTick + 2,
 			type: ATYPES.SET_SPRITE,
 			id: casterId,
-			sprite: casterData.entity.castSprite,
-			play: casterData.entity.castSprite.indices > 1,
+			sprite: getCastSprite(casterData.entity),
+			play: getCastSprite(casterData.entity).indices > 1,
 			mirror: !enterLeft
 		},
 		{
@@ -216,11 +216,11 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 		]
 	}
 
-	if (casterData.entity.castSprite.indices > 1) {
+	if (getCastSprite(casterData.entity).indices > 1) {
 		actions = [
 			...actions,
 			{
-				tick: spellCastingStartTick + casterData.entity.castSprite.indices + 2,
+				tick: spellCastingStartTick + getCastSprite(casterData.entity).indices + 2,
 				type: ATYPES.PAUSE_ANIMATION,
 				id: casterId
 			}
@@ -458,8 +458,8 @@ function createCleanUpSequence(exitLeft, spellRemovalTick, cleanUpStartTick, spe
 			tick: cleanUpStartTick + 2,
 			type: ATYPES.SET_SPRITE,
 			id: casterId,
-			sprite: casterData.entity.idleSprite,
-			play: casterData.entity.idleSprite.indices > 1,
+			sprite: getIdleSprite(casterData.entity),
+			play: getIdleSprite(casterData.entity).indices > 1,
 			mirror: !exitLeft
 		},
 		{
@@ -507,7 +507,7 @@ function createEntityEnterSequence(enterLeft, startTick, casterId, casterData) {
 			tick: startTick,
 			type: ATYPES.INITIALIZE_ENTITY,
 			id: casterId,
-			sprite: casterData.entity.idleSprite,
+			sprite: getIdleSprite(casterData.entity),
 			alpha: 1,
 			posX: enterLeft ? scale(-96) : scale(480),
 			posY: scale(128),
@@ -516,7 +516,7 @@ function createEntityEnterSequence(enterLeft, startTick, casterId, casterData) {
 			rot: 0,
 			zIndex: 4,
 			mirror: !enterLeft,
-			play: casterData.entity.idleSprite.indices > 1
+			play: getIdleSprite(casterData.entity).indices > 1
 		},
 		{
 			tick: startTick,
@@ -613,7 +613,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				tick: spellAnimationStartTick,
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: victimIds[i],
-				sprite: victimData.entity.idleSprite,
+				sprite: getIdleSprite(victimData.entity),
 				alpha: 1,
 				posX: enterLeft ? scale(-128) : scale(480),
 				posY: scale(118) - scale(28 * i),
@@ -621,7 +621,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				sizeY: scale(128 - i * 16),
 				rot: 0,
 				zIndex: 8 - i,
-				play: victimData.entity.idleSprite.indices > 1,
+				play: getIdleSprite(victimData.entity).indices > 1,
 				mirror: !enterLeft
 			},
 			{
@@ -830,7 +830,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 		const victimData = victimDatas[i];
 		const victimId = victimIds[i];
 		if (victimHealth <= 0) {
-			buffer = Math.max(buffer, victimData.entity.deathSprite.indices);
+			buffer = Math.max(buffer, getDeathSprite(victimData.entity).indices);
 			actions = [
 				...actions,
 				{
@@ -843,7 +843,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 					tick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2,
 					id: victimId,
 					type: ATYPES.SET_SPRITE,
-					sprite: victimData.entity.deathSprite,
+					sprite: getDeathSprite(victimData.entity),
 					play: true,
 					mirror: !enterLeft
 				},
@@ -925,7 +925,7 @@ function createMiddleVictimSequence(mirror, spellAnimationStartTick, victimId, v
 			tick: spellAnimationStartTick,
 			type: ATYPES.INITIALIZE_ENTITY,
 			id: victimId,
-			sprite: victimData.entity.idleSprite,
+			sprite: getIdleSprite(victimData.entity),
 			alpha: 1,
 			posX: scale(240 - 64),
 			posY: scale(270),
@@ -933,7 +933,7 @@ function createMiddleVictimSequence(mirror, spellAnimationStartTick, victimId, v
 			sizeY: scale(128),
 			rot: 0,
 			zIndex: 2,
-			play: victimData.entity.idleSprite.indices > 1,
+			play: getIdleSprite(victimData.entity).indices > 1,
 			mirror: mirror
 		},
 		{

@@ -1,7 +1,7 @@
 function drawBattleField(battleState, iterator) { // battleData, selectedCards, selectedVictims, playerIndex) {
 	let inputData = {};
-	const { battleData, selectedCards, selectedVictims, playerIndex } = battleState;
-	const selectedPlayerSpell = selectedCards[playerIndex] === undefined ? undefined : getSpell(battleData[playerIndex].hand[selectedCards[playerIndex]]);
+	const { turnState: { battleData, selectedCards, selectedVictims }, playerIndex } = battleState;
+	const selectedPlayerSpell = selectedCards[playerIndex] === null ? null : getSpell(battleData[playerIndex].hand[selectedCards[playerIndex]]);
 
 	for (let i = 0; i < 4; i++) {
 		const battleEntity = battleData[i];
@@ -9,13 +9,13 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 			continue;
 		}
 
-		if (selectedPlayerSpell === undefined || canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
+		if (selectedPlayerSpell === null || canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 			ctx.globalAlpha = 1;
 			makeInteractable(scale(2), i * scale(67) + scale(2), scale(160), scale(65),
 				() => { },
-				({ x, y, sizeX, sizeY }) => selectedPlayerSpell !== undefined && sprites.PLACARD_160x65.draw(ctx, x, y, sizeX, sizeY),
+				({ x, y, sizeX, sizeY }) => selectedPlayerSpell !== null && sprites.PLACARD_160x65.draw(ctx, x, y, sizeX, sizeY),
 				() => {
-					if (selectedPlayerSpell !== undefined && canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
+					if (selectedPlayerSpell !== null && canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 						inputData.selectedVictims = [i];
 					}
 				});
@@ -56,7 +56,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		ctx.fillStyle = 'white';
 		ctx.fillRect(scale(161 - healthBarWidth), i * scale(67) + scale(15), scale(healthBarWidth), scale(4));
 
-		entity.idleSprite.draw(ctx, 0, i * scale(67) + 10, scale(64), scale(64), { iIndex: iterator % entity.idleSprite.indices });
+		getIdleSprite(entity).draw(ctx, 0, i * scale(67) + 10, scale(64), scale(64), { iIndex: iterator % getIdleSprite(entity).indices });
 		for (let j = 0; j < superVril; j++) {
 			sprites.SUPER_VRIL_4x4.draw(ctx, scale(6), (i + 1) * scale(67) - j * scale(6) - scale(10), scale(4), scale(4), { iIndex: ELEMENT_COLORS[entity.element] });
 		}
@@ -65,7 +65,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		}
 
 		if (playerIndex < 4) {
-			const selectedEntitySpell = selectedCards[i] === undefined ? undefined : getSpell(battleData[i].hand[selectedCards[i]]);
+			const selectedEntitySpell = selectedCards[i] === null ? null : getSpell(battleData[i].hand[selectedCards[i]]);
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
 				if (selectedVictims[i].length > 0) {
@@ -96,13 +96,13 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 			continue;
 		}
 
-		if (selectedPlayerSpell === undefined || canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
+		if (selectedPlayerSpell === null || canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 			ctx.globalAlpha = 1;
 			makeInteractable(scale(480 - 162), i_offset * scale(67) + scale(2), scale(160), scale(65),
 				() => { },
-				({ x, y, sizeX, sizeY }) => selectedPlayerSpell !== undefined && sprites.PLACARD_RIGHT_160x65.draw(ctx, x, y, sizeX, sizeY),
+				({ x, y, sizeX, sizeY }) => selectedPlayerSpell !== null && sprites.PLACARD_RIGHT_160x65.draw(ctx, x, y, sizeX, sizeY),
 				() => {
-					if (selectedPlayerSpell !== undefined && canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
+					if (selectedPlayerSpell !== null && canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 						inputData.selectedVictims = [i];
 					}
 				});
@@ -143,7 +143,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		ctx.fillStyle = 'white';
 		ctx.fillRect(scale(480 - 161), i_offset * scale(67) + scale(15), scale(healthBarWidth), scale(4));
 
-		entity.idleSprite.draw(ctx, scale(480 - 64), i_offset * scale(67) + 10, scale(64), scale(64), { iIndex: iterator % entity.idleSprite.indices, mirror: true });
+		getIdleSprite(entity).draw(ctx, scale(480 - 64), i_offset * scale(67) + 10, scale(64), scale(64), { iIndex: iterator % getIdleSprite(entity).indices, mirror: true });
 		for (let j = 0; j < superVril; j++) {
 			sprites.SUPER_VRIL_4x4.draw(ctx, scale(480 - 10), (i_offset + 1) * scale(67) - j * scale(6) - scale(10), scale(4), scale(4), { iIndex: ELEMENT_COLORS[entity.element] });
 		}
@@ -152,7 +152,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		}
 
 		if (playerIndex >= 4) {
-			const selectedEntitySpell = selectedCards[i] === undefined ? undefined : getSpell(battleData[i].hand[selectedCards[i]]);
+			const selectedEntitySpell = selectedCards[i] === null ? null : getSpell(battleData[i].hand[selectedCards[i]]);
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
 				if (selectedVictims[i].length > 0) {
@@ -179,7 +179,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 }
 
 function drawCards(battleState) { //playerData, selectedCard) {
-	const { selectedCards, playerIndex, battleData, selectedVictims } = battleState;
+	const { turnState: { selectedCards, battleData, selectedVictims }, playerIndex } = battleState;
 	const playerData = battleData[playerIndex];
 	const selectedCard = selectedCards[playerIndex];
 
@@ -189,7 +189,7 @@ function drawCards(battleState) { //playerData, selectedCard) {
 	playerData.hand.forEach((spellId, i) => {
 		const spell = getSpell(spellId);
 		const hasEnoughVril = getTotalVril(playerData, spell.element) >= spell.vrilRequired;
-		if (hasEnoughVril && selectedCard === undefined || selectedCard === i) {
+		if (hasEnoughVril && selectedCard === null || selectedCard === i) {
 			ctx.globalAlpha = 1;
 		} else {
 			if (selectedVictims[playerIndex].length > 0) {
@@ -209,12 +209,12 @@ function drawCards(battleState) { //playerData, selectedCard) {
 				}
 			},
 			() => {
-				if (selectedCard === undefined) {
+				if (selectedCard === null) {
 					inputData.selectedCard = i;
 					if (spell.type === SPELL_TYPES.ATTACK_ALL) {
 						inputData.selectedVictims = [];
 						for (let j = (playerIndex < 4 ? 4 : 0); j < (playerIndex < 4 ? 8 : 4); j++) {
-							if (battleData[j] === undefined) {
+							if (battleData[j] === null) {
 								continue;
 							}
 							inputData.selectedVictims.push(j);
@@ -225,14 +225,14 @@ function drawCards(battleState) { //playerData, selectedCard) {
 			{
 				forceHoverOn: () => selectedCard === i,
 				onRightPress: () => {
-					if (selectedCard === undefined) {
+					if (selectedCard === null) {
 						inputData.discardCard = i;
 					}
 				}
 			});
 	});
 
-	if (selectedCard === undefined) {
+	if (selectedCard === null) {
 		ctx.globalAlpha = 1;
 	} else {
 		ctx.globalAlpha = 0.25;
@@ -247,7 +247,7 @@ function drawCards(battleState) { //playerData, selectedCard) {
 			ctx.fillRect(x, y + scale(18), sizeX, scale(4));
 		},
 		() => {
-			if (selectedCard === undefined) {
+			if (selectedCard === null) {
 				inputData.selectedCard = 'PASS';
 			}
 		});
@@ -259,11 +259,11 @@ function getReturnSequence(battleData) {
 	return {
 		ticks: 10,
 		actions: [
-			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== undefined).map(({ battleEntity, i }) => ({
+			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
 				tick: 0,
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: `left.${i}`,
-				sprite: battleEntity.entity.idleSprite,
+				sprite: getIdleSprite(battleEntity.entity),
 				alpha: 1,
 				posX: scale(-64),
 				posY: i * scale(67) + 10,
@@ -271,9 +271,9 @@ function getReturnSequence(battleData) {
 				sizeY: scale(64),
 				rot: 0,
 				zIndex: 1,
-				play: battleEntity.entity.idleSprite.indices > 1
+				play: getIdleSprite(battleEntity.entity).indices > 1
 			})),
-			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== undefined).map(({ i }) => ({
+			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
 				startTick: 0,
 				endTick: 9,
 				type: ATYPES.CHANGE_POSITION_X,
@@ -281,11 +281,11 @@ function getReturnSequence(battleData) {
 				posX: 0,
 				ease: EASE_TYPES.EASE_IN
 			})),
-			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== undefined).map(({ battleEntity, i }) => ({
+			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
 				tick: 0,
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: `right.${i}`,
-				sprite: battleEntity.entity.idleSprite,
+				sprite: getIdleSprite(battleEntity.entity),
 				alpha: 1,
 				posX: scale(480),
 				posY: (i - 4) * scale(67) + 10,
@@ -293,10 +293,10 @@ function getReturnSequence(battleData) {
 				sizeY: scale(64),
 				rot: 0,
 				zIndex: 1,
-				play: battleEntity.entity.idleSprite.indices > 1,
+				play: getIdleSprite(battleEntity.entity).indices > 1,
 				mirror: true
 			})),
-			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== undefined).map(({ i }) => ({
+			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
 				startTick: 0,
 				endTick: 9,
 				type: ATYPES.CHANGE_POSITION_X,
@@ -323,12 +323,12 @@ function drawBattleIdle(state) {
 	return inputData;
 }
 
-function areAllPlayersReady(battleState) {
-	for (let i = 0; i < battleState.battleData.length; i++) {
-		if (battleState.battleData[i] === undefined) {
+function areAllPlayersReady(turnState) {
+	for (let i = 0; i < turnState.battleData.length; i++) {
+		if (turnState.battleData[i] === null) {
 			continue;
 		}
-		if (battleState.selectedCards[i] === undefined || battleState.selectedVictims[i].length === 0) {
+		if (turnState.selectedCards[i] === null || (turnState.selectedCards[i] !== 'PASS' && turnState.selectedVictims[i].length === 0)) {
 			return false;
 		}
 	}
@@ -336,162 +336,167 @@ function areAllPlayersReady(battleState) {
 }
 
 function handleInput(battleState, inputData) {
+	const { playerIndex, turnState } = battleState;
 	// handle input
-	if (inputData.selectedCard !== undefined) {
-		battleState.selectedCards[battleState.playerIndex] = inputData.selectedCard;
+	if (inputData.selectedCard) {
+		turnState.selectedCards[playerIndex] = inputData.selectedCard;
 	}
-	if (inputData.selectedVictims !== undefined) {
-		battleState.selectedVictims[battleState.playerIndex] = inputData.selectedVictims;
+	if (inputData.selectedVictims) {
+		turnState.selectedVictims[playerIndex] = inputData.selectedVictims;
 	}
-	if (inputData.discardCard !== undefined) {
-		battleState.battleData[battleState.playerIndex].hand.splice(inputData.discardCard, 1);
+	if (inputData.discardCard) {
+		turnState.battleData[playerIndex].hand.splice(inputData.discardCard, 1);
 	}
 	if (rightClickPos) {
-		if (battleState.selectedCards[battleState.playerIndex] !== undefined && battleState.selectedVictims[battleState.playerIndex].length === 0) {
-			battleState.selectedCards[battleState.playerIndex] = undefined;
-		} else if (battleState.selectedVictims[battleState.playerIndex].length > 0) {
-			battleState.selectedVictims[battleState.playerIndex] = [];
+		if (turnState.selectedCards[playerIndex] !== null && turnState.selectedVictims[playerIndex].length === 0) {
+			turnState.selectedCards[playerIndex] = null;
+		} else if (turnState.selectedVictims[playerIndex].length > 0) {
+			turnState.selectedVictims[playerIndex] = [];
 		}
 	}
 }
 
+function createWithdrawAnimation(turnState) {
+	return {
+		ticks: 10,
+		actions: [
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				tick: 0,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: `left.${i}`,
+				sprite: getIdleSprite(battleEntity.entity),
+				alpha: 1,
+				posX: 0,
+				posY: i * scale(67) + 10,
+				sizeX: scale(64),
+				sizeY: scale(64),
+				rot: 0,
+				zIndex: 1,
+				play: getIdleSprite(battleEntity.entity).indices > 1
+			})),
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				startTick: 0,
+				endTick: 9,
+				type: ATYPES.CHANGE_POSITION_X,
+				id: `left.${i}`,
+				posX: scale(-64),
+				ease: EASE_TYPES.EASE_IN
+			})),
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				tick: 0,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: `right.${i}`,
+				sprite: getIdleSprite(battleEntity.entity),
+				alpha: 1,
+				posX: scale(480 - 64),
+				posY: (i - 4) * scale(67) + 10,
+				sizeX: scale(64),
+				sizeY: scale(64),
+				rot: 0,
+				zIndex: 1,
+				play: getIdleSprite(battleEntity.entity).indices > 1,
+				mirror: true
+			})),
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				startTick: 0,
+				endTick: 9,
+				type: ATYPES.CHANGE_POSITION_X,
+				id: `right.${i}`,
+				posX: scale(480),
+				ease: EASE_TYPES.EASE_IN
+			}))
+		]
+	};
+}
+
+function postBattle(turnState, callback) {
+	turnState.battleIndex++;
+	if (turnState.battleIndex === 8) {
+		turnState.selectedVictims = [[], [], [], [], [], [], [], []];
+		turnState.selectedCards = [null, null, null, null, null, null, null, null];
+		for (let i = 0; i < turnState.battleData.length; i++) {
+			if (turnState.battleData[i] && turnState.battleData[i].entity.health > 0) {
+				if (Math.random() <= turnState.battleData[i].superVrilChance) {
+					turnState.battleData[i].superVril++;
+				} else {
+					turnState.battleData[i].vril++;
+				}
+			} else if (turnState.battleData[i] && turnState.battleData[i].entity.health <= 0) {
+				turnState.battleData[i] = null;
+			}
+		}
+		for (let i = 0; i < turnState.battleData.length; i++) {
+			if (!turnState.battleData[i]) {
+				continue;
+			}
+			while (turnState.battleData[i].hand.length < 7) {
+				const cardId = turnState.battleData[i].deck.pop();
+				if (!cardId) {
+					break;
+				}
+				turnState.battleData[i].hand.push(cardId);
+			}
+		}
+		callback();
+	}
+}
+
 function battleGameLoop(timeMs) {
-	const { battleState } = state;
-	const { onWin, onLose } = battleState;
+	const { battleState, battleState: { turnState, onWin, onLose, playerIndex } } = state;
 
 	let inputData = {};
 
-	if (battleState.battleIndex === -1) {
+	if (turnState.battleIndex === -1) {
 		inputData = { inputData, ...drawBattleIdle(state) };
 
-		if (areAllPlayersReady(battleState)) {
-			const withdrawAnimationData = {
-				ticks: 10,
-				actions: [
-					...battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== undefined).map(({ battleEntity, i }) => ({
-						tick: 0,
-						type: ATYPES.INITIALIZE_ENTITY,
-						id: `left.${i}`,
-						sprite: battleEntity.entity.idleSprite,
-						alpha: 1,
-						posX: 0,
-						posY: i * scale(67) + 10,
-						sizeX: scale(64),
-						sizeY: scale(64),
-						rot: 0,
-						zIndex: 1,
-						play: battleEntity.entity.idleSprite.indices > 1
-					})),
-					...battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== undefined).map(({ battleEntity, i }) => ({
-						startTick: 0,
-						endTick: 9,
-						type: ATYPES.CHANGE_POSITION_X,
-						id: `left.${i}`,
-						posX: scale(-64),
-						ease: EASE_TYPES.EASE_IN
-					})),
-					...battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== undefined).map(({ battleEntity, i }) => ({
-						tick: 0,
-						type: ATYPES.INITIALIZE_ENTITY,
-						id: `right.${i}`,
-						sprite: battleEntity.entity.idleSprite,
-						alpha: 1,
-						posX: scale(480 - 64),
-						posY: (i - 4) * scale(67) + 10,
-						sizeX: scale(64),
-						sizeY: scale(64),
-						rot: 0,
-						zIndex: 1,
-						play: battleEntity.entity.idleSprite.indices > 1,
-						mirror: true
-					})),
-					...battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== undefined).map(({ battleEntity, i }) => ({
-						startTick: 0,
-						endTick: 9,
-						type: ATYPES.CHANGE_POSITION_X,
-						id: `right.${i}`,
-						posX: scale(480),
-						ease: EASE_TYPES.EASE_IN
-					}))
-				]
-			};
-
-			state.animationQueue.push(new AnimationEngine(withdrawAnimationData, TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
-			battleState.battleIndex = 0;
+		if (areAllPlayersReady(turnState)) {
+			state.animationQueue.push(new AnimationEngine(createWithdrawAnimation(turnState), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+			turnState.battleIndex = 0;
 		}
 
 		handleInput(battleState, inputData);
 	} else {
-		const postBattle = () => {
-			battleState.battleIndex++;
-			if (battleState.battleIndex === 8) {
-				battleState.selectedVictims = [[], [], [], [], [], [], [], []];
-				battleState.selectedCards = [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined];
-				for (let i = 0; i < battleState.battleData.length; i++) {
-					if (battleState.battleData[i] && battleState.battleData[i].entity.health > 0) {
-						if (Math.random() <= battleState.battleData[i].superVrilChance) {
-							battleState.battleData[i].superVril++;
-						} else {
-							battleState.battleData[i].vril++;
-						}
-					} else if (battleState.battleData[i] && battleState.battleData[i].entity.health <= 0) {
-						battleState.battleData[i] = undefined;
-					}
-				}
-				for (let i = 0; i < battleState.battleData.length; i++) {
-					if (!battleState.battleData[i]) {
-						continue;
-					}
-					while (battleState.battleData[i].hand.length < 7) {
-						const cardId = battleState.battleData[i].deck.pop();
-						if (!cardId) {
-							break;
-						}
-						battleState.battleData[i].hand.push(cardId);
-					}
-				}
-				battleState.battleIndex = -1;
-				if (battleState.battleData[battleState.playerIndex] === undefined) {
-					onLose();
-				} else if (
-					(battleState.playerIndex < 4 && battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== undefined).length === 0)
-					|| (battleState.playerIndex >= 4 && battleState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== undefined).length === 0)) {
-					onWin();
-				} else {
-					state.animationQueue.push(new AnimationEngine(getReturnSequence(battleState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
-					selectCardsForAI(battleState);
-				}
+		const postBattleCallback = () => {
+			turnState.battleIndex = -1;
+			if (turnState.battleData[playerIndex] === null) {
+				onLose();
+			} else if (
+				(playerIndex < 4 && turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).length === 0)
+				|| (playerIndex >= 4 && turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).length === 0)) {
+				onWin();
+			} else {
+				state.animationQueue.push(new AnimationEngine(getReturnSequence(turnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+				selectCardsForAI(battleState);
 			}
-		};
-
-		if (!battleState.battleData[battleState.battleIndex] || battleState.selectedCards[battleState.battleIndex] === 'PASS') {
-			postBattle();
+		}
+		if (!turnState.battleData[turnState.battleIndex] || turnState.selectedCards[turnState.battleIndex] === 'PASS') {
+			postBattle(turnState, postBattleCallback);
 		} else {
-			const victimIndices = battleState.selectedVictims[battleState.battleIndex]
-				.filter(i => battleState.battleData[i] !== undefined && battleState.battleData[i].entity.health > 0);
-			if (victimIndices.length > 0 && battleState.battleData[battleState.battleIndex].entity.health > 0) {
-				const spellIndex = battleState.selectedCards[battleState.battleIndex];
-				const spell = getSpell(battleState.battleData[battleState.battleIndex].hand[spellIndex]);
+			const victimIndices = turnState.selectedVictims[turnState.battleIndex]
+				.filter(i => turnState.battleData[i] !== null && turnState.battleData[i].entity.health > 0);
+			if (victimIndices.length > 0 && turnState.battleData[turnState.battleIndex].entity.health > 0) {
+				const spellIndex = turnState.selectedCards[turnState.battleIndex];
+				const spell = getSpell(turnState.battleData[turnState.battleIndex].hand[spellIndex]);
 				const calculatedDamages = victimIndices
-					.map(i => battleState.battleData[i])
+					.map(i => turnState.battleData[i])
 					.map(victimData => calculateDamages(
 						spell,
-						battleState.battleData[battleState.battleIndex],
+						turnState.battleData[turnState.battleIndex],
 						victimData));
-				const sequence = battleState.battleIndex < 4
-					? createLeftAttackSequence(battleState.battleData, battleState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0)
-					: createRightAttackSequence(battleState.battleData, battleState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0);
+				const sequence = turnState.battleIndex < 4
+					? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0)
+					: createRightAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0);
 				const animation = new AnimationEngine({
 					ticks: sequence.length,
 					actions: sequence.actions
 				}, TICK_TIME, FPS, canvas, ctx, () => {
 					reduceAnimationQueue();
-					battleState.battleData = iterateSpell(battleState.battleIndex, victimIndices, spellIndex, battleState.battleData, calculatedDamages);
-					postBattle();
+					turnState.battleData = iterateSpell(turnState.battleIndex, victimIndices, spellIndex, turnState.battleData, calculatedDamages);
+					postBattle(turnState, postBattleCallback);
 				});
 				state.animationQueue.push(animation);
 			} else {
-				postBattle();
+				postBattle(turnState, postBattleCallback);
 			}
 		}
 	}

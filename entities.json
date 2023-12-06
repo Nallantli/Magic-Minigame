@@ -1,0 +1,367 @@
+{
+	"fire_wizard": {
+		"id": "fire_wizard",
+		"name": "Wizard Wizard",
+		"element": "fire",
+		"maxHealth": 400,
+		"health": 400,
+		"deck": [
+			"fire.fire_shield",
+			"water.water_shield",
+			"fire.fireball",
+			"fire.fireball",
+			"fire.fireball",
+			"fire.fireball"
+		],
+		"augments": {
+			"fire": 0.8,
+			"water": 1.1
+		},
+		"criticalRating": 0,
+		"superVrilChance": 0,
+		"spritePath": "wiz",
+		"idleFrames": 1,
+		"castFrames": 1,
+		"deathFrames": 8
+	},
+	"air_wizard": {
+		"id": "air_wizard",
+		"name": "Top Hat Wizard",
+		"element": "air",
+		"maxHealth": 480,
+		"health": 480,
+		"deck": [
+			"air.air_shield",
+			"earth.earth_shield",
+			"air.updraft",
+			"air.updraft",
+			"air.updraft",
+			"air.updraft"
+		],
+		"augments": {
+			"air": 0.8,
+			"earth": 1.1
+		},
+		"criticalRating": 0,
+		"superVrilChance": 0,
+		"spritePath": "wiz_top_hat",
+		"idleFrames": 1,
+		"castFrames": 1,
+		"deathFrames": 19
+	},
+	"water_wizard": {
+		"id": "water_wizard",
+		"name": "Baseball Wizard",
+		"element": "water",
+		"maxHealth": 440,
+		"health": 440,
+		"deck": [
+			"water.water_shield",
+			"fire.fire_shield",
+			"water.wave",
+			"water.wave",
+			"water.wave",
+			"water.wave"
+		],
+		"augments": {
+			"water": 0.8,
+			"fire": 1.1
+		},
+		"criticalRating": 0,
+		"superVrilChance": 0,
+		"spritePath": "wiz_baseball",
+		"idleFrames": 1,
+		"castFrames": 1,
+		"deathFrames": 7
+	},
+	"earth_wizard": {
+		"id": "earth_wizard",
+		"name": "Hatless Wizard",
+		"element": "earth",
+		"maxHealth": 520,
+		"health": 520,
+		"deck": [
+			"earth.earth_shield",
+			"air.air_shield",
+			"earth.boulder",
+			"earth.boulder",
+			"earth.boulder",
+			"earth.boulder"
+		],
+		"augments": {
+			"earth": 0.8,
+			"air": 1.1
+		},
+		"criticalRating": 0,
+		"superVrilChance": 0,
+		"spritePath": "wiz_no_hat",
+		"idleFrames": 1,
+		"castFrames": 1,
+		"deathFrames": 12
+	},
+	"earth_skeleton_lv1": {
+		"id": "earth_skeleton_lv1",
+		"name": "Skeleton",
+		"element": "earth",
+		"maxHealth": 150,
+		"health": 150,
+		"deck": [
+			"earth.boulder",
+			"earth.boulder",
+			"earth.boulder",
+			"air.updraft"
+		],
+		"augments": {
+			"earth": 0.9,
+			"air": 1.2
+		},
+		"criticalRating": 0,
+		"superVrilChance": 0,
+		"spritePath": "skeleton",
+		"idleFrames": 16,
+		"castFrames": 5,
+		"deathFrames": 7
+	},
+	"fire_skeleton_lv1": {
+		"id": "fire_skeleton_lv1",
+		"name": "Skeleton",
+		"element": "fire",
+		"maxHealth": 120,
+		"health": 120,
+		"deck": [
+			"fire.fireball",
+			"fire.fireball",
+			"fire.fireball",
+			"water.wave"
+		],
+		"augments": {
+			"fire": 0.9,
+			"water": 1.2
+		},
+		"criticalRating": 0,
+		"superVrilChance": 0,
+		"spritePath": "skeleton",
+		"idleFrames": 16,
+		"castFrames": 5,
+		"deathFrames": 7
+	},
+	"air_skeleton_lv1": {
+		"id": "air_skeleton_lv1",
+		"name": "Skeleton",
+		"element": "air",
+		"maxHealth": 140,
+		"health": 140,
+		"deck": [
+			"air.updraft",
+			"air.updraft",
+			"air.updraft",
+			"earth.boulder"
+		],
+		"augments": {
+			"air": 0.9,
+			"earth": 1.2
+		},
+		"criticalRating": 0,
+		"superVrilChance": 0,
+		"spritePath": "skeleton",
+		"idleFrames": 16,
+		"castFrames": 5,
+		"deathFrames": 7
+	},
+	"water_skeleton_lv1": {
+		"id": "water_skeleton_lv1",
+		"name": "Skeleton",
+		"element": "water",
+		"maxHealth": 130,
+		"health": 130,
+		"deck": [
+			"water.wave",
+			"water.wave",
+			"water.wave",
+			"fire.fireball"
+		],
+		"augments": {
+			"water": 0.9,
+			"fire": 1.2
+		},
+		"criticalRating": 0,
+		"superVrilChance": 0,
+		"spritePath": "skeleton",
+		"idleFrames": 16,
+		"castFrames": 5,
+		"deathFrames": 7
+	},
+	"earth_skeleton_lv2": {
+		"id": "earth_skeleton_lv2",
+		"name": "Skilled Skeleton",
+		"element": "earth",
+		"maxHealth": 250,
+		"health": 250,
+		"deck": [
+			"air.air_shield",
+			"earth.earth_blade",
+			"earth.earth_shield",
+			"earth.boulder",
+			"earth.boulder",
+			"earth.boulder",
+			"earth.boulder",
+			"earth.burden"
+		],
+		"augments": {
+			"earth": 0.8,
+			"air": 1.2
+		},
+		"criticalRating": 50,
+		"superVrilChance": 0.1,
+		"spritePath": "skeleton",
+		"idleFrames": 16,
+		"castFrames": 5,
+		"deathFrames": 7
+	},
+	"water_ghost_lv2": {
+		"id": "water_ghost_lv2",
+		"name": "Ghost",
+		"element": "water",
+		"maxHealth": 210,
+		"health": 210,
+		"deck": [
+			"fire.fire_shield",
+			"water.water_shield",
+			"water.wave",
+			"water.wave",
+			"water.wave",
+			"water.wave",
+			"water.water_blade",
+			"water.weakness"
+		],
+		"augments": {
+			"water": 0.8,
+			"fire": 1.2
+		},
+		"criticalRating": 40,
+		"superVrilChance": 0.1,
+		"spritePath": "ghost",
+		"idleFrames": 21,
+		"castFrames": 3,
+		"deathFrames": 12
+	},
+	"air_ghost_lv2": {
+		"id": "air_ghost_lv2",
+		"name": "Ghost",
+		"element": "air",
+		"maxHealth": 230,
+		"health": 230,
+		"deck": [
+			"earth.earth_shield",
+			"air.air_shield",
+			"air.updraft",
+			"air.updraft",
+			"air.updraft",
+			"air.updraft",
+			"air.air_blade",
+			"air.gentle_breeze"
+		],
+		"augments": {
+			"air": 0.8,
+			"earth": 1.2
+		},
+		"criticalRating": 30,
+		"superVrilChance": 0.1,
+		"spritePath": "ghost",
+		"idleFrames": 21,
+		"castFrames": 3,
+		"deathFrames": 12
+	},
+	"earth_goomborb_lv3": {
+		"id": "earth_goomborb_lv3",
+		"name": "Goomborb",
+		"element": "earth",
+		"maxHealth": 350,
+		"health": 350,
+		"deck": [
+			"air.air_shield",
+			"earth.earth_blade",
+			"earth.earth_shield",
+			"earth.boulder",
+			"earth.boulder",
+			"earth.burden",
+			"earth.earth_trap",
+			"earth.earthquake",
+			"earth.earthquake"
+		],
+		"augments": {
+			"earth": 0.9,
+			"air": 1.2
+		},
+		"criticalRating": 80,
+		"superVrilChance": 0.2,
+		"spritePath": "goomborb",
+		"idleFrames": 10,
+		"castFrames": 2,
+		"deathFrames": 7
+	},
+	"fire_phoenix_lv3": {
+		"id": "fire_phoenix_lv3",
+		"name": "Phoenix",
+		"element": "fire",
+		"maxHealth": 300,
+		"health": 300,
+		"deck": [
+			"water.water_shield",
+			"fire.fire_shield",
+			"fire.fire_blade",
+			"fire.fireball",
+			"fire.fireball",
+			"fire.magnify",
+			"fire.fire_trap",
+			"fire.balefire",
+			"fire.balefire"
+		],
+		"augments": {
+			"fire": 0.9,
+			"water": 1.2
+		},
+		"criticalRating": 60,
+		"superVrilChance": 0.2,
+		"spritePath": "phoenix",
+		"idleFrames": 8,
+		"castFrames": 8,
+		"deathFrames": 10
+	},
+	"boss_skull": {
+		"id": "boss_skull",
+		"name": "King Skull",
+		"element": "earth",
+		"maxHealth": 600,
+		"health": 600,
+		"deck": [
+			"earth.earth_blade",
+			"earth.earth_blade",
+			"earth.earth_shield",
+			"earth.earth_shield",
+			"earth.boulder",
+			"earth.boulder",
+			"air.gentle_breeze",
+			"earth.burden",
+			"fire.magnify",
+			"water.weakness",
+			"earth.earth_trap",
+			"earth.earth_trap",
+			"earth.earthquake",
+			"earth.earthquake",
+			"earth.earthquake",
+			"earth.earthquake"
+		],
+		"augments": {
+			"earth": 0.8,
+			"air": 1.3
+		},
+		"criticalRating": 80,
+		"superVrilChance": 0.3,
+		"spritePath": "skull",
+		"idleFrames": 10,
+		"castFrames": 6,
+		"deathFrames": 13,
+		"track": "./audio/boss_track.wav"
+	}
+}

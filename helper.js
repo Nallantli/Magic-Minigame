@@ -216,7 +216,7 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calcul
 	battleData[casterIndex].hand.splice(spellIndex, 1);
 
 	for (let i = 0; i < battleData.length; i++) {
-		if (battleData[i] === undefined) {
+		if (battleData[i] === null) {
 			continue;
 		}
 		battleData[i].entity.health = Math.round(battleData[i].entity.health);
@@ -273,44 +273,46 @@ function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
 		if (i < leftBattleEntities.length) {
 			battleData.push(leftBattleEntities[i]);
 		} else {
-			battleData.push(undefined);
+			battleData.push(null);
 		}
 	}
 	for (let i = 0; i < 4; i++) {
 		if (i < rightBattleEntities.length) {
 			battleData.push(rightBattleEntities[i]);
 		} else {
-			battleData.push(undefined);
+			battleData.push(null);
 		}
 	}
 
 	state.animationQueue.push(new AnimationEngine(getReturnSequence(battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 
-	const battleState = {
-		iterator: 0,
-		startTime: undefined,
+	const turnState = {
 		battleData,
-		selectedCards: [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined],
+		selectedCards: [null, null, null, null, null, null, null, null],
 		selectedVictims: [[], [], [], [], [], [], [], []],
-		playerIndex: battleData.findIndex(battleEntity => battleEntity !== undefined && battleEntity.entity.id === 'player_character'),
-		battleIndex: -1,
+		battleIndex: -1
+	};
+
+	const battleState = {
+		turnState,
+		playerIndex: battleData.findIndex(battleEntity => battleEntity !== null && battleEntity.entity.id === state.player.id),
 		onWin,
 		onLose
 	};
-
 	selectCardsForAI(battleState);
 	return battleState;
 }
 
 function selectCardsForAI(battleState) {
-	battleState.battleData.forEach((battleEntity, i) => {
+	const { turnState, playerIndex } = battleState;
+	turnState.battleData.forEach((battleEntity, i) => {
 		if (!battleEntity) {
 			return;
 		}
-		if (battleState.playerIndex !== i && battleEntity.AI) {
-			const { selectedCard, selectedVictims } = battleEntity.AI(i, battleState.battleData);
-			battleState.selectedCards[i] = selectedCard;
-			battleState.selectedVictims[i] = selectedVictims;
+		if (playerIndex !== i && battleEntity.AI) {
+			const { selectedCard, selectedVictims } = battleEntity.AI(i, turnState.battleData);
+			turnState.selectedCards[i] = selectedCard;
+			turnState.selectedVictims[i] = selectedVictims;
 		}
 	});
 }
