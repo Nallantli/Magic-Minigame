@@ -39,6 +39,26 @@ function makeInteractable(x, y, sizeX, sizeY, render, hoverRender, onPress, opti
 	}
 }
 
+function makeTextBox(id, x, y, sizeX, sizeY, render, validator) {
+	if (clickPos !== undefined) {
+		if (clickPos?.x >= x && clickPos?.x < x + sizeX && clickPos?.y >= y && clickPos?.y < y + sizeY) {
+			state.textboxes[id].isFocused = true;
+			console.log('Focused');
+		}
+		if (clickPos?.x < x || clickPos?.x >= x + sizeX || clickPos?.y < y || clickPos?.y >= y + sizeY) {
+			state.textboxes[id].isFocused = false;
+			console.log('Unfocused');
+		}
+	}
+	if (state.textboxes[id].isFocused) {
+		keysUp.forEach(key => {
+			state.textboxes[id].value = validator(state.textboxes[id].value, key);
+		});
+	}
+	const { value, isFocused } = state.textboxes[id];
+	render({ x, y, sizeX, sizeY, value, isFocused });
+}
+
 function drawBox(ctx, x, y, sizeX, sizeY) {
 	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y, scale(3), scale(3));
 	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y, scale(3), scale(3), { iIndex: 1 });

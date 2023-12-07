@@ -1,15 +1,82 @@
-function menuGameLoop(timeMs) {
-	sprites.START_128x48.draw(ctx, scale(240 - 64), scale(187 - 24), scale(128), scale(48), 0, false);
+function setUpSocket(socket) {
+	socket.addEventListener('message', event => {
+		const data = JSON.parse(event.data);
+		console.log(data);
+		switch (data.action) {
+			case 'BATTLE_ANIMATION_DATA': {
+				const { animationData, finalTurnState } = data;
+				animationData.forEach(({ turnState, victimIndices, spell, calculatedDamages }, i) => {
+					const sequence = turnState.battleIndex < 4
+						? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0)
+						: createRightAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0);
+					const animation = new AnimationEngine({
+						ticks: sequence.length,
+						actions: sequence.actions
+					}, TICK_TIME, FPS, canvas, ctx, () => {
+						reduceAnimationQueue();
+						if (i === animationData.length - 1) {
+							state.animationQueue.push(new AnimationEngine(getReturnSequence(finalTurnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+							state = {
+								...state,
+								battleState: {
+									...state.battleState,
+									turnState: finalTurnState
+								}
+							};
+						}
+					});
+					state.animationQueue.push(animation);
+				});
+				break;
+			}
+			case 'STATE_UPDATE': {
+				state = {
+					...state,
+					battleState: {
+						...state.battleState,
+						...data
+					},
+					path: 'MP_BATTLE'
+				}
+				break;
+			}
+		}
+	});
+}
 
-	makeInteractable(scale(240 - 64), scale(187 - 24), scale(128), scale(48),
-		({ x, y, sizeX, sizeY }) => {
-			sprites.START_128x48.draw(ctx, x, y, sizeX, sizeY, 0, false);
+function menuGameLoop(timeMs) {
+	makeTextBox('joinTextbox', scale(240 - 24), scale(156), scale(48), scale(16),
+		({ x, y, sizeX, sizeY, isFocused, value }) => {
+			font.draw(ctx, x, y, scale(12), scale(16), 0, value);
+			if (isFocused) {
+				ctx.fillStyle = 'white';
+				ctx.fillRect(x, y + scale(18), sizeX, scale(4));
+			} else {
+				ctx.fillStyle = 'white';
+				ctx.fillRect(x, y + scale(18), sizeX, scale(2));
+			}
 		},
-		({ x, y, sizeX, renderCallback }) => {
-			renderCallback();
-			ctx.fillStyle = 'white';
-			ctx.fillRect(x, y + scale(52), sizeX, scale(4));
-		},
+		(value, key) => {
+			switch (key) {
+				case 'backspace':
+					if (value.length > 0) {
+						return value.slice(0, -1);
+					}
+					return value;
+				default:
+					if (value.length === 4) {
+						return value;
+					}
+					if (key.length === 1 && ((key.charCodeAt(0) >= 'a'.charCodeAt(0) && key.charCodeAt(0) <= 'z'.charCodeAt(0)) || (key.charCodeAt(0) >= '0'.charCodeAt(0) && key.charCodeAt(0) <= '9'.charCodeAt(0)))) {
+						return value + key.toUpperCase();
+					}
+					return value;
+			}
+		});
+
+	makeInteractable(scale(240 - 69), scale(204), scale(138), scale(22),
+		({ x, y, sizeX, sizeY }) => sprites.CREATE_GAME_69x11.draw(ctx, x, y, sizeX, sizeY),
+		({ x, y, sizeX, sizeY }) => sprites.CREATE_GAME_69x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 		() => {
 			const socket = new WebSocket(serverUrl);
 			state = {
@@ -26,73 +93,31 @@ function menuGameLoop(timeMs) {
 					entity: state.player
 				}));
 			});
-			socket.addEventListener('message', event => {
-				const data = JSON.parse(event.data);
-				console.log(data);
-				switch (data.action) {
-					case 'BATTLE_ANIMATION_DATA': {
-						const { animationData, finalTurnState } = data;
-						animationData.forEach(({ turnState, victimIndices, spell, calculatedDamages }, i) => {
-							const sequence = turnState.battleIndex < 4
-								? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0)
-								: createRightAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0);
-							const animation = new AnimationEngine({
-								ticks: sequence.length,
-								actions: sequence.actions
-							}, TICK_TIME, FPS, canvas, ctx, () => {
-								reduceAnimationQueue();
-								if (i === animationData.length - 1) {
-									state.animationQueue.push(new AnimationEngine(getReturnSequence(finalTurnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
-									state = {
-										...state,
-										battleState: {
-											...state.battleState,
-											turnState: finalTurnState
-										}
-									};
-								}
-							});
-							state.animationQueue.push(animation);
-						});
-						break;
-					}
-					case 'STATE_UPDATE': {
-						state = {
-							...state,
-							battleState: {
-								...state.battleState,
-								...data
-							},
-							path: 'MP_BATTLE'
-						}
-						break;
-					}
-				}
-			})
+			setUpSocket(socket);
 		});
 
-	makeInteractable(scale(240 - 32), scale(232), scale(64), scale(12),
-		({ x, y, sizeX, sizeY }) => {
-			sprites.EDIT_DECKS_64x12.draw(ctx, x, y, sizeX, sizeY);
-		},
-		({ x, y, sizeX, renderCallback }) => {
-			renderCallback();
-			ctx.fillStyle = 'white';
-			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
-		},
-		() => state.path = 'DECK');
-
-	/* makeInteractable(scale(240 - 32), scale(252), scale(64), scale(12),
-		({ x, y, sizeX, sizeY }) => {
-			sprites.CUSTOMIZE_64x12.draw(ctx, x, y, sizeX, sizeY);
-		},
-		({ x, y, sizeX, renderCallback }) => {
-			renderCallback();
-			ctx.fillStyle = 'white';
-			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
-		},
-		() => state.path = 'CUSTOMIZE'); */
-
+	makeInteractable(scale(240 - 69), scale(180), scale(138), scale(22),
+		({ x, y, sizeX, sizeY }) => sprites.JOIN_GAME_69x11.draw(ctx, x, y, sizeX, sizeY),
+		({ x, y, sizeX, sizeY }) => sprites.JOIN_GAME_69x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+		() => {
+			const socket = new WebSocket(serverUrl);
+			state = {
+				...state,
+				battleState: {
+					...state.battleState,
+					playerIndex: 0,
+					socket
+				}
+			};
+			socket.addEventListener('open', () => {
+				socket.send(JSON.stringify({
+					action: 'JOIN_GAME',
+					entity: state.player,
+					id: state.textboxes.joinTextbox.value
+				}));
+			});
+			setUpSocket(socket);
+		});
 }
 
 function drawEntityIcon(entity, i, si) {

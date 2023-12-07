@@ -89,6 +89,8 @@ const sprites = {
 	STAIRS_32x32: new Sprite('./img/maps/tiles/stairs.png', 32, 32, 1),
 	HEAL_COIN_16x16: new Sprite('./img/heal_count_16x16.png', 16, 16, 8),
 	READY_UP_62x11: new Sprite('./img/ready_up_62x11.png', 62, 11, 2),
+	CREATE_GAME_69x11: new Sprite('./img/create_game_69x11.png', 69, 11, 2),
+	JOIN_GAME_69x11: new Sprite('./img/join_game_69x11.png', 69, 11, 2),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
 };

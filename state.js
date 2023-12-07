@@ -9,7 +9,13 @@ let state = {
 	},
 	battleState: undefined,
 	animationQueue: [],
-	overlayAnimationQueue: []
+	overlayAnimationQueue: [],
+	textboxes: {
+		joinTextbox: {
+			value: '',
+			isFocused: false
+		}
+	}
 };
 
 const reduceAnimationQueue = () => state.animationQueue.splice(0, 1);
