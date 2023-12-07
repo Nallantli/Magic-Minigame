@@ -93,6 +93,9 @@ function criticalChance(cra, crb) {
 }
 
 function calculateDamages(spell, caster, victim) {
+	if (Math.random() > spell.chance) {
+		return 'FAILED';
+	}
 	if (spell.type !== SPELL_TYPES.ATTACK_ALL && spell.type !== SPELL_TYPES.ATTACK_BASIC) {
 		return {};
 	}
@@ -167,6 +170,15 @@ function getTotalVril(data, element) {
 }
 
 function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calculatedDamages) {
+	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
+		const spellId = battleData[casterIndex].hand[spellIndex];
+		battleData[casterIndex].deck = [
+			spellId,
+			...battleData[casterIndex].deck
+		];
+		battleData[casterIndex].hand.splice(spellIndex, 1);
+		return battleData;
+	}
 	const spell = getSpell(battleData[casterIndex].hand[spellIndex]);
 	switch (spell.type) {
 		case SPELL_TYPES.HEALING_BASIC:

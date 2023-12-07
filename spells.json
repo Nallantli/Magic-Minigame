@@ -11,7 +11,8 @@
 				"maxDamage": -290,
 				"element": "air"
 			}
-		],
+		], 
+		"chance": 0.85,
 		"vrilRequired": 3,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -29,6 +30,7 @@
 				"element": "air"
 			}
 		],
+		"chance": 0.85,
 		"vrilRequired": 2,
 		"frames": 25,
 		"spellUseType": "TO_ENEMIES"
@@ -44,6 +46,7 @@
 				"heal": 250
 			}
 		],
+		"chance": 0.85,
 		"vrilRequired": 2,
 		"frames": 12,
 		"spellUseType": "TO_ALLIES"
@@ -62,6 +65,7 @@
 				"isBonus": true
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ALLIES"
@@ -80,6 +84,7 @@
 				"isBonus": true
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ALLIES"
@@ -98,6 +103,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -116,6 +122,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -133,6 +140,7 @@
 				"element": "fire"
 			}
 		],
+		"chance": 0.75,
 		"vrilRequired": 1,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -150,6 +158,7 @@
 				"element": "fire"
 			}
 		],
+		"chance": 0.75,
 		"vrilRequired": 2,
 		"frames": 19,
 		"spellUseType": "TO_ENEMIES"
@@ -168,6 +177,7 @@
 				"isBonus": true
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ALLIES"
@@ -186,6 +196,7 @@
 				"isBonus": true
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ALLIES"
@@ -213,6 +224,7 @@
 				"isBonus": true
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 1,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -231,6 +243,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -249,6 +262,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -266,6 +280,7 @@
 				"element": "water"
 			}
 		],
+		"chance": 0.8,
 		"vrilRequired": 1,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -284,6 +299,7 @@
 				"isBonus": true
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ALLIES"
@@ -302,6 +318,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -320,6 +337,7 @@
 				"isBonus": true
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ALLIES"
@@ -346,6 +364,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 0.8,
 		"vrilRequired": 3,
 		"frames": 20,
 		"spellUseType": "TO_ENEMIES"
@@ -364,6 +383,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -382,6 +402,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -399,6 +420,7 @@
 				"element": "earth"
 			}
 		],
+		"chance": 0.9,
 		"vrilRequired": 1,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -416,6 +438,7 @@
 				"element": "earth"
 			}
 		],
+		"chance": 0.9,
 		"vrilRequired": 2,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -455,6 +478,7 @@
 				"isBonus": true
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 15,
 		"spellUseType": "TO_ALLIES"
@@ -473,6 +497,7 @@
 				"isBonus": true
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ALLIES"
@@ -491,6 +516,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -518,6 +544,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 1,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -536,6 +563,7 @@
 				"isBonus": false
 			}
 		],
+		"chance": 1,
 		"vrilRequired": 0,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -553,6 +581,7 @@
 				"element": "air"
 			}
 		],
+		"chance": 0.85,
 		"vrilRequired": 1,
 		"frames": 12,
 		"spellUseType": "TO_ENEMIES"
@@ -571,6 +600,7 @@
 				"steal": 0.5
 			}
 		],
+		"chance": 0.8,
 		"vrilRequired": 2,
 		"frames": 16,
 		"spellUseType": "TO_ENEMIES"
@@ -588,6 +618,7 @@
 				"element": "fire"
 			}
 		],
+		"chance": 0.75,
 		"vrilRequired": 3,
 		"frames": 18,
 		"spellUseType": "TO_ENEMIES"

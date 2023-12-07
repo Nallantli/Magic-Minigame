@@ -1,5 +1,5 @@
 
-function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculateDamages) {
+function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculatedDamages) {
 	const elementSparksId = crypto.randomUUID();
 	const spellTypeId = crypto.randomUUID();
 
@@ -87,57 +87,6 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			ease: EASE_TYPES.EASE_OUT
 		},
 		{
-			tick: spellCastingStartTick + 14,
-			type: ATYPES.PLAY_SOUND,
-			audio: new Audio('./audio/cast.wav'),
-			volume: 0.1
-		},
-		{
-			tick: spellCastingStartTick + 14,
-			type: ATYPES.INITIALIZE_ENTITY,
-			id: elementSparksId,
-			sprite: sprites.ELEMENT_SPARKS_32x16,
-			alpha: 1,
-			posX: scale(240 - 32),
-			posY: scale(22),
-			sizeX: scale(64),
-			sizeY: scale(32),
-			rot: 0,
-			zIndex: 2
-		},
-		{
-			startTick: spellCastingStartTick + 14,
-			endTick: spellCastingStartTick + 19,
-			type: ATYPES.CHANGE_OPACITY,
-			id: elementSparksId,
-			alpha: 0,
-			ease: EASE_TYPES.EASE_IN
-		},
-		{
-			startTick: spellCastingStartTick + 14,
-			endTick: spellCastingStartTick + 19,
-			type: ATYPES.CHANGE_POSITION_Y,
-			id: elementSparksId,
-			posY: scale(18),
-			ease: EASE_TYPES.EASE_IN
-		},
-		{
-			startTick: spellCastingStartTick + 14,
-			endTick: spellCastingStartTick + 19,
-			type: ATYPES.CHANGE_SIZE_X,
-			id: elementSparksId,
-			sizeX: scale(72),
-			ease: EASE_TYPES.EASE_IN
-		},
-		{
-			startTick: spellCastingStartTick + 14,
-			endTick: spellCastingStartTick + 19,
-			type: ATYPES.CHANGE_POSITION_X,
-			id: elementSparksId,
-			posX: scale(240 - 36),
-			ease: EASE_TYPES.EASE_IN
-		},
-		{
 			startTick: spellCastingStartTick + 14,
 			endTick: spellCastingStartTick + 24,
 			type: ATYPES.CHANGE_SIZE_X,
@@ -179,18 +128,24 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 		}
 	];
 
-	if (calculateDamages.length > 0 && calculateDamages[0].isCritical) {
-		const criticalTextId = crypto.randomUUID();
+	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
+		const failedTextId = crypto.randomUUID();
 		actions = [
 			...actions,
 			{
 				tick: spellCastingStartTick + 14,
+				type: ATYPES.PLAY_SOUND,
+				audio: new Audio('./audio/failed_spell.wav'),
+				volume: 0.25
+			},
+			{
+				tick: spellCastingStartTick + 14,
 				type: ATYPES.INITIALIZE_ENTITY,
-				id: criticalTextId,
+				id: failedTextId,
 				sprite: font,
-				text: 'CRITICAL',
+				text: 'FAILED',
 				alpha: 1,
-				posX: scale(240 - 6 * 8),
+				posX: scale(240 - 6 * 6),
 				posY: scale(64),
 				sizeX: scale(12),
 				sizeY: scale(16),
@@ -201,7 +156,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 				startTick: spellCastingStartTick + 14,
 				endTick: spellCastingStartTick + 24,
 				type: ATYPES.CHANGE_OPACITY,
-				id: criticalTextId,
+				id: failedTextId,
 				alpha: 0,
 				ease: EASE_TYPES.EASE_OUT
 			},
@@ -209,11 +164,102 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 				startTick: spellCastingStartTick + 14,
 				endTick: spellCastingStartTick + 24,
 				type: ATYPES.CHANGE_POSITION_Y,
-				id: criticalTextId,
+				id: failedTextId,
 				posY: scale(48),
 				ease: EASE_TYPES.EASE_OUT
 			}
 		]
+	} else {
+		actions = [
+			...actions,
+			{
+				tick: spellCastingStartTick + 14,
+				type: ATYPES.PLAY_SOUND,
+				audio: new Audio('./audio/cast.wav'),
+				volume: 0.1
+			},
+			{
+				tick: spellCastingStartTick + 14,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: elementSparksId,
+				sprite: sprites.ELEMENT_SPARKS_32x16,
+				alpha: 1,
+				posX: scale(240 - 32),
+				posY: scale(22),
+				sizeX: scale(64),
+				sizeY: scale(32),
+				rot: 0,
+				zIndex: 2
+			},
+			{
+				startTick: spellCastingStartTick + 14,
+				endTick: spellCastingStartTick + 19,
+				type: ATYPES.CHANGE_OPACITY,
+				id: elementSparksId,
+				alpha: 0,
+				ease: EASE_TYPES.EASE_IN
+			},
+			{
+				startTick: spellCastingStartTick + 14,
+				endTick: spellCastingStartTick + 19,
+				type: ATYPES.CHANGE_POSITION_Y,
+				id: elementSparksId,
+				posY: scale(18),
+				ease: EASE_TYPES.EASE_IN
+			},
+			{
+				startTick: spellCastingStartTick + 14,
+				endTick: spellCastingStartTick + 19,
+				type: ATYPES.CHANGE_SIZE_X,
+				id: elementSparksId,
+				sizeX: scale(72),
+				ease: EASE_TYPES.EASE_IN
+			},
+			{
+				startTick: spellCastingStartTick + 14,
+				endTick: spellCastingStartTick + 19,
+				type: ATYPES.CHANGE_POSITION_X,
+				id: elementSparksId,
+				posX: scale(240 - 36),
+				ease: EASE_TYPES.EASE_IN
+			},
+		]
+		if (calculatedDamages.length > 0 && calculatedDamages[0].isCritical) {
+			const criticalTextId = crypto.randomUUID();
+			actions = [
+				...actions,
+				{
+					tick: spellCastingStartTick + 14,
+					type: ATYPES.INITIALIZE_ENTITY,
+					id: criticalTextId,
+					sprite: font,
+					text: 'CRITICAL',
+					alpha: 1,
+					posX: scale(240 - 6 * 8),
+					posY: scale(64),
+					sizeX: scale(12),
+					sizeY: scale(16),
+					rot: 0,
+					zIndex: 2
+				},
+				{
+					startTick: spellCastingStartTick + 14,
+					endTick: spellCastingStartTick + 24,
+					type: ATYPES.CHANGE_OPACITY,
+					id: criticalTextId,
+					alpha: 0,
+					ease: EASE_TYPES.EASE_OUT
+				},
+				{
+					startTick: spellCastingStartTick + 14,
+					endTick: spellCastingStartTick + 24,
+					type: ATYPES.CHANGE_POSITION_Y,
+					id: criticalTextId,
+					posY: scale(48),
+					ease: EASE_TYPES.EASE_OUT
+				}
+			]
+		}
 	}
 
 	if (getCastSprite(casterData.entity).indices > 1) {
@@ -447,13 +493,8 @@ function createRightBladeCastingSequence(blades, baseId, iteratorOffset, startTi
 	return actions;
 }
 
-function createCleanUpSequence(exitLeft, spellRemovalTick, cleanUpStartTick, spellId, casterId, castingCircleId, casterData) {
+function createCastingExitSequence(exitLeft, cleanUpStartTick, casterId, castingCircleId, casterData) {
 	return [
-		{
-			tick: spellRemovalTick,
-			type: ATYPES.REMOVE_ENTITY,
-			id: spellId
-		},
 		{
 			tick: cleanUpStartTick + 2,
 			type: ATYPES.SET_SPRITE,
@@ -482,6 +523,17 @@ function createCleanUpSequence(exitLeft, spellRemovalTick, cleanUpStartTick, spe
 			posX: exitLeft ? scale(-128) : scale(480),
 			ease: EASE_TYPES.EASE_IN
 		}
+	];
+}
+
+function createCleanUpSequence(exitLeft, spellRemovalTick, cleanUpStartTick, spellId, casterId, castingCircleId, casterData) {
+	return [
+		{
+			tick: spellRemovalTick,
+			type: ATYPES.REMOVE_ENTITY,
+			id: spellId
+		},
+		...createCastingExitSequence(exitLeft, cleanUpStartTick, casterId, castingCircleId, casterData)
 	];
 }
 
@@ -994,10 +1046,21 @@ function createLeftAttackSequence(battleData, casterIndex, victimIndices, spell,
 		...createMiddleCastingSequence(true, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculatedDamages)
 	];
 
+	let spellAnimationStartTick = spellCastingStartTick + 25;
+
+	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
+		return {
+			length: spellAnimationStartTick + 8,
+			actions: [
+				...actions,
+				...createCastingExitSequence(true, spellAnimationStartTick, casterId, castingCircleId, casterData)
+			]
+		}
+	}
+
 	// spell animation
 
 	let buffer = 0;
-	let spellAnimationStartTick = spellCastingStartTick + 25;
 	actions = [
 		...actions,
 		{
@@ -1178,10 +1241,21 @@ function createRightAttackSequence(battleData, casterIndex, victimIndices, spell
 		...createMiddleCastingSequence(false, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculatedDamages)
 	];
 
+	let spellAnimationStartTick = spellCastingStartTick + 25;
+
+	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
+		return {
+			length: spellAnimationStartTick + 8,
+			actions: [
+				...actions,
+				...createCastingExitSequence(false, spellAnimationStartTick, casterId, castingCircleId, casterData)
+			]
+		}
+	}
+
 	// spell animation
 
 	let buffer = 0;
-	let spellAnimationStartTick = spellCastingStartTick + 25;
 	actions = [
 		...actions,
 		{

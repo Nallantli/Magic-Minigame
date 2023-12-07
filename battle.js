@@ -212,7 +212,7 @@ function drawCards(battleState) {
 					}
 				},
 				() => {
-					if (selectedCard === null) {
+					if (selectedCard === null && hasEnoughVril) {
 						inputData.selectedCard = i;
 						if (spell.type === SPELL_TYPES.ATTACK_ALL) {
 							inputData.selectedVictims = [];
@@ -341,13 +341,13 @@ function areAllPlayersReady(turnState) {
 function handleInput(battleState, inputData) {
 	const { playerIndex, turnState } = battleState;
 	// handle input
-	if (inputData.selectedCard) {
+	if (inputData.selectedCard !== undefined) {
 		turnState.selectedCards[playerIndex] = inputData.selectedCard;
 	}
-	if (inputData.selectedVictims) {
+	if (inputData.selectedVictims !== undefined) {
 		turnState.selectedVictims[playerIndex] = inputData.selectedVictims;
 	}
-	if (inputData.discardCard) {
+	if (inputData.discardCard !== undefined) {
 		turnState.battleData[playerIndex].hand.splice(inputData.discardCard, 1);
 	}
 	if (rightClickPos) {
