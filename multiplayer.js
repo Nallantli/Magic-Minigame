@@ -34,11 +34,13 @@ function drawLobby(battleState, iterator) {
 
 		if (i === playerIndex) {
 			makeInteractable(scale(164), i * scale(67) + scale(2), scale(32), scale(64),
-				({ x, y, sizeX, sizeY }) => sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY),
+				({ x, y, sizeX, sizeY }) => {
+					ctx.globalAlpha = 0.25;
+					sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY)
+				},
 				({ x, y, sizeX, sizeY, renderCallback }) => {
-					renderCallback();
-					ctx.fillStyle = 'white';
-					ctx.fillRect(x + scale(34), y, scale(4), sizeY);
+					ctx.globalAlpha = 1;
+					sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY)
 				},
 				() => {
 					let nextAvailablePos = 4;
@@ -91,11 +93,13 @@ function drawLobby(battleState, iterator) {
 
 		if (i === playerIndex) {
 			makeInteractable(scale(480 - 196), i_offset * scale(67) + scale(2), scale(32), scale(64),
-				({ x, y, sizeX, sizeY }) => sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+				({ x, y, sizeX, sizeY }) => {
+					ctx.globalAlpha = 0.25;
+					sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 })
+				},
 				({ x, y, sizeX, sizeY, renderCallback }) => {
-					renderCallback();
-					ctx.fillStyle = 'white';
-					ctx.fillRect(x - scale(6), y, scale(4), sizeY);
+					ctx.globalAlpha = 1;
+					sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 })
 				},
 				() => {
 					let nextAvailablePos = 0;
