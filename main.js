@@ -3,6 +3,13 @@ function setUpSocket(socket) {
 		const data = JSON.parse(event.data);
 		console.log(data);
 		switch (data.action) {
+			case 'JOIN_FAILURE': {
+				const { message } = data;
+				state.path = 'MENU';
+				state.menuState.errorMessage = message;
+				socket.close();
+				break;
+			}
 			case 'WIN': {
 				const { side, entities } = data;
 				state = {
@@ -64,6 +71,10 @@ function setUpSocket(socket) {
 }
 
 function menuGameLoop(timeMs) {
+	if (state.menuState.errorMessage) {
+		font.draw(ctx, scale(240 - state.menuState.errorMessage.length * 3), scale(330), scale(6), scale(8), 2, state.menuState.errorMessage);
+	}
+
 	makeTextBox('joinTextbox', scale(240 - 26), scale(228), scale(52), scale(20),
 		({ x, y, sizeX, sizeY, isFocused, value }) => {
 			if (!isFocused && value === '') {
@@ -105,6 +116,10 @@ function menuGameLoop(timeMs) {
 			const socket = new WebSocket(serverUrl);
 			state = {
 				...state,
+				menuState: {
+					...state.menuState,
+					errorMessage: undefined
+				},
 				battleState: {
 					...state.battleState,
 					playerIndex: 0,
@@ -128,6 +143,10 @@ function menuGameLoop(timeMs) {
 			const socket = new WebSocket(serverUrl);
 			state = {
 				...state,
+				menuState: {
+					...state.menuState,
+					errorMessage: undefined
+				},
 				battleState: {
 					...state.battleState,
 					playerIndex: 0,

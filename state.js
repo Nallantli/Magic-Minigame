@@ -8,6 +8,9 @@ let state = {
 		currentElement: 'air',
 		returnPath: 'MENU'
 	},
+	menuState: {
+		errorMessage: undefined
+	},
 	battleState: undefined,
 	animationQueue: [],
 	overlayAnimationQueue: [],
