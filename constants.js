@@ -1,4 +1,4 @@
-const serverUrl = 'ws://5.161.177.22:8080';
+const serverUrl = 'wss://nallant.li:8080';
 
 const SCALE_FACTOR = 4;
 const FPS = 75;
