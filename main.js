@@ -1158,6 +1158,7 @@ function gameLoop(timeMs) {
 	}
 
 	keysUp = [];
+	keysPressed = [];
 	clickPos = undefined;
 	rightClickPos = undefined;
 	window.requestAnimationFrame(gameLoop);

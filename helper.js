@@ -52,7 +52,7 @@ function makeTextBox(id, x, y, sizeX, sizeY, render, validator, onUnfocus) {
 		}
 	}
 	if (state.textboxes[id].isFocused) {
-		keysUp.forEach(key => {
+		keysPressed.forEach(key => {
 			state.textboxes[id].value = validator(state.textboxes[id].value, key);
 		});
 	}

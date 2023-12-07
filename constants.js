@@ -13,6 +13,7 @@ let clickPos = undefined;
 let rightClickPos = undefined;
 let keys = {};
 let keysUp = [];
+let keysPressed = [];
 
 canvas.addEventListener("mousemove", function (evt) {
 	mousePos = getMousePos(canvas, evt);
@@ -29,6 +30,7 @@ canvas.addEventListener("contextmenu", function (evt) {
 
 canvas.addEventListener("keydown", function (evt) {
 	keys[evt.key.toLowerCase()] = true;
+	keysPressed.push(evt.key.toLocaleLowerCase());
 }, false);
 
 canvas.addEventListener("keyup", function (evt) {
