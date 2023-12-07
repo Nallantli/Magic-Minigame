@@ -156,7 +156,7 @@ function mpBattleGameLoop(timeMs) {
 					({ x, y, sizeX, sizeY }) => sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY),
 					({ x, y, sizeX, sizeY }) => sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 					() => {
-						if (players.find(({ pos }) => pos === playerIndex).isReady) {
+						if (playerIsReady) {
 							socket.send(JSON.stringify({
 								action: "READY_DOWN",
 								id: battleState.id
@@ -170,13 +170,26 @@ function mpBattleGameLoop(timeMs) {
 						}
 					},
 					{
-						forceHoverOn: () => players.find(({ pos }) => pos === playerIndex).isReady
+						forceHoverOn: () => playerIsReady
 					});
 				makeInteractable(scale(6), scale(346), scale(124), scale(22),
-					({ x, y, sizeX, sizeY }) => sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY),
-					({ x, y, sizeX, sizeY }) => sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+					({ x, y, sizeX, sizeY }) => { 
+						if (playerIsReady) {
+							ctx.globalAlpha = 0.25;
+						} else {
+							ctx.globalAlpha = 1;
+						}
+						sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY) 
+					},
+					({ x, y, sizeX, sizeY, renderCallback }) => {
+						if (playerIsReady) {
+							renderCallback();
+						} else {
+							sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 })
+						}
+					},
 					() => {
-						if (!players.find(({ pos }) => pos === playerIndex).isReady) {
+						if (!playerIsReady) {
 							state = {
 								...state,
 								deckState: {
@@ -189,6 +202,7 @@ function mpBattleGameLoop(timeMs) {
 					});
 				break;
 			case -1:
+				ctx.globalAlpha = 1;
 				inputData = { ...inputData, ...drawBattleIdle(state) };
 				if (turnState.battleData[playerIndex] !== null) {
 					if (inputData.selectedCard !== undefined) {
