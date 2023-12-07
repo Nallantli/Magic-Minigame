@@ -147,21 +147,21 @@ function mpBattleGameLoop(timeMs) {
 			break;
 		case -1:
 			inputData = { ...inputData, ...drawBattleIdle(state) };
-			if (inputData.selectedCard) {
+			if (inputData.selectedCard !== undefined) {
 				socket.send(JSON.stringify({
 					action: "SELECT_CARD",
 					id: battleState.id,
 					card: inputData.selectedCard
 				}));
 			}
-			if (inputData.selectedVictims) {
+			if (inputData.selectedVictims !== undefined) {
 				socket.send(JSON.stringify({
 					action: "SELECT_VICTIMS",
 					id: battleState.id,
 					victims: inputData.selectedVictims
 				}));
 			}
-			if (inputData.discardCard) {
+			if (inputData.discardCard !== undefined) {
 				socket.send(JSON.stringify({
 					action: "DISCARD_CARD",
 					id: battleState.id,
