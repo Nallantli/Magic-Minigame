@@ -43,8 +43,7 @@ function setUpSocket(socket) {
 					battleState: {
 						...state.battleState,
 						...data
-					},
-					path: 'MP_BATTLE'
+					}
 				}
 				break;
 			}
@@ -93,7 +92,8 @@ function menuGameLoop(timeMs) {
 					...state.battleState,
 					playerIndex: 0,
 					socket
-				}
+				},
+				path: 'MP_BATTLE'
 			};
 			socket.addEventListener('open', () => {
 				socket.send(JSON.stringify({
@@ -115,7 +115,8 @@ function menuGameLoop(timeMs) {
 					...state.battleState,
 					playerIndex: 0,
 					socket
-				}
+				},
+				path: 'MP_BATTLE'
 			};
 			socket.addEventListener('open', () => {
 				socket.send(JSON.stringify({

@@ -117,6 +117,9 @@ function drawLobby(battleState, iterator) {
 
 function mpBattleGameLoop(timeMs) {
 	const { battleState, battleState: { turnState, onWin, onLose, playerIndex, id, socket, players }, iterator } = state;
+	if (turnState === undefined) {
+		return;
+	}
 
 	let inputData = {};
 
