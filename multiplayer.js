@@ -152,6 +152,14 @@ function mpBattleGameLoop(timeMs) {
 				drawLobby(battleState, iterator, playerIsReady);
 				ctx.globalAlpha = 1;
 				font.draw(ctx, scale(240 - 60), scale(300), scale(30), scale(40), 0, id);
+				makeInteractable(scale(6), scale(346), scale(174), scale(22),
+					({ x, y, sizeX, sizeY }) => sprites.RETURN_TO_MENU_87x11.draw(ctx, x, y, sizeX, sizeY),
+					({ x, y, sizeX, sizeY }) => sprites.RETURN_TO_MENU_87x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+					() => {
+						state.battleState = undefined;
+						socket.close();
+						state.path = 'MENU';
+					})
 				makeInteractable(scale(350), scale(346), scale(124), scale(22),
 					({ x, y, sizeX, sizeY }) => sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY),
 					({ x, y, sizeX, sizeY }) => sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
@@ -172,7 +180,7 @@ function mpBattleGameLoop(timeMs) {
 					{
 						forceHoverOn: () => playerIsReady
 					});
-				makeInteractable(scale(6), scale(346), scale(124), scale(22),
+				makeInteractable(scale(6), scale(320), scale(124), scale(22),
 					({ x, y, sizeX, sizeY }) => { 
 						if (playerIsReady) {
 							ctx.globalAlpha = 0.25;
@@ -182,7 +190,7 @@ function mpBattleGameLoop(timeMs) {
 						sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY) 
 					},
 					({ x, y, sizeX, sizeY, renderCallback }) => {
-						if (playerIsReady) {
+						if (playerIsReady		) {
 							renderCallback();
 						} else {
 							sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 })
