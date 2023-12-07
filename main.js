@@ -64,16 +64,21 @@ function setUpSocket(socket) {
 }
 
 function menuGameLoop(timeMs) {
-	makeTextBox('joinTextbox', scale(240 - 24), scale(156), scale(48), scale(16),
+	makeTextBox('joinTextbox', scale(240 - 26), scale(228), scale(52), scale(20),
 		({ x, y, sizeX, sizeY, isFocused, value }) => {
-			font.draw(ctx, x, y, scale(12), scale(16), 0, value);
+			if (!isFocused && value === '') {
+				font.draw(ctx, x + scale(12), y - scale(4), scale(3), scale(4), 0, 'Room Code:');
+			}
 			if (isFocused) {
 				ctx.fillStyle = 'white';
-				ctx.fillRect(x, y + scale(18), sizeX, scale(4));
+				ctx.fillRect(x - scale(2), y - scale(2), sizeX + scale(4), sizeY + scale(4));
 			} else {
 				ctx.fillStyle = 'white';
-				ctx.fillRect(x, y + scale(18), sizeX, scale(2));
+				ctx.fillRect(x, y + scale(20), sizeX, scale(2));
 			}
+			ctx.fillStyle = '#333';
+			ctx.fillRect(x, y, sizeX, sizeY);
+			font.draw(ctx, x + scale(3), y + scale(3), scale(12), scale(16), 0, value);
 		},
 		(value, key) => {
 			switch (key) {
@@ -93,7 +98,7 @@ function menuGameLoop(timeMs) {
 			}
 		});
 
-	makeInteractable(scale(240 - 69), scale(204), scale(138), scale(22),
+	makeInteractable(scale(240 - 69), scale(280), scale(138), scale(22),
 		({ x, y, sizeX, sizeY }) => sprites.CREATE_GAME_69x11.draw(ctx, x, y, sizeX, sizeY),
 		({ x, y, sizeX, sizeY }) => sprites.CREATE_GAME_69x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 		() => {
@@ -116,7 +121,7 @@ function menuGameLoop(timeMs) {
 			setUpSocket(socket);
 		});
 
-	makeInteractable(scale(240 - 69), scale(180), scale(138), scale(22),
+	makeInteractable(scale(240 - 69), scale(254), scale(138), scale(22),
 		({ x, y, sizeX, sizeY }) => sprites.JOIN_GAME_69x11.draw(ctx, x, y, sizeX, sizeY),
 		({ x, y, sizeX, sizeY }) => sprites.JOIN_GAME_69x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 		() => {
