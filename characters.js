@@ -112,8 +112,8 @@ fetch('./entities.json')
 	.catch(error => console.log(error));
 
 const wizardIds = [
-	'fire_wizard',
 	'air_wizard',
+	'fire_wizard',
 	'water_wizard',
 	'earth_wizard'
 ];

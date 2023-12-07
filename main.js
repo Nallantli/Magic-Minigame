@@ -3,6 +3,18 @@ function setUpSocket(socket) {
 		const data = JSON.parse(event.data);
 		console.log(data);
 		switch (data.action) {
+			case 'WIN': {
+				const { side, entities } = data;
+				state = {
+					...state,
+					battleState: {
+						...state.battleState,
+						win: side,
+						entities
+					}
+				};
+				break;
+			}
 			case 'BATTLE_ANIMATION_DATA': {
 				state.animationQueue.push(new AnimationEngine(createWithdrawAnimation(state.battleState.turnState), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 

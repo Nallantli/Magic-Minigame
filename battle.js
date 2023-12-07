@@ -49,7 +49,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 				});
 		});
 
-		font.draw(ctx, scale(57), i * scale(67) + scale(5), scale(6), scale(8), 0, entity.name);
+		font.draw(ctx, scale(57), i * scale(67) + scale(5), scale(6), scale(8), ELEMENT_COLORS[entity.element], entity.name);
 		const healthString = String(entity.health);
 		numberText.draw(ctx, scale(161 - healthString.length * 4), i * scale(67) + scale(21), scale(4), scale(6), 0, healthString);
 		const healthBarWidth = Math.round(106 * entity.health / entity.maxHealth);
@@ -136,7 +136,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 				});
 		});
 
-		font.draw(ctx, scale(480 - 57 - entity.name.length * 6), i_offset * scale(67) + scale(5), scale(6), scale(8), 0, entity.name);
+		font.draw(ctx, scale(480 - 57 - entity.name.length * 6), i_offset * scale(67) + scale(5), scale(6), scale(8), ELEMENT_COLORS[entity.element], entity.name);
 		const healthString = String(entity.health);
 		numberText.draw(ctx, scale(480 - 160), i_offset * scale(67) + scale(21), scale(4), scale(6), 0, healthString);
 		const healthBarWidth = Math.round(106 * entity.health / entity.maxHealth);
