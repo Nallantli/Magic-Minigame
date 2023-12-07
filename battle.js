@@ -178,80 +178,83 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 	return inputData;
 }
 
-function drawCards(battleState) { //playerData, selectedCard) {
+function drawCards(battleState) {
 	const { turnState: { selectedCards, battleData, selectedVictims }, playerIndex } = battleState;
 	const playerData = battleData[playerIndex];
-	const selectedCard = selectedCards[playerIndex];
-
-	const startX = scale(240 - playerData.hand.length * 25);
 	let inputData = {};
+	if (playerData === null) {
+		sprites.YOU_DIED_160x64.draw(ctx, scale(240 - 80), scale(280), scale(160), scale(64));
+	} else {
+		const selectedCard = selectedCards[playerIndex];
 
-	playerData.hand.forEach((spellId, i) => {
-		const spell = getSpell(spellId);
-		const hasEnoughVril = getTotalVril(playerData, spell.element) >= spell.vrilRequired;
-		if (hasEnoughVril && selectedCard === null || selectedCard === i) {
-			ctx.globalAlpha = 1;
-		} else {
-			if (selectedVictims[playerIndex].length > 0) {
+		const startX = scale(240 - playerData.hand.length * 25);
+
+		playerData.hand.forEach((spellId, i) => {
+			const spell = getSpell(spellId);
+			const hasEnoughVril = getTotalVril(playerData, spell.element) >= spell.vrilRequired;
+			if (hasEnoughVril && selectedCard === null || selectedCard === i) {
 				ctx.globalAlpha = 1;
 			} else {
-				ctx.globalAlpha = 0.25;
+				if (selectedVictims[playerIndex].length > 0) {
+					ctx.globalAlpha = 1;
+				} else {
+					ctx.globalAlpha = 0.25;
+				}
 			}
+
+			makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
+				({ x, y, sizeX, sizeY }) => getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY, 0),
+				({ x, y, sizeX, renderCallback }) => {
+					renderCallback();
+					if (hasEnoughVril) {
+						ctx.fillStyle = 'white';
+						ctx.fillRect(x, y + scale(66), sizeX, scale(4));
+					}
+				},
+				() => {
+					if (selectedCard === null) {
+						inputData.selectedCard = i;
+						if (spell.type === SPELL_TYPES.ATTACK_ALL) {
+							inputData.selectedVictims = [];
+							for (let j = (playerIndex < 4 ? 4 : 0); j < (playerIndex < 4 ? 8 : 4); j++) {
+								if (battleData[j] === null) {
+									continue;
+								}
+								inputData.selectedVictims.push(j);
+							}
+						}
+					}
+				},
+				{
+					forceHoverOn: () => selectedCard === i,
+					onRightPress: () => {
+						if (selectedCard === null) {
+							inputData.discardCard = i;
+						}
+					}
+				});
+		});
+
+		if (selectedCard === null) {
+			ctx.globalAlpha = 1;
+		} else {
+			ctx.globalAlpha = 0.25;
 		}
 
-		makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
-			({ x, y, sizeX, sizeY }) => getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY, 0),
+		makeInteractable(scale(240 - 20), scale(348), scale(39), scale(16),
+			({ x, y, sizeX, sizeY }) => sprites.PASS_39x16.draw(ctx, x, y, sizeX, sizeY, 0),
 			({ x, y, sizeX, renderCallback }) => {
 				renderCallback();
-				if (hasEnoughVril) {
-					ctx.fillStyle = 'white';
-					ctx.fillRect(x, y + scale(66), sizeX, scale(4));
-				}
+
+				ctx.fillStyle = 'white';
+				ctx.fillRect(x, y + scale(18), sizeX, scale(4));
 			},
 			() => {
 				if (selectedCard === null) {
-					inputData.selectedCard = i;
-					if (spell.type === SPELL_TYPES.ATTACK_ALL) {
-						inputData.selectedVictims = [];
-						for (let j = (playerIndex < 4 ? 4 : 0); j < (playerIndex < 4 ? 8 : 4); j++) {
-							if (battleData[j] === null) {
-								continue;
-							}
-							inputData.selectedVictims.push(j);
-						}
-					}
-				}
-			},
-			{
-				forceHoverOn: () => selectedCard === i,
-				onRightPress: () => {
-					if (selectedCard === null) {
-						inputData.discardCard = i;
-					}
+					inputData.selectedCard = 'PASS';
 				}
 			});
-	});
-
-	if (selectedCard === null) {
-		ctx.globalAlpha = 1;
-	} else {
-		ctx.globalAlpha = 0.25;
 	}
-
-	makeInteractable(scale(240 - 20), scale(348), scale(39), scale(16),
-		({ x, y, sizeX, sizeY }) => sprites.PASS_39x16.draw(ctx, x, y, sizeX, sizeY, 0),
-		({ x, y, sizeX, renderCallback }) => {
-			renderCallback();
-
-			ctx.fillStyle = 'white';
-			ctx.fillRect(x, y + scale(18), sizeX, scale(4));
-		},
-		() => {
-			if (selectedCard === null) {
-				inputData.selectedCard = 'PASS';
-			}
-		});
-
 	return inputData;
 }
 

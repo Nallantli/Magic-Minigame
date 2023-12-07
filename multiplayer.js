@@ -170,40 +170,42 @@ function mpBattleGameLoop(timeMs) {
 			break;
 		case -1:
 			inputData = { ...inputData, ...drawBattleIdle(state) };
-			if (inputData.selectedCard !== undefined) {
-				socket.send(JSON.stringify({
-					action: "SELECT_CARD",
-					id: battleState.id,
-					card: inputData.selectedCard
-				}));
-			}
-			if (inputData.selectedVictims !== undefined) {
-				socket.send(JSON.stringify({
-					action: "SELECT_VICTIMS",
-					id: battleState.id,
-					victims: inputData.selectedVictims
-				}));
-			}
-			if (inputData.discardCard !== undefined) {
-				socket.send(JSON.stringify({
-					action: "DISCARD_CARD",
-					id: battleState.id,
-					hand: turnState.battleData[playerIndex].hand.toSpliced(inputData.discardCard, 1)
-				}));
-			}
-			if (rightClickPos) {
-				if (turnState.selectedCards[playerIndex] !== null && turnState.selectedVictims[playerIndex].length === 0) {
+			if (turnState.battleData[playerIndex] !== null) {
+				if (inputData.selectedCard !== undefined) {
 					socket.send(JSON.stringify({
 						action: "SELECT_CARD",
 						id: battleState.id,
-						card: null
+						card: inputData.selectedCard
 					}));
-				} else if (turnState.selectedVictims[playerIndex].length > 0) {
+				}
+				if (inputData.selectedVictims !== undefined) {
 					socket.send(JSON.stringify({
 						action: "SELECT_VICTIMS",
 						id: battleState.id,
-						victims: []
+						victims: inputData.selectedVictims
 					}));
+				}
+				if (inputData.discardCard !== undefined) {
+					socket.send(JSON.stringify({
+						action: "DISCARD_CARD",
+						id: battleState.id,
+						hand: turnState.battleData[playerIndex].hand.toSpliced(inputData.discardCard, 1)
+					}));
+				}
+				if (rightClickPos) {
+					if (turnState.selectedCards[playerIndex] !== null && turnState.selectedVictims[playerIndex].length === 0) {
+						socket.send(JSON.stringify({
+							action: "SELECT_CARD",
+							id: battleState.id,
+							card: null
+						}));
+					} else if (turnState.selectedVictims[playerIndex].length > 0) {
+						socket.send(JSON.stringify({
+							action: "SELECT_VICTIMS",
+							id: battleState.id,
+							victims: []
+						}));
+					}
 				}
 			}
 			break;
