@@ -101,13 +101,7 @@ function getDeathSprite(entity) {
 fetch('./entities.json')
 	.then(response => response.json())
 	.then(data => {
-		Object.values(data).forEach(registerEntity)
-
-		state.player = {
-			...randomFromList(wizardIds.map(getEntity)),
-			id: crypto.randomUUID(),
-			name: 'Player'
-		};
+		Object.values(data).forEach(registerEntity);
 	})
 	.catch(error => console.log(error));
 

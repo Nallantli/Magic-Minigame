@@ -72,10 +72,44 @@ function setUpSocket(socket) {
 
 function menuGameLoop(timeMs) {
 	if (state.menuState.errorMessage) {
-		font.draw(ctx, scale(240 - state.menuState.errorMessage.length * 3), scale(330), scale(6), scale(8), 2, state.menuState.errorMessage);
+		font.draw(ctx, scale(240 - state.menuState.errorMessage.length * 3), scale(340), scale(6), scale(8), 2, state.menuState.errorMessage);
 	}
 
-	makeTextBox('joinTextbox', scale(240 - 26), scale(228), scale(52), scale(20),
+	makeTextBox('usernameTextbox', scale(240 - 120), scale(24), scale(240), scale(20),
+		({ x, y, sizeX, sizeY, isFocused, value }) => {
+			if (!isFocused && value === '') {
+				font.draw(ctx, x + scale(12), y - scale(4), scale(3), scale(4), 0, 'Player Name:');
+			}
+			if (isFocused) {
+				ctx.fillStyle = 'white';
+				ctx.fillRect(x - scale(2), y - scale(2), sizeX + scale(4), sizeY + scale(4));
+			} else {
+				ctx.fillStyle = 'white';
+				ctx.fillRect(x, y + scale(20), sizeX, scale(2));
+			}
+			ctx.fillStyle = '#333';
+			ctx.fillRect(x, y, sizeX, sizeY);
+			font.draw(ctx, x + scale(3), y + scale(3), scale(12), scale(16), 0, value);
+		},
+		(value, key) => {
+			switch (key) {
+				case 'backspace':
+					if (value.length > 0) {
+						return value.slice(0, -1);
+					}
+					return value;
+				default:
+					if (key.length === 1) {
+						return value + (keys['shift'] ? key.toUpperCase() : key);
+					}
+					return value;
+			}
+		},
+		({ value }) => {
+			state.player.name = value;
+		});
+
+	makeTextBox('joinTextbox', scale(240 - 26), scale(258), scale(52), scale(20),
 		({ x, y, sizeX, sizeY, isFocused, value }) => {
 			if (!isFocused && value === '') {
 				font.draw(ctx, x + scale(12), y - scale(4), scale(3), scale(4), 0, 'Room Code:');
@@ -109,7 +143,33 @@ function menuGameLoop(timeMs) {
 			}
 		});
 
-	makeInteractable(scale(240 - 69), scale(280), scale(138), scale(22),
+	const wizardSelectionIndex = mpWizards.findIndex(({ element }) => state.player.element === element);
+	mpWizards.forEach((wizard, i) => {
+		makeInteractable(scale(240 - mpWizards.length * 36 + i * 70), scale(64), scale(70), scale(164),
+			({ x, y, sizeX, sizeY }) => {
+				ctx.globalAlpha = 0.25;
+				getIdleSprite(wizard).draw(ctx, x - scale(30), y, scale(128), scale(128));
+				ELEMENT_ICONS[wizard.element].draw(ctx, x + scale(20), y + scale(132), scale(32), scale(32));
+			},
+			({ x, y, sizeX, sizeY }) => {
+				ctx.globalAlpha = 1;
+				getIdleSprite(wizard).draw(ctx, x - scale(30), y, scale(128), scale(128));
+				ELEMENT_ICONS[wizard.element].draw(ctx, x + scale(20), y + scale(132), scale(32), scale(32));
+			},
+			() => {
+				state.player = {
+					...wizard,
+					name: state.player.name,
+					id: state.player.id
+				}
+			},
+			{
+				forceHoverOn: () => wizardSelectionIndex === i
+			})
+	});
+	ctx.globalAlpha = 1;
+
+	makeInteractable(scale(240 - 69), scale(310), scale(138), scale(22),
 		({ x, y, sizeX, sizeY }) => sprites.CREATE_GAME_69x11.draw(ctx, x, y, sizeX, sizeY),
 		({ x, y, sizeX, sizeY }) => sprites.CREATE_GAME_69x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 		() => {
@@ -136,7 +196,7 @@ function menuGameLoop(timeMs) {
 			setUpSocket(socket);
 		});
 
-	makeInteractable(scale(240 - 69), scale(254), scale(138), scale(22),
+	makeInteractable(scale(240 - 69), scale(284), scale(138), scale(22),
 		({ x, y, sizeX, sizeY }) => sprites.JOIN_GAME_69x11.draw(ctx, x, y, sizeX, sizeY),
 		({ x, y, sizeX, sizeY }) => sprites.JOIN_GAME_69x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 		() => {
@@ -1103,4 +1163,4 @@ function gameLoop(timeMs) {
 	window.requestAnimationFrame(gameLoop);
 }
 
-window.requestAnimationFrame(gameLoop);
+setTimeout(() => window.requestAnimationFrame(gameLoop), 100)

@@ -181,16 +181,16 @@ function mpBattleGameLoop(timeMs) {
 						forceHoverOn: () => playerIsReady
 					});
 				makeInteractable(scale(6), scale(320), scale(124), scale(22),
-					({ x, y, sizeX, sizeY }) => { 
+					({ x, y, sizeX, sizeY }) => {
 						if (playerIsReady) {
 							ctx.globalAlpha = 0.25;
 						} else {
 							ctx.globalAlpha = 1;
 						}
-						sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY) 
+						sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY)
 					},
 					({ x, y, sizeX, sizeY, renderCallback }) => {
-						if (playerIsReady		) {
+						if (playerIsReady) {
 							renderCallback();
 						} else {
 							sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 })

@@ -39,15 +39,16 @@ function makeInteractable(x, y, sizeX, sizeY, render, hoverRender, onPress, opti
 	}
 }
 
-function makeTextBox(id, x, y, sizeX, sizeY, render, validator) {
+function makeTextBox(id, x, y, sizeX, sizeY, render, validator, onUnfocus) {
 	if (clickPos !== undefined) {
-		if (clickPos?.x >= x && clickPos?.x < x + sizeX && clickPos?.y >= y && clickPos?.y < y + sizeY) {
+		if (!state.textboxes[id].isFocused && clickPos?.x >= x && clickPos?.x < x + sizeX && clickPos?.y >= y && clickPos?.y < y + sizeY) {
 			state.textboxes[id].isFocused = true;
-			console.log('Focused');
 		}
-		if (clickPos?.x < x || clickPos?.x >= x + sizeX || clickPos?.y < y || clickPos?.y >= y + sizeY) {
+		if (state.textboxes[id].isFocused && (clickPos?.x < x || clickPos?.x >= x + sizeX || clickPos?.y < y || clickPos?.y >= y + sizeY)) {
 			state.textboxes[id].isFocused = false;
-			console.log('Unfocused');
+			if (onUnfocus) {
+				onUnfocus({ value: state.textboxes[id].value });
+			}
 		}
 	}
 	if (state.textboxes[id].isFocused) {
