@@ -5,7 +5,8 @@ let state = {
 	path: 'MENU',
 	deckState: {
 		currentIndex: -1,
-		currentElement: 'air'
+		currentElement: 'air',
+		returnPath: 'MENU'
 	},
 	battleState: undefined,
 	animationQueue: [],

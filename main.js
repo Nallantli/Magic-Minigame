@@ -4,7 +4,19 @@ function setUpSocket(socket) {
 		console.log(data);
 		switch (data.action) {
 			case 'BATTLE_ANIMATION_DATA': {
+				state.animationQueue.push(new AnimationEngine(createWithdrawAnimation(state.battleState.turnState), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+
 				const { animationData, finalTurnState } = data;
+				const finalAnimation = () => {
+					state.animationQueue.push(new AnimationEngine(getReturnSequence(finalTurnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+					state = {
+						...state,
+						battleState: {
+							...state.battleState,
+							turnState: finalTurnState
+						}
+					};
+				}
 				animationData.forEach(({ turnState, victimIndices, spell, calculatedDamages }, i) => {
 					const sequence = turnState.battleIndex < 4
 						? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0)
@@ -15,18 +27,14 @@ function setUpSocket(socket) {
 					}, TICK_TIME, FPS, canvas, ctx, () => {
 						reduceAnimationQueue();
 						if (i === animationData.length - 1) {
-							state.animationQueue.push(new AnimationEngine(getReturnSequence(finalTurnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
-							state = {
-								...state,
-								battleState: {
-									...state.battleState,
-									turnState: finalTurnState
-								}
-							};
+							finalAnimation();
 						}
 					});
 					state.animationQueue.push(animation);
 				});
+				if (animationData.length === 0) {
+					finalAnimation();
+				}
 				break;
 			}
 			case 'STATE_UPDATE': {
@@ -236,12 +244,12 @@ function deckGameLoop(timeMs) {
 			ctx.fillStyle = 'white';
 			ctx.fillRect(x - scale(6), y, scale(4), sizeY);
 		},
-		() => state.path = 'MAP');
+		() => state.path = state.deckState.returnPath);
 
 	toolTips.forEach(toolTip => toolTip(ctx));
 
 	if (keysUp.includes('escape')) {
-		state.path = 'MAP';
+		state.path = state.deckState.returnPath;
 	}
 }
 
@@ -953,6 +961,7 @@ function mapGameLoop(timeMs) {
 
 	if (keysUp.includes('escape')) {
 		state.path = 'DECK';
+		state.deckState.returnPath = 'MAP';
 	}
 }
 

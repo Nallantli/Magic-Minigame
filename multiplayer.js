@@ -137,13 +137,29 @@ function mpBattleGameLoop(timeMs) {
 					} else {
 						socket.send(JSON.stringify({
 							action: "READY_UP",
-							id: battleState.id
+							id: battleState.id,
+							deck: state.player.deck
 						}));
 					}
 				},
 				{
 					forceHoverOn: () => players.find(({ pos }) => pos === playerIndex).isReady
-				})
+				});
+			makeInteractable(scale(6), scale(346), scale(124), scale(22),
+				({ x, y, sizeX, sizeY }) => sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY),
+				({ x, y, sizeX, sizeY }) => sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+				() => {
+					if (!players.find(({ pos }) => pos === playerIndex).isReady) {
+						state = {
+							...state,
+							deckState: {
+								...state.deckState,
+								returnPath: 'MP_BATTLE'
+							},
+							path: 'DECK'
+						};
+					}
+				});
 			break;
 		case -1:
 			inputData = { ...inputData, ...drawBattleIdle(state) };
