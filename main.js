@@ -12,6 +12,7 @@ function setUpSocket(socket) {
 			}
 			case 'WIN': {
 				const { side, entities } = data;
+				socket.close();
 				state = {
 					...state,
 					battleState: {

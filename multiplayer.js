@@ -142,7 +142,6 @@ function mpBattleGameLoop(timeMs) {
 			({ x, y, sizeX, sizeY }) => sprites.RETURN_TO_MENU_87x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 			() => {
 				state.battleState = undefined;
-				socket.close();
 				state.path = 'MENU';
 			})
 	} else {
