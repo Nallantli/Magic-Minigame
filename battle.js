@@ -187,7 +187,9 @@ function drawCards(battleState) {
 	} else {
 		const selectedCard = selectedCards[playerIndex];
 
-		const startX = scale(240 - playerData.hand.length * 25);
+		const remainingDeck = playerData.deck.length;
+
+		const startX = scale(240 - (playerData.hand.length + (remainingDeck > 0 ? 1 : 0)) * 25);
 
 		playerData.hand.forEach((spellId, i) => {
 			const spell = getSpell(spellId);
@@ -252,6 +254,14 @@ function drawCards(battleState) {
 					inputData.selectedCard = 'PASS';
 				}
 			});
+
+		if (remainingDeck > 0) {
+			sprites.DECK_REMAIN_48x64.draw(ctx, scale(240 + (playerData.hand.length - 1) * 25), scale(276), scale(48), scale(64));
+			const remainingText = `+${remainingDeck}`;
+
+			numberText.draw(ctx, scale(240 + (playerData.hand.length - 1) * 25 + 24 - remainingText.length * 4), scale(292), scale(8), scale(12), 0, remainingText);
+		}
+
 	}
 	return inputData;
 }
