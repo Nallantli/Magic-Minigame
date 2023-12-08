@@ -120,11 +120,11 @@ const SPELL_TYPES = {
 };
 
 const ELEMENT_ICONS = {
-	all: new Sprite('./img/aether_32x32.png', 32, 32, 1),
-	fire: new Sprite('./img/fire_32x32.png', 32, 32, 1),
-	air: new Sprite('./img/air_32x32.png', 32, 32, 1),
-	water: new Sprite('./img/water_32x32.png', 32, 32, 1),
-	earth: new Sprite('./img/earth_32x32.png', 32, 32, 1)
+	all: new Sprite('./img/aether_32x32.png', 32, 32, 2),
+	fire: new Sprite('./img/fire_32x32.png', 32, 32, 2),
+	air: new Sprite('./img/air_32x32.png', 32, 32, 2),
+	water: new Sprite('./img/water_32x32.png', 32, 32, 2),
+	earth: new Sprite('./img/earth_32x32.png', 32, 32, 2)
 };
 
 const ELEMENT_COLORS = {

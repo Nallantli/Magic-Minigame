@@ -140,6 +140,12 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			},
 			{
 				tick: spellCastingStartTick + 14,
+				type: ATYPES.SET_FRAME,
+				id: spellTypeId,
+				iIndex: 1
+			},
+			{
+				tick: spellCastingStartTick + 14,
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: failedTextId,
 				sprite: font,
@@ -1438,4 +1444,110 @@ function createCardDropSequence(spell) {
 			ease: EASE_TYPES.EASE_IN
 		}
 	];
+}
+
+function createWithdrawAnimation(turnState) {
+	return {
+		ticks: 10,
+		actions: [
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				tick: 0,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: `left.${i}`,
+				sprite: getIdleSprite(battleEntity.entity),
+				alpha: 1,
+				posX: 0,
+				posY: i * scale(67) + 10,
+				sizeX: scale(64),
+				sizeY: scale(64),
+				rot: 0,
+				zIndex: 1,
+				play: getIdleSprite(battleEntity.entity).indices > 1
+			})),
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				startTick: 0,
+				endTick: 9,
+				type: ATYPES.CHANGE_POSITION_X,
+				id: `left.${i}`,
+				posX: scale(-64),
+				ease: EASE_TYPES.EASE_IN
+			})),
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				tick: 0,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: `right.${i}`,
+				sprite: getIdleSprite(battleEntity.entity),
+				alpha: 1,
+				posX: scale(480 - 64),
+				posY: (i - 4) * scale(67) + 10,
+				sizeX: scale(64),
+				sizeY: scale(64),
+				rot: 0,
+				zIndex: 1,
+				play: getIdleSprite(battleEntity.entity).indices > 1,
+				mirror: true
+			})),
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				startTick: 0,
+				endTick: 9,
+				type: ATYPES.CHANGE_POSITION_X,
+				id: `right.${i}`,
+				posX: scale(480),
+				ease: EASE_TYPES.EASE_IN
+			}))
+		]
+	};
+}
+
+function getReturnSequence(battleData) {
+	return {
+		ticks: 10,
+		actions: [
+			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				tick: 0,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: `left.${i}`,
+				sprite: getIdleSprite(battleEntity.entity),
+				alpha: 1,
+				posX: scale(-64),
+				posY: i * scale(67) + 10,
+				sizeX: scale(64),
+				sizeY: scale(64),
+				rot: 0,
+				zIndex: 1,
+				play: getIdleSprite(battleEntity.entity).indices > 1
+			})),
+			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
+				startTick: 0,
+				endTick: 9,
+				type: ATYPES.CHANGE_POSITION_X,
+				id: `left.${i}`,
+				posX: 0,
+				ease: EASE_TYPES.EASE_IN
+			})),
+			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+				tick: 0,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: `right.${i}`,
+				sprite: getIdleSprite(battleEntity.entity),
+				alpha: 1,
+				posX: scale(480),
+				posY: (i - 4) * scale(67) + 10,
+				sizeX: scale(64),
+				sizeY: scale(64),
+				rot: 0,
+				zIndex: 1,
+				play: getIdleSprite(battleEntity.entity).indices > 1,
+				mirror: true
+			})),
+			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
+				startTick: 0,
+				endTick: 9,
+				type: ATYPES.CHANGE_POSITION_X,
+				id: `right.${i}`,
+				posX: scale(480 - 64),
+				ease: EASE_TYPES.EASE_IN
+			}))
+		]
+	};
 }
