@@ -100,4 +100,4 @@ function gameLoop(timeMs) {
 	window.requestAnimationFrame(gameLoop);
 }
 
-setTimeout(() => window.requestAnimationFrame(gameLoop), 100)
+setTimeout(() => window.requestAnimationFrame(gameLoop), 500)
