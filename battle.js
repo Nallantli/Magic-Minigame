@@ -256,6 +256,7 @@ function drawCards(battleState) {
 			});
 
 		if (remainingDeck > 0) {
+			ctx.globalAlpha = 1;
 			sprites.DECK_REMAIN_48x64.draw(ctx, scale(240 + (playerData.hand.length - 1) * 25), scale(276), scale(48), scale(64));
 			const remainingText = `+${remainingDeck}`;
 
