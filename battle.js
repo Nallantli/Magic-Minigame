@@ -192,21 +192,17 @@ function drawCards(battleState) {
 		playerData.hand.forEach((spellId, i) => {
 			const spell = getSpell(spellId);
 			const hasEnoughVril = getTotalVril(playerData, spell.element) >= spell.vrilRequired;
-			if (hasEnoughVril && selectedCard === null || selectedCard === i) {
+			if (selectedVictims[playerIndex].length === 0 && hasEnoughVril && (selectedCard === null || selectedCard === i)) {
 				ctx.globalAlpha = 1;
 			} else {
-				if (selectedVictims[playerIndex].length > 0) {
-					ctx.globalAlpha = 1;
-				} else {
-					ctx.globalAlpha = 0.25;
-				}
+				ctx.globalAlpha = 0.25;
 			}
 
 			makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
 				({ x, y, sizeX, sizeY }) => getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY, 0),
 				({ x, y, sizeX, renderCallback }) => {
 					renderCallback();
-					if (hasEnoughVril) {
+					if (hasEnoughVril && (selectedCard === null || selectedCard === i)) {
 						ctx.fillStyle = 'white';
 						ctx.fillRect(x, y + scale(66), sizeX, scale(4));
 					}
@@ -246,8 +242,10 @@ function drawCards(battleState) {
 			({ x, y, sizeX, renderCallback }) => {
 				renderCallback();
 
-				ctx.fillStyle = 'white';
-				ctx.fillRect(x, y + scale(18), sizeX, scale(4));
+				if (selectedCard === null) {
+					ctx.fillStyle = 'white';
+					ctx.fillRect(x, y + scale(18), sizeX, scale(4));
+				}
 			},
 			() => {
 				if (selectedCard === null) {
