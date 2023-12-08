@@ -141,6 +141,8 @@ function mpBattleGameLoop(timeMs) {
 			({ x, y, sizeX, sizeY }) => sprites.RETURN_TO_MENU_87x11.draw(ctx, x, y, sizeX, sizeY),
 			({ x, y, sizeX, sizeY }) => sprites.RETURN_TO_MENU_87x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 			() => {
+				battleTrack.pause();
+				battleTrack.currentTime = 0;
 				state.battleState = undefined;
 				state.path = 'MENU';
 			})

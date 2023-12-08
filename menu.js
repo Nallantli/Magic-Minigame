@@ -34,42 +34,46 @@ function setUpSocket(socket) {
 				break;
 			}
 			case 'BATTLE_ANIMATION_DATA': {
-				state.animationQueue.push(new AnimationEngine(createWithdrawAnimation(state.battleState.turnState), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
-
-				const { animationData, finalTurnState } = data;
-				const finalAnimation = () => {
-					if (state.battleState.win) {
-						battleTrack.pause();
-						battleTrack.currentTime = 0;
-					} else {
-						state.animationQueue.push(new AnimationEngine(getReturnSequence(finalTurnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+				state.animationQueue.push(new AnimationEngine(createWithdrawAnimation(state.battleState.turnState), TICK_TIME, FPS, canvas, ctx, () => {
+					reduceAnimationQueue();
+					const { animationData, finalTurnState } = data;
+					const finalAnimation = () => {
+						if (state.battleState.win) {
+							battleTrack.pause();
+							battleTrack.currentTime = 0;
+							battleTrack = new Audio('./audio/win_music.wav');
+							battleTrack.loop = true;
+							battleTrack.play();
+						} else {
+							state.animationQueue.push(new AnimationEngine(getReturnSequence(finalTurnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+						}
+						state = {
+							...state,
+							battleState: {
+								...state.battleState,
+								turnState: finalTurnState
+							}
+						};
 					}
-					state = {
-						...state,
-						battleState: {
-							...state.battleState,
-							turnState: finalTurnState
-						}
-					};
-				}
-				animationData.forEach(({ turnState, victimIndices, spell, calculatedDamages }, i) => {
-					const sequence = turnState.battleIndex < 4
-						? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0)
-						: createRightAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0);
-					const animation = new AnimationEngine({
-						ticks: sequence.length,
-						actions: sequence.actions
-					}, TICK_TIME, FPS, canvas, ctx, () => {
-						reduceAnimationQueue();
-						if (i === animationData.length - 1) {
-							finalAnimation();
-						}
+					animationData.forEach(({ turnState, victimIndices, spell, calculatedDamages }, i) => {
+						const sequence = turnState.battleIndex < 4
+							? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0)
+							: createRightAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0);
+						const animation = new AnimationEngine({
+							ticks: sequence.length,
+							actions: sequence.actions
+						}, TICK_TIME, FPS, canvas, ctx, () => {
+							reduceAnimationQueue();
+							if (i === animationData.length - 1) {
+								finalAnimation();
+							}
+						});
+						state.animationQueue.push(animation);
 					});
-					state.animationQueue.push(animation);
-				});
-				if (animationData.length === 0) {
-					finalAnimation();
-				}
+					if (animationData.length === 0) {
+						finalAnimation();
+					}
+				}));
 				break;
 			}
 			case 'STATE_UPDATE': {
