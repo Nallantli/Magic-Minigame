@@ -122,6 +122,12 @@ function drawLobby(battleState, iterator, isReady) {
 function mpBattleGameLoop(timeMs) {
 	const { battleState, battleState: { turnState, onWin, onLose, playerIndex, id, socket, players, win, entities }, iterator } = state;
 	if (turnState === undefined) {
+		let loadingMessage = 'LOADING.';
+		const dia = Math.floor(iterator / 10) % 3;
+		for (let i = 0; i < dia; i++) {
+			loadingMessage += '.';
+		}
+		font.draw(ctx, scale(240 - loadingMessage.length * 15), scale(160), scale(30), scale(40), 0, loadingMessage);
 		return;
 	}
 
