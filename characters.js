@@ -133,7 +133,7 @@ const level3CreatureIds = [
 const randomAI = (index, battleData) => {
 	const entityData = battleData[index];
 	const accessibleCards = entityData.hand
-		.map((cardId, i) => ({ card: getSpell(cardId), i }))
+		.map(({ id }, i) => ({ card: getSpell(id), i }))
 		.filter(({ card: { vrilRequired, element } }) => getTotalVril(entityData, element) >= vrilRequired);
 
 	const options = accessibleCards
@@ -160,8 +160,8 @@ const randomAI = (index, battleData) => {
 	}
 	const selectedCardOptions = randomFromList(options);
 	let selectedVictims = [];
-	if (entityData.hand[selectedCardOptions.selectedCard].type === SPELL_TYPES.ATTACK_ALL) {
-		selectedVictims = battleData.map((e, i) => ({ e, i })).filter(({ e, i }) => e !== null && canUseSpellOn(entityData.hand[selectedCardOptions.selectedCard], index, i)).map(({ i }) => i);
+	if (getSpell(entityData.hand[selectedCardOptions.selectedCard].id).type === SPELL_TYPES.ATTACK_ALL) {
+		selectedVictims = battleData.map((e, i) => ({ e, i })).filter(({ e, i }) => e !== null && canUseSpellOn(getSpell(entityData.hand[selectedCardOptions.selectedCard].id), index, i)).map(({ i }) => i);
 	} else {
 		selectedVictims = [randomFromList(selectedCardOptions.options)];
 	}

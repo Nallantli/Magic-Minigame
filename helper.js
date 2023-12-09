@@ -96,7 +96,7 @@ function criticalChance(cra, crb) {
 	return ((diff - 32) / (2 * (16 + Math.abs(diff - 32))) + 0.5) * (Math.min(cra, 100) / 100);
 }
 
-function calculateDamages(spell, caster, victim) {
+function calculateDamages(spell, enchantments, caster, victim) {
 	if (Math.random() > spell.chance) {
 		return 'FAILED';
 	}
@@ -123,7 +123,7 @@ function calculateDamages(spell, caster, victim) {
 		isCritical,
 		usedBladeIds,
 		damages: spell.damages.map(d => {
-			let base = d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage);
+			let base = (d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage)) - (enchantments?.damage ? enchantments.damage / spell.damages.length : 0);
 			let usedShieldIds = [];
 			let currentElement = d.element;
 			for (let i = shields.length - 1; i >= 0; i--) {
@@ -174,9 +174,17 @@ function getTotalVril(data, element) {
 	return superVril + vril;
 }
 
+function getEnchantmentTooltips(enchantments) {
+	let tooltips = [];
+	if (enchantments.damage) {
+		tooltips.push(`+${enchantments.damage}AB`);
+	}
+	return tooltips
+}
+
 function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calculatedDamages) {
 	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
-		const spellId = battleData[casterIndex].hand[spellIndex];
+		const spellId = battleData[casterIndex].hand[spellIndex].id;
 		battleData[casterIndex].deck = [
 			spellId,
 			...battleData[casterIndex].deck
@@ -184,7 +192,7 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calcul
 		battleData[casterIndex].hand.splice(spellIndex, 1);
 		return battleData;
 	}
-	const spell = getSpell(battleData[casterIndex].hand[spellIndex]);
+	const spell = getSpell(battleData[casterIndex].hand[spellIndex].id);
 	switch (spell.type) {
 		case SPELL_TYPES.HEALING_BASIC:
 			spell.heals.forEach(({ heal }) => battleData[victimIndices[0]].entity.health += heal);
@@ -278,7 +286,7 @@ function generateBattleEntity(entity, AI) {
 		if (!card) {
 			break;
 		}
-		hand.push(card);
+		hand.push({ id: card });
 	}
 
 	const hasSuperVril = Math.random() <= entity.superVrilChance;

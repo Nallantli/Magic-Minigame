@@ -4,7 +4,9 @@ let spellSpriteDirectory = {};
 
 function registerSpell(spell) {
 	spellDirectory[`${spell.id}`] = spell;
-	spellSpriteDirectory[`${spell.id}.spell`] = new Sprite(`./img/spells/${spell.id.replaceAll('.', '/')}/spell_240x135.png`, 240, 135, spell.frames);
+	if (spell.frames) {
+		spellSpriteDirectory[`${spell.id}.spell`] = new Sprite(`./img/spells/${spell.id.replaceAll('.', '/')}/spell_240x135.png`, 240, 135, spell.frames);
+	}
 	spellSpriteDirectory[`${spell.id}.card`] = new Sprite(`./img/spells/${spell.id.replaceAll('.', '/')}/card_48x64.png`, 48, 64, 1);
 	if (spell.victimBlades) {
 		spell.victimBlades.forEach(blade => {
@@ -123,7 +125,7 @@ function giveMeTheGun() {
 		spellUseType: 'TO_ALL'
 	};
 	if (state.battleState) {
-		state.battleState.turnState.battleData[state.battleState.playerIndex].hand.push(gun.id);
+		state.battleState.turnState.battleData[state.battleState.playerIndex].hand.push({ id: gun.id });
 	}
 	state.knownSpells.push(gun.id);
 	registerSpell(gun);

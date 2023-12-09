@@ -130,7 +130,8 @@ let state = {
 		...level1Spells,
 		...level2Spells,
 		...level3Spells,
-		...level4Spells
+		...level4Spells,
+		'solar.advantage'
 	],
 	player: {
 		...randomFromList(mpWizards),
@@ -139,7 +140,7 @@ let state = {
 	},
 	level: 1,
 	iterator: 0,
-	path: 'MENU',
+	path: 'LEVEL',
 	deckState: {
 		currentIndex: -1,
 		currentElement: 'air',

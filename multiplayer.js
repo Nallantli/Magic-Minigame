@@ -231,15 +231,34 @@ function mpBattleGameLoop(timeMs) {
 						}));
 					}
 					if (inputData.selectedVictims !== undefined) {
-						socket.send(JSON.stringify({
-							action: "SELECT_VICTIMS",
-							id: battleState.id,
-							victims: inputData.selectedVictims
-						}));
+						if (typeof inputData.selectedVictims === 'number') {
+							let newHand = turnState.battleData[playerIndex].hand;
+							const enchantmentSpell = getSpell(turnState.battleData[playerIndex].hand[turnState.selectedCards[playerIndex]].id);
+							newHand[inputData.selectedVictims].enchantments = {
+								damage: enchantmentSpell.damage
+							};
+							newHand.splice(turnState.selectedCards[playerIndex], 1);
+							socket.send(JSON.stringify({
+								action: "UPDATE_HAND",
+								id: battleState.id,
+								hand: newHand
+							}));
+							socket.send(JSON.stringify({
+								action: "SELECT_CARD",
+								id: battleState.id,
+								card: null
+							}));
+						} else {
+							socket.send(JSON.stringify({
+								action: "SELECT_VICTIMS",
+								id: battleState.id,
+								victims: inputData.selectedVictims
+							}));
+						}
 					}
 					if (inputData.discardCard !== undefined) {
 						socket.send(JSON.stringify({
-							action: "DISCARD_CARD",
+							action: "UPDATE_HAND",
 							id: battleState.id,
 							hand: turnState.battleData[playerIndex].hand.toSpliced(inputData.discardCard, 1)
 						}));

@@ -99,6 +99,9 @@ class NumberText {
 		if (c == '0' || Number(c)) {
 			return Number(c);
 		}
+		if (c.charCodeAt(0) >= 'A'.charCodeAt(0)) {
+			return 15 + (c.charCodeAt(0) - 'A'.charCodeAt(0));
+		}
 		switch (c) {
 			case '+':
 				return 10;

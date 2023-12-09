@@ -11,7 +11,7 @@
 				"maxDamage": -290,
 				"element": "air"
 			}
-		], 
+		],
 		"chance": 0.85,
 		"vrilRequired": 3,
 		"frames": 12,
@@ -640,5 +640,12 @@
 		"vrilRequired": 3,
 		"frames": 19,
 		"spellUseType": "TO_ENEMIES"
+	},
+	"solar.advantage": {
+		"id": "solar.advantage",
+		"name": "Advantage",
+		"type": "ENCHANTMENT",
+		"element": "solar",
+		"damage": 100
 	}
 }

@@ -96,6 +96,7 @@ const sprites = {
 	EDIT_DECK_67x11: new Sprite('./img/edit_deck_67x11.png', 67, 11, 2),
 	RETURN_TO_MENU_87x11: new Sprite('./img/return_to_menu_87x11.png', 93, 11, 2),
 	DECK_REMAIN_48x64: new Sprite('./img/deck_remain_48x64.png', 48, 64, 1),
+	ENCHANTMENT_BORDER_48x64: new Sprite('./img/enchantment_border_48x64.png', 48, 64, 1),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
 };
@@ -116,7 +117,9 @@ const SPELL_TYPES = {
 	HEALING_BASIC: 'HEALING_BASIC',
 
 	TRAP_BASIC: 'TRAP_BASIC',
-	JINX_BASIC: 'JINX_BASIC'
+	JINX_BASIC: 'JINX_BASIC',
+
+	ENCHANTMENT: 'ENCHANTMENT'
 };
 
 const ELEMENT_ICONS = {
@@ -124,7 +127,8 @@ const ELEMENT_ICONS = {
 	fire: new Sprite('./img/fire_32x32.png', 32, 32, 2),
 	air: new Sprite('./img/air_32x32.png', 32, 32, 2),
 	water: new Sprite('./img/water_32x32.png', 32, 32, 2),
-	earth: new Sprite('./img/earth_32x32.png', 32, 32, 2)
+	earth: new Sprite('./img/earth_32x32.png', 32, 32, 2),
+	solar: new Sprite('./img/solar_32x32.png', 32, 32, 2)
 };
 
 const ELEMENT_COLORS = {
@@ -132,7 +136,8 @@ const ELEMENT_COLORS = {
 	air: 1,
 	fire: 2,
 	water: 3,
-	earth: 4
+	earth: 4,
+	solar: 5
 };
 
 const ELEMENT_ID_LIST = [
@@ -140,7 +145,8 @@ const ELEMENT_ID_LIST = [
 	'air',
 	'fire',
 	'water',
-	'earth'
+	'earth',
+	'solar'
 ];
 
 const ELEMENT_CARD_ITEMS = {
@@ -149,4 +155,5 @@ const ELEMENT_CARD_ITEMS = {
 	'fire': new Sprite('./img/fire_card_item_16x16.png', 16, 16, 18),
 	'water': new Sprite('./img/water_card_item_16x16.png', 16, 16, 18),
 	'earth': new Sprite('./img/earth_card_item_16x16.png', 16, 16, 18),
+	'solar': new Sprite('./img/solar_card_item_16x16.png', 16, 16, 18)
 };

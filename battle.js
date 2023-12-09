@@ -1,7 +1,7 @@
 function drawBattleField(battleState, iterator) { // battleData, selectedCards, selectedVictims, playerIndex) {
 	let inputData = {};
 	const { turnState: { battleData, selectedCards, selectedVictims }, playerIndex } = battleState;
-	const selectedPlayerSpell = (selectedCards[playerIndex] === null || selectedCards[playerIndex] === 'PASS') ? null : getSpell(battleData[playerIndex].hand[selectedCards[playerIndex]]);
+	const selectedPlayerSpell = (selectedCards[playerIndex] === null || selectedCards[playerIndex] === 'PASS') ? null : getSpell(battleData[playerIndex].hand[selectedCards[playerIndex]].id);
 
 	for (let i = 0; i < 4; i++) {
 		const battleEntity = battleData[i];
@@ -9,7 +9,9 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 			continue;
 		}
 
-		if (selectedPlayerSpell === null || canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
+		if (selectedPlayerSpell === null || selectedVictims[playerIndex].length > 0 || selectedPlayerSpell.type === SPELL_TYPES.ENCHANTMENT) {
+			ctx.globalAlpha = 1;
+		} else if (selectedVictims[playerIndex].length === 0 && canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 			ctx.globalAlpha = 1;
 			makeInteractable(scale(2), i * scale(67) + scale(2), scale(160), scale(65),
 				() => { },
@@ -20,11 +22,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 					}
 				});
 		} else {
-			if (selectedVictims[playerIndex].length > 0) {
-				ctx.globalAlpha = 1;
-			} else {
-				ctx.globalAlpha = 0.25;
-			}
+			ctx.globalAlpha = 0.25;
 		}
 
 		const { shields, blades, vril, superVril, entity } = battleEntity;
@@ -65,7 +63,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		}
 
 		if (playerIndex < 4) {
-			const selectedEntitySpell = selectedCards[i] === null ? null : getSpell(battleData[i].hand[selectedCards[i]]);
+			const selectedEntitySpell = (selectedCards[i] === null || selectedCards[i] === 'PASS') ? null : getSpell(battleData[i].hand[selectedCards[i]].id);
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
 				if (selectedVictims[i].length > 0) {
@@ -96,7 +94,9 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 			continue;
 		}
 
-		if (selectedPlayerSpell === null || canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
+		if (selectedPlayerSpell === null || selectedVictims[playerIndex].length > 0 || selectedPlayerSpell.type === SPELL_TYPES.ENCHANTMENT) {
+			ctx.globalAlpha = 1;
+		} else if (selectedVictims[playerIndex].length === 0 && canUseSpellOn(selectedPlayerSpell, playerIndex, i)) {
 			ctx.globalAlpha = 1;
 			makeInteractable(scale(480 - 162), i_offset * scale(67) + scale(2), scale(160), scale(65),
 				() => { },
@@ -107,11 +107,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 					}
 				});
 		} else {
-			if (selectedVictims[playerIndex].length > 0) {
-				ctx.globalAlpha = 1;
-			} else {
-				ctx.globalAlpha = 0.25;
-			}
+			ctx.globalAlpha = 0.25;
 		}
 
 		const { shields, blades, vril, superVril, entity } = battleEntity;
@@ -152,7 +148,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		}
 
 		if (playerIndex >= 4) {
-			const selectedEntitySpell = selectedCards[i] === null ? null : getSpell(battleData[i].hand[selectedCards[i]]);
+			const selectedEntitySpell = (selectedCards[i] === null || selectedCards[i] === 'PASS') ? null : getSpell(battleData[i].hand[selectedCards[i]].id);
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
 				if (selectedVictims[i].length > 0) {
@@ -191,47 +187,107 @@ function drawCards(battleState) {
 
 		const startX = scale(240 - (playerData.hand.length + (remainingDeck > 0 ? 1 : 0)) * 25);
 
-		playerData.hand.forEach((spellId, i) => {
-			const spell = getSpell(spellId);
-			const hasEnoughVril = getTotalVril(playerData, spell.element) >= spell.vrilRequired;
-			if (selectedVictims[playerIndex].length === 0 && hasEnoughVril && (selectedCard === null || selectedCard === i)) {
-				ctx.globalAlpha = 1;
-			} else {
-				ctx.globalAlpha = 0.25;
+		if (selectedCard !== null && selectedCard !== 'PASS' && getSpell(playerData.hand[selectedCard].id).type === SPELL_TYPES.ENCHANTMENT) {
+			const enchantmentSpell = getSpell(playerData.hand[selectedCard].id);
+			let validEnchantees = [];
+			if (enchantmentSpell.damage) {
+				validEnchantees = [
+					...validEnchantees,
+					SPELL_TYPES.ATTACK_ALL,
+					SPELL_TYPES.ATTACK_BASIC
+				];
 			}
+			playerData.hand.forEach(({ id, enchantments }, i) => {
+				const spell = getSpell(id);
+				const canSelectCard = validEnchantees.includes(spell.type) && enchantments === undefined;
+				if (canSelectCard) {
+					ctx.globalAlpha = 1;
+				} else {
+					ctx.globalAlpha = 0.25;
+				}
 
-			makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
-				({ x, y, sizeX, sizeY }) => getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY, 0),
-				({ x, y, sizeX, renderCallback }) => {
-					renderCallback();
-					if (hasEnoughVril && (selectedCard === null || selectedCard === i)) {
-						ctx.fillStyle = 'white';
-						ctx.fillRect(x, y + scale(66), sizeX, scale(4));
-					}
-				},
-				() => {
-					if (selectedCard === null && hasEnoughVril) {
-						inputData.selectedCard = i;
-						if (spell.type === SPELL_TYPES.ATTACK_ALL) {
-							inputData.selectedVictims = [];
-							for (let j = (playerIndex < 4 ? 4 : 0); j < (playerIndex < 4 ? 8 : 4); j++) {
-								if (battleData[j] === null) {
-									continue;
-								}
-								inputData.selectedVictims.push(j);
+				makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
+					({ x, y, sizeX, sizeY }) => {
+						getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY, 0);
+						if (enchantments) {
+							sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, x, y, sizeX, sizeY, 0);
+						}
+					},
+					({ x, y, sizeX, renderCallback }) => {
+						renderCallback();
+						if (enchantments) {
+							const enchantmentToolTips = getEnchantmentTooltips(enchantments);
+							const startY = y - scale(8 + 6 * enchantmentToolTips.length);
+							for (let j = 0; j < enchantmentToolTips.length; j++) {
+								numberText.draw(ctx, x + scale(24 - enchantmentToolTips[j].length * 2), startY + scale(6 * j), scale(4), scale(6), 5, enchantmentToolTips[j]);
 							}
 						}
-					}
-				},
-				{
-					forceHoverOn: () => selectedCard === i,
-					onRightPress: () => {
-						if (selectedCard === null) {
-							inputData.discardCard = i;
+						if (canSelectCard) {
+							ctx.fillStyle = 'white';
+							ctx.fillRect(x, y + scale(66), sizeX, scale(4));
 						}
-					}
-				});
-		});
+					},
+					() => {
+						if (canSelectCard) {
+							inputData.selectedVictims = i
+						}
+					});
+			});
+		} else {
+			playerData.hand.forEach(({ id, enchantments }, i) => {
+				const spell = getSpell(id);
+				const canSelectCard = spell.type === SPELL_TYPES.ENCHANTMENT || getTotalVril(playerData, spell.element) >= spell.vrilRequired;
+				if (selectedVictims[playerIndex].length === 0 && canSelectCard && (selectedCard === null || selectedCard === i)) {
+					ctx.globalAlpha = 1;
+				} else {
+					ctx.globalAlpha = 0.25;
+				}
+
+				makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
+					({ x, y, sizeX, sizeY }) => {
+						getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY, 0);
+						if (enchantments) {
+							sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, x, y, sizeX, sizeY, 0);
+						}
+					},
+					({ x, y, sizeX, renderCallback }) => {
+						renderCallback();
+						if (enchantments) {
+							const enchantmentToolTips = getEnchantmentTooltips(enchantments);
+							const startY = y - scale(8 + 6 * enchantmentToolTips.length);
+							for (let j = 0; j < enchantmentToolTips.length; j++) {
+								numberText.draw(ctx, x + scale(24 - enchantmentToolTips[j].length * 2), startY + scale(6 * j), scale(4), scale(6), 5, enchantmentToolTips[j]);
+							}
+						}
+						if (canSelectCard && selectedCard === null || selectedCard === i) {
+							ctx.fillStyle = 'white';
+							ctx.fillRect(x, y + scale(66), sizeX, scale(4));
+						}
+					},
+					() => {
+						if (selectedCard === null && canSelectCard) {
+							inputData.selectedCard = i;
+							if (spell.type === SPELL_TYPES.ATTACK_ALL) {
+								inputData.selectedVictims = [];
+								for (let j = (playerIndex < 4 ? 4 : 0); j < (playerIndex < 4 ? 8 : 4); j++) {
+									if (battleData[j] === null) {
+										continue;
+									}
+									inputData.selectedVictims.push(j);
+								}
+							}
+						}
+					},
+					{
+						forceHoverOn: () => selectedCard === i,
+						onRightPress: () => {
+							if (selectedCard === null) {
+								inputData.discardCard = i;
+							}
+						}
+					});
+			});
+		}
 
 		if (selectedCard === null) {
 			ctx.globalAlpha = 1;
@@ -301,7 +357,17 @@ function handleInput(battleState, inputData) {
 		turnState.selectedCards[playerIndex] = inputData.selectedCard;
 	}
 	if (inputData.selectedVictims !== undefined) {
-		turnState.selectedVictims[playerIndex] = inputData.selectedVictims;
+		if (typeof inputData.selectedVictims === 'number') {
+			console.log("enchant");
+			const enchantmentSpell = getSpell(turnState.battleData[playerIndex].hand[turnState.selectedCards[playerIndex]].id);
+			turnState.battleData[playerIndex].hand[inputData.selectedVictims].enchantments = {
+				damage: enchantmentSpell.damage
+			};
+			turnState.battleData[playerIndex].hand.splice(turnState.selectedCards[playerIndex], 1);
+			turnState.selectedCards[playerIndex] = null;
+		} else {
+			turnState.selectedVictims[playerIndex] = inputData.selectedVictims;
+		}
 	}
 	if (inputData.discardCard !== undefined) {
 		turnState.battleData[playerIndex].hand.splice(inputData.discardCard, 1);
@@ -340,7 +406,7 @@ function postBattle(turnState, callback) {
 				if (!cardId) {
 					break;
 				}
-				turnState.battleData[i].hand.push(cardId);
+				turnState.battleData[i].hand.push({ id: cardId });
 			}
 		}
 		callback();
@@ -382,11 +448,13 @@ function battleGameLoop(timeMs) {
 				.filter(i => turnState.battleData[i] !== null && turnState.battleData[i].entity.health > 0);
 			if (victimIndices.length > 0 && turnState.battleData[turnState.battleIndex].entity.health > 0) {
 				const spellIndex = turnState.selectedCards[turnState.battleIndex];
-				const spell = getSpell(turnState.battleData[turnState.battleIndex].hand[spellIndex]);
+				const spell = getSpell(turnState.battleData[turnState.battleIndex].hand[spellIndex].id);
+				const enchantments = turnState.battleData[turnState.battleIndex].hand[spellIndex].enchantments;
 				const calculatedDamages = victimIndices
 					.map(i => turnState.battleData[i])
 					.map(victimData => calculateDamages(
 						spell,
+						enchantments,
 						turnState.battleData[turnState.battleIndex],
 						victimData));
 				const sequence = turnState.battleIndex < 4
