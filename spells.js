@@ -100,7 +100,7 @@ const level4Spells = [
 	'water.ignifex',
 	'water.deluge',
 	'earth.caelifex',
-	// need earth attack
+	'earth.pound'
 ];
 
 // easter egg >:)

@@ -622,5 +622,23 @@
 		"vrilRequired": 3,
 		"frames": 18,
 		"spellUseType": "TO_ENEMIES"
+	},
+	"earth.pound": {
+		"id": "earth.pound",
+		"name": "Pound",
+		"type": "ATTACK_ALL",
+		"element": "earth",
+		"damages": [
+			{
+				"tick": 16,
+				"minDamage": -220,
+				"maxDamage": -260,
+				"element": "earth"
+			}
+		],
+		"chance": 0.9,
+		"vrilRequired": 3,
+		"frames": 19,
+		"spellUseType": "TO_ENEMIES"
 	}
 }
