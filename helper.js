@@ -24,7 +24,11 @@ function shuffleArray(array) {
 }
 
 function makeInteractable(x, y, sizeX, sizeY, render, hoverRender, onPress, options) {
-	if (options?.forceHoverOn({ x, y, sizeX, sizeY }) || (mousePos.x >= x && mousePos.x < x + sizeX && mousePos.y >= y && mousePos.y < y + sizeY)) {
+	if (options?.disableOn && options?.disableOn({ x, y, sizeX, sizeY })) {
+		options?.disabledRender({ x, y, sizeX, sizeY, renderRaw: render, renderCallback: () => render({ x, y, sizeX, sizeY }) });
+		return;
+	}
+	if (options?.forceHoverOn && options?.forceHoverOn({ x, y, sizeX, sizeY }) || (mousePos.x >= x && mousePos.x < x + sizeX && mousePos.y >= y && mousePos.y < y + sizeY)) {
 		if (hoverRender) {
 			hoverRender({ x, y, sizeX, sizeY, renderRaw: render, renderCallback: () => render({ x, y, sizeX, sizeY }) });
 		}

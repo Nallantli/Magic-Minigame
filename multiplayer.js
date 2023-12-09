@@ -170,28 +170,15 @@ function mpBattleGameLoop(timeMs) {
 
 				const canReadyUp = turnState.battleData.filter((e, i) => i < 4 && e !== null).length !== 0 && turnState.battleData.filter((e, i) => i >= 4 && e !== null).length !== 0;
 				makeInteractable(scale(350), scale(346), scale(124), scale(22),
-					({ x, y, sizeX, sizeY }) => {
-						if (canReadyUp) {
-							ctx.globalAlpha = 1;
-						} else {
-							ctx.globalAlpha = 0.25;
-						}
-						sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY);
-					},
-					({ x, y, sizeX, sizeY, renderCallback }) => {
-						if (canReadyUp) {
-							sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 });
-						} else {
-							renderCallback();
-						}
-					},
+					({ x, y, sizeX, sizeY }) => sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY),
+					({ x, y, sizeX, sizeY }) => sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 					() => {
 						if (playerIsReady) {
 							socket.send(JSON.stringify({
 								action: "READY_DOWN",
 								id: battleState.id
 							}));
-						} else if (canReadyUp) {
+						} else {
 							socket.send(JSON.stringify({
 								action: "READY_UP",
 								id: battleState.id,
@@ -200,24 +187,17 @@ function mpBattleGameLoop(timeMs) {
 						}
 					},
 					{
-						forceHoverOn: () => playerIsReady
-					});
-				makeInteractable(scale(6), scale(320), scale(124), scale(22),
-					({ x, y, sizeX, sizeY }) => {
-						if (playerIsReady) {
+						forceHoverOn: () => playerIsReady,
+						disableOn: () => !canReadyUp,
+						disabledRender: ({ renderCallback }) => {
 							ctx.globalAlpha = 0.25;
-						} else {
+							renderCallback();
 							ctx.globalAlpha = 1;
 						}
-						sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY)
-					},
-					({ x, y, sizeX, sizeY, renderCallback }) => {
-						if (playerIsReady) {
-							renderCallback();
-						} else {
-							sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 })
-						}
-					},
+					});
+				makeInteractable(scale(6), scale(320), scale(124), scale(22),
+					({ x, y, sizeX, sizeY }) => sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY),
+					({ x, y, sizeX, sizeY }) => sprites.EDIT_DECK_67x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 					() => {
 						if (!playerIsReady) {
 							state = {
@@ -228,6 +208,14 @@ function mpBattleGameLoop(timeMs) {
 								},
 								path: 'DECK'
 							};
+						}
+					},
+					{
+						disableOn: () => playerIsReady,
+						disabledRender: ({ renderCallback }) => {
+							ctx.globalAlpha = 0.25;
+							renderCallback();
+							ctx.globalAlpha = 1;
 						}
 					});
 				break;
