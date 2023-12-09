@@ -97,14 +97,14 @@ function criticalChance(cra, crb) {
 }
 
 function calculateDamages(spell, enchantments, caster, victim) {
-	if (Math.random() > spell.chance) {
+	if (Math.random() > spell.chance + (enchantments?.accuracy || 0)) {
 		return 'FAILED';
 	}
 	if (spell.type !== SPELL_TYPES.ATTACK_ALL && spell.type !== SPELL_TYPES.ATTACK_BASIC) {
 		return {};
 	}
 
-	const isCritical = Math.random() <= criticalChance(caster.entity.criticalRating, victim.entity.criticalRating);
+	const isCritical = spell.element === caster.entity.element && Math.random() <= criticalChance(caster.entity.criticalRating, victim.entity.criticalRating);
 
 	const shields = victim.shields;
 	const blades = caster.blades;
@@ -178,6 +178,9 @@ function getEnchantmentTooltips(enchantments) {
 	let tooltips = [];
 	if (enchantments.damage) {
 		tooltips.push(`+${enchantments.damage}AB`);
+	}
+	if (enchantments.accuracy) {
+		tooltips.push(`+${enchantments.accuracy * 100}%CD`);
 	}
 	return tooltips
 }

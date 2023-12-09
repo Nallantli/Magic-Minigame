@@ -131,6 +131,7 @@ let state = {
 		...level2Spells,
 		...level3Spells,
 		...level4Spells,
+		'solar.force',
 		'solar.advantage'
 	],
 	player: {
@@ -140,7 +141,7 @@ let state = {
 	},
 	level: 1,
 	iterator: 0,
-	path: 'MENU',
+	path: 'LEVEL',
 	deckState: {
 		currentIndex: -1,
 		currentElement: 'air',

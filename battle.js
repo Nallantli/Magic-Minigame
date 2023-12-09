@@ -66,6 +66,9 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 			const selectedEntitySpell = (selectedCards[i] === null || selectedCards[i] === 'PASS') ? null : getSpell(battleData[i].hand[selectedCards[i]].id);
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
+				if (battleData[i].hand[selectedCards[i]].enchantments) {
+					sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
+				}
 				if (selectedVictims[i].length > 0) {
 					const index = selectedVictims[i];
 					selectedVictims[i].forEach(index => {
@@ -151,6 +154,9 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 			const selectedEntitySpell = (selectedCards[i] === null || selectedCards[i] === 'PASS') ? null : getSpell(battleData[i].hand[selectedCards[i]].id);
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
+				if (battleData[i].hand[selectedCards[i]].enchantments) {
+					sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
+				}
 				if (selectedVictims[i].length > 0) {
 					const index = selectedVictims[i];
 					selectedVictims[i].forEach(index => {
@@ -196,6 +202,14 @@ function drawCards(battleState) {
 					SPELL_TYPES.ATTACK_ALL,
 					SPELL_TYPES.ATTACK_BASIC
 				];
+			}
+			if (enchantmentSpell.accuracy) {
+				validEnchantees = [
+					...validEnchantees,
+					SPELL_TYPES.ATTACK_ALL,
+					SPELL_TYPES.ATTACK_BASIC,
+					SPELL_TYPES.HEALING_BASIC
+				]
 			}
 			playerData.hand.forEach(({ id, enchantments }, i) => {
 				const spell = getSpell(id);
@@ -361,7 +375,8 @@ function handleInput(battleState, inputData) {
 			console.log("enchant");
 			const enchantmentSpell = getSpell(turnState.battleData[playerIndex].hand[turnState.selectedCards[playerIndex]].id);
 			turnState.battleData[playerIndex].hand[inputData.selectedVictims].enchantments = {
-				damage: enchantmentSpell.damage
+				damage: enchantmentSpell.damage,
+				accuracy: enchantmentSpell.accuracy
 			};
 			turnState.battleData[playerIndex].hand.splice(turnState.selectedCards[playerIndex], 1);
 			turnState.selectedCards[playerIndex] = null;

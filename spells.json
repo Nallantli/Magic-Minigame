@@ -641,11 +641,18 @@
 		"frames": 19,
 		"spellUseType": "TO_ENEMIES"
 	},
+	"solar.force": {
+		"id": "solar.force",
+		"name": "Force",
+		"type": "ENCHANTMENT",
+		"element": "solar",
+		"damage": 100
+	},
 	"solar.advantage": {
 		"id": "solar.advantage",
 		"name": "Advantage",
 		"type": "ENCHANTMENT",
 		"element": "solar",
-		"damage": 100
+		"accuracy": 0.1
 	}
 }

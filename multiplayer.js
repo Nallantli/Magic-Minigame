@@ -235,7 +235,8 @@ function mpBattleGameLoop(timeMs) {
 							let newHand = turnState.battleData[playerIndex].hand;
 							const enchantmentSpell = getSpell(turnState.battleData[playerIndex].hand[turnState.selectedCards[playerIndex]].id);
 							newHand[inputData.selectedVictims].enchantments = {
-								damage: enchantmentSpell.damage
+								damage: enchantmentSpell.damage,
+								accuracy: enchantmentSpell.accuracy
 							};
 							newHand.splice(turnState.selectedCards[playerIndex], 1);
 							socket.send(JSON.stringify({
