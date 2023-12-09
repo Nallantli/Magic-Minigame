@@ -17,24 +17,20 @@ function drawEntityIcon(entity, i, si) {
 function deckGameLoop(timeMs) {
 	let toolTips = [];
 
-	drawEntityIcon(state.player, 0, -1);
+	const currentEntity = state.player;
 
-	// entities.forEach((entity, i) => drawEntityIcon(entity, i + 2, i));
+	sprites.ELEMENTS_MINOR_8x8.draw(ctx, scale(17), scale(36), scale(8), scale(8), { iIndex: ELEMENT_COLORS[currentEntity.element] });
+	font.draw(ctx, scale(27), scale(36), scale(6), scale(8), 0, currentEntity.name);
+	font.draw(ctx, scale(33 + currentEntity.name.length * 6), scale(36), scale(6), scale(8), ELEMENT_COLORS[currentEntity.element], `[${currentEntity.health}/${currentEntity.maxHealth}]`);
 
-	const currentEntity = state.player // state.deckState.currentIndex === -1 ? state.player : entities[state.deckState.currentIndex];
-
-	sprites.ELEMENTS_MINOR_8x8.draw(ctx, scale(52), scale(36), scale(8), scale(8), { iIndex: ELEMENT_COLORS[currentEntity.element] });
-	font.draw(ctx, scale(62), scale(36), scale(6), scale(8), 0, currentEntity.name);
-	font.draw(ctx, scale(68 + currentEntity.name.length * 6), scale(36), scale(6), scale(8), ELEMENT_COLORS[currentEntity.element], `[${currentEntity.health}/${currentEntity.maxHealth}]`);
-
-	sprites.DECK_BACK_252x302.draw(ctx, scale(48), scale(48), scale(252), scale(302));
+	sprites.DECK_BACK_252x302.draw(ctx, scale(13), scale(48), scale(252), scale(302));
 	let deckIndex = 0;
 	const deck = currentEntity.deck;
 	for (let i = 0; i < 6; i++) {
 		for (let j = 0; j < 5; j++) {
 			if (deckIndex < deck.length) {
 				const card = getSpell(deck[deckIndex]);
-				makeInteractable(scale(50 + j * 50), scale(50 + i * 50), scale(48), scale(48),
+				makeInteractable(scale(15 + j * 50), scale(50 + i * 50), scale(48), scale(48),
 					({ x, y, sizeX, sizeY }) => {
 						getCardSprite(card).draw(ctx, x, y, sizeX, sizeY, { cropY: 48 });
 					},
@@ -54,12 +50,12 @@ function deckGameLoop(timeMs) {
 						deck.splice(deckIndex, 1);
 					});
 			}
-			sprites.DECK_SLOT_50x50.draw(ctx, scale(49 + j * 50), scale(49 + i * 50), scale(50), scale(50), { iIndex: deckIndex < deck.length });
+			sprites.DECK_SLOT_50x50.draw(ctx, scale(14 + j * 50), scale(49 + i * 50), scale(50), scale(50), { iIndex: deckIndex < deck.length });
 			deckIndex++;
 		}
 	}
 	ELEMENT_ID_LIST.forEach((element, i) => {
-		makeInteractable(scale(300) + i * scale(31), scale(16), scale(32), scale(32),
+		makeInteractable(scale(265) + i * scale(31), scale(16), scale(32), scale(32),
 			({ x, y, sizeX, sizeY }) => {
 				sprites.ELEMENT_SELECT_32x32.draw(ctx, x, y + scale(5), sizeX, sizeY);
 				ELEMENT_ICONS[element].draw(ctx, x, y + scale(5), sizeX, sizeY);
@@ -74,9 +70,9 @@ function deckGameLoop(timeMs) {
 			});
 	});
 
-	sprites.DECK_CARDS_164x268.draw(ctx, scale(300), scale(48), scale(164), scale(268));
+	sprites.DECK_CARDS_204x268.draw(ctx, scale(265), scale(48), scale(204), scale(268));
 	getAllSpellsForElement(state.knownSpells, state.deckState.currentElement).forEach((card, i) => {
-		makeInteractable(scale(302 + (i % 3) * 50), scale(52 + Math.floor(i / 3) * 66), scale(48), scale(66),
+		makeInteractable(scale(267 + (i % 4) * 50), scale(52 + Math.floor(i / 4) * 66), scale(48), scale(66),
 			({ x, y, sizeX }) => {
 				if (deck.length === 30 || deck.filter(id => id === card.id).length >= 4) {
 					ctx.globalAlpha = 0.5;

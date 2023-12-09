@@ -74,7 +74,7 @@ const sprites = {
 	ELEMENT_SELECT_32x32: new Sprite('./img/element_select_32x32.png', 32, 32, 1),
 	DECK_BACK_252x302: new Sprite('./img/deck_back_252x302.png', 252, 302, 1),
 	DECK_X_48x48: new Sprite('./img/deck_x_48x48.png', 48, 48, 1),
-	DECK_CARDS_164x268: new Sprite('./img/deck_cards_164x268.png', 164, 268, 1),
+	DECK_CARDS_204x268: new Sprite('./img/deck_cards_204x268.png', 204, 268, 1),
 	DECK_CIRCLE_48x64: new Sprite('./img/deck_circle_48x64.png', 48, 64, 1),
 	BACK_32x32: new Sprite('./img/back_32x32.png', 32, 32, 1),
 	EDIT_DECKS_64x12: new Sprite('./img/edit_decks_64x12.png', 64, 12, 1),
