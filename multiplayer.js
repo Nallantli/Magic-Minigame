@@ -166,17 +166,32 @@ function mpBattleGameLoop(timeMs) {
 						state.battleState = undefined;
 						socket.close();
 						state.path = 'MENU';
-					})
+					});
+
+				const canReadyUp = turnState.battleData.filter((e, i) => i < 4 && e !== null).length !== 0 && turnState.battleData.filter((e, i) => i >= 4 && e !== null).length !== 0;
 				makeInteractable(scale(350), scale(346), scale(124), scale(22),
-					({ x, y, sizeX, sizeY }) => sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY),
-					({ x, y, sizeX, sizeY }) => sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+					({ x, y, sizeX, sizeY }) => {
+						if (canReadyUp) {
+							ctx.globalAlpha = 1;
+						} else {
+							ctx.globalAlpha = 0.25;
+						}
+						sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY);
+					},
+					({ x, y, sizeX, sizeY, renderCallback }) => {
+						if (canReadyUp) {
+							sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 });
+						} else {
+							renderCallback();
+						}
+					},
 					() => {
 						if (playerIsReady) {
 							socket.send(JSON.stringify({
 								action: "READY_DOWN",
 								id: battleState.id
 							}));
-						} else {
+						} else if (canReadyUp) {
 							socket.send(JSON.stringify({
 								action: "READY_UP",
 								id: battleState.id,
