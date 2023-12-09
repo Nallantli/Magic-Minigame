@@ -392,7 +392,7 @@ function createLeftShieldCastingSequence(shields, baseId, iteratorOffset, startT
 function createRightShieldCastingSequence(shields, baseId, iteratorOffset, startTick, useTick, posX, posY) {
 	let actions = [];
 
-	shields.map((s, j) => ({ s, j })).toReversed().forEach(({ s: { id, tick, isBonus }, j }, i) => {
+	shields.map((s, j) => ({ s, j })).forEach(({ s: { id, tick, isBonus }, j }, i) => {
 		const i_offset = i + iteratorOffset;
 		const j_offset = j + iteratorOffset;
 		actions = [
@@ -447,7 +447,7 @@ function createRightShieldCastingSequence(shields, baseId, iteratorOffset, start
 function createRightBladeCastingSequence(blades, baseId, iteratorOffset, startTick, useTick) {
 	let actions = [];
 
-	blades.map((s, j) => ({ s, j })).toReversed().forEach(({ s: { id, tick, isBonus }, j }, i) => {
+	blades.map((s, j) => ({ s, j })).forEach(({ s: { id, tick, isBonus }, j }, i) => {
 		const i_offset = i + iteratorOffset;
 		const j_offset = j + iteratorOffset;
 		actions = [

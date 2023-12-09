@@ -122,7 +122,8 @@ function calculateDamages(spell, caster, victim) {
 			let base = d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage);
 			let usedShieldIds = [];
 			let currentElement = d.element;
-			shields.forEach(({ id, value, element, elementTo }, i) => {
+			for (let i = shields.length - 1; i >= 0; i--) {
+				const { id, value, element, elementTo } = shields[i];
 				if ((currentElement === element || element === 'all') && !totalUsedShieldIds.includes(id)) {
 					if (value) {
 						base += base * (value / 100);
@@ -133,7 +134,7 @@ function calculateDamages(spell, caster, victim) {
 					usedShieldIds.push({ index: i, id });
 					totalUsedShieldIds.push(id);
 				}
-			});
+			}
 			if (isCritical) {
 				base *= 2;
 			}
