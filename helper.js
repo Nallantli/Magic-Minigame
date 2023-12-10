@@ -91,6 +91,14 @@ function makeToolTip(sizeX, sizeY, render) {
 	};
 }
 
+function makeTextToolTip(text, fontSizeX, fontSizeY, iIndex) {
+	const { x, y } = mousePos;
+	return (ctx) => {
+		drawBox(ctx, x, y, fontSizeX * text.length + scale(6), fontSizeY + scale(6));
+		font.draw(ctx, x + scale(3), y + scale(3), fontSizeX, fontSizeY, iIndex, text);
+	}
+}
+
 function criticalChance(cra, crb) {
 	const diff = cra - crb;
 	return ((diff - 32) / (2 * (16 + Math.abs(diff - 32))) + 0.5) * (Math.min(cra, 100) / 100);

@@ -3,6 +3,8 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 	const { turnState: { battleData, selectedCards, selectedVictims }, playerIndex } = battleState;
 	const selectedPlayerSpell = (selectedCards[playerIndex] === null || selectedCards[playerIndex] === 'PASS') ? null : getSpell(battleData[playerIndex].hand[selectedCards[playerIndex]].id);
 
+	let tooltips = [];
+
 	for (let i = 0; i < 4; i++) {
 		const battleEntity = battleData[i];
 		if (!battleEntity) {
@@ -27,23 +29,23 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 
 		const { shields, blades, vril, superVril, entity } = battleEntity;
 
-		shields.forEach(({ value, id, element }, j) => {
+		shields.forEach(({ value, id, element, elementTo }, j) => {
 			makeInteractable(scale(57) + j * scale(12), i * scale(67) + scale(28), scale(10), scale(12),
 				({ x, y, sizeX, sizeY }) => spellSpriteDirectory[id].draw(ctx, x, y, sizeX, sizeY),
 				({ x, y, renderCallback }) => {
 					renderCallback();
-					const str = `${value > 0 ? '+' : ''}${value}%`;
-					numberText.draw(ctx, x + scale(5 - str.length * 2), y + scale(14), scale(4), scale(6), ELEMENT_COLORS[element], str);
+					const str = elementTo === undefined ? `${value > 0 ? '+' : ''}${value}% Incoming` : `${element.toUpperCase()} to ${elementTo.toUpperCase()}`;
+					tooltips.push(makeTextToolTip(str, scale(6), scale(8), ELEMENT_COLORS[element]));
 				});
 		});
 
 		blades.forEach(({ value, id, element }, j) => {
-			makeInteractable(scale(57) + j * scale(12), i * scale(67) + scale(50), scale(10), scale(12),
+			makeInteractable(scale(57) + j * scale(12), i * scale(67) + scale(44), scale(10), scale(12),
 				({ x, y, sizeX, sizeY }) => spellSpriteDirectory[id].draw(ctx, x, y, sizeX, sizeY),
 				({ x, y, renderCallback }) => {
 					renderCallback();
-					const str = `${value > 0 ? '+' : ''}${value}%`;
-					numberText.draw(ctx, x + scale(5 - str.length * 2), y - scale(8), scale(4), scale(6), ELEMENT_COLORS[element], str);
+					const str = `${value > 0 ? '+' : ''}${value}% Outgoing`;
+					tooltips.push(makeTextToolTip(str, scale(6), scale(8), ELEMENT_COLORS[element]));
 				});
 		});
 
@@ -113,23 +115,23 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 
 		const { shields, blades, vril, superVril, entity } = battleEntity;
 
-		shields.forEach(({ value, id, element }, j) => {
+		shields.forEach(({ value, id, element, elementTo }, j) => {
 			makeInteractable(scale(480 - 67) - j * scale(12), i_offset * scale(67) + scale(28), scale(10), scale(12),
 				({ x, y, sizeX, sizeY }) => spellSpriteDirectory[id].draw(ctx, x, y, sizeX, sizeY),
 				({ x, y, renderCallback }) => {
 					renderCallback();
-					const str = `${value > 0 ? '+' : ''}${value}%`;
-					numberText.draw(ctx, x + scale(5 - str.length * 2), y + scale(14), scale(4), scale(6), ELEMENT_COLORS[element], str);
+					const str = elementTo === undefined ? `${value > 0 ? '+' : ''}${value}% Incoming` : `${element.toUpperCase()} to ${elementTo.toUpperCase()}`;
+					tooltips.push(makeTextToolTip(str, scale(6), scale(8), ELEMENT_COLORS[element]));
 				});
 		});
 
 		blades.forEach(({ value, id, element }, j) => {
-			makeInteractable(scale(480 - 67) - j * scale(12), i_offset * scale(67) + scale(50), scale(10), scale(12),
+			makeInteractable(scale(480 - 67) - j * scale(12), i_offset * scale(67) + scale(44), scale(10), scale(12),
 				({ x, y, sizeX, sizeY }) => spellSpriteDirectory[id].draw(ctx, x, y, sizeX, sizeY),
 				({ x, y, renderCallback }) => {
 					renderCallback();
-					const str = `${value > 0 ? '+' : ''}${value}%`;
-					numberText.draw(ctx, x + scale(5 - str.length * 2), y - scale(8), scale(4), scale(6), ELEMENT_COLORS[element], str);
+					const str = `${value > 0 ? '+' : ''}${value}% Outgoing`;
+					tooltips.push(makeTextToolTip(str, scale(6), scale(8), ELEMENT_COLORS[element]));
 				});
 		});
 
@@ -174,6 +176,9 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 			}
 		}
 	}
+
+	ctx.globalAlpha = 1;
+	tooltips.forEach(f => f(ctx));
 
 	return inputData;
 }
