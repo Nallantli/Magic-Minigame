@@ -141,7 +141,7 @@ let state = {
 	},
 	level: 1,
 	iterator: 0,
-	path: 'LEVEL',
+	path: 'MENU',
 	deckState: {
 		currentIndex: -1,
 		currentElement: 'air',
