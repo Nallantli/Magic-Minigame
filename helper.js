@@ -93,9 +93,12 @@ function makeToolTip(sizeX, sizeY, render) {
 
 function makeTextToolTip(text, fontSizeX, fontSizeY, iIndex) {
 	const { x, y } = mousePos;
+	const sizeX = fontSizeX * text.length + scale(6);
+	const leftToRight = sizeX + x > scale(480);
+	const startX = leftToRight ? x - sizeX : x;
 	return (ctx) => {
-		drawBox(ctx, x, y, fontSizeX * text.length + scale(6), fontSizeY + scale(6));
-		font.draw(ctx, x + scale(3), y + scale(3), fontSizeX, fontSizeY, iIndex, text);
+		drawBox(ctx, startX, y, sizeX, fontSizeY + scale(6));
+		font.draw(ctx, startX + scale(3), y + scale(3), fontSizeX, fontSizeY, iIndex, text);
 	}
 }
 
