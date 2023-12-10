@@ -100,7 +100,7 @@ class NumberText {
 			return Number(c);
 		}
 		if (c.charCodeAt(0) >= 'A'.charCodeAt(0)) {
-			return 15 + (c.charCodeAt(0) - 'A'.charCodeAt(0));
+			return 16 + (c.charCodeAt(0) - 'A'.charCodeAt(0));
 		}
 		switch (c) {
 			case '+':
@@ -111,8 +111,10 @@ class NumberText {
 				return 12;
 			case '/':
 				return 13;
-			default:
+			case 'X':
 				return 14;
+			default:
+				return 15;
 		}
 	}
 

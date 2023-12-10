@@ -70,16 +70,14 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 					sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
 				}
 				if (selectedVictims[i].length > 0) {
-					const index = selectedVictims[i];
-					selectedVictims[i].forEach(index => {
-						if (index < 4) {
-							numberText.draw(ctx, scale(170), i * scale(67) + scale(49), scale(8), scale(12), 0, String(index + 1));
-							sprites.VICTIM_ARROW_8x16.draw(ctx, scale(182), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
-						} else {
-							numberText.draw(ctx, scale(182), i * scale(67) + scale(49), scale(8), scale(12), 0, String(index - 3));
-							sprites.VICTIM_ARROW_8x16.draw(ctx, scale(170), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
-						}
-					});
+					const index = selectedVictims[i][0];
+					if (index < 4) {
+						numberText.draw(ctx, scale(170), i * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index + 1) : 'X');
+						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(182), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
+					} else {
+						numberText.draw(ctx, scale(182), i * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index - 3) : 'X');
+						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(170), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
+					}
 				}
 			}
 
@@ -158,16 +156,16 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 					sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
 				}
 				if (selectedVictims[i].length > 0) {
-					const index = selectedVictims[i];
-					selectedVictims[i].forEach(index => {
-						if (index < 4) {
-							numberText.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, String(index + 1));
-							sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
-						} else {
-							numberText.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, String(index - 3));
-							sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
-						}
-					});
+					const index = selectedVictims[i][0];
+					if (index < 4) {
+						console.log(index, String(index + 1));
+						numberText.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index + 1) : 'X');
+						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
+					} else {
+						console.log(index, String(index - 3));
+						numberText.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index - 3) : 'X');
+						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
+					}
 				}
 			}
 
@@ -192,7 +190,7 @@ function drawCards(battleState) {
 		const remainingDeck = playerData.battleDeck.length;
 
 		const startX = scale(240 - (playerData.hand.length + (remainingDeck > 0 ? 1 : 0)) * 25);
-		
+
 		if (selectedCard !== null && selectedCard !== 'PASS' && getSpell(playerData.hand[selectedCard].id)?.type === SPELL_TYPES.ENCHANTMENT) {
 			const enchantmentSpell = getSpell(playerData.hand[selectedCard].id);
 			let validEnchantees = [];
