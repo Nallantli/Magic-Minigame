@@ -192,8 +192,8 @@ function drawCards(battleState) {
 		const remainingDeck = playerData.battleDeck.length;
 
 		const startX = scale(240 - (playerData.hand.length + (remainingDeck > 0 ? 1 : 0)) * 25);
-
-		if (selectedCard !== null && selectedCard !== 'PASS' && getSpell(playerData.hand[selectedCard].id).type === SPELL_TYPES.ENCHANTMENT) {
+		
+		if (selectedCard !== null && selectedCard !== 'PASS' && getSpell(playerData.hand[selectedCard].id)?.type === SPELL_TYPES.ENCHANTMENT) {
 			const enchantmentSpell = getSpell(playerData.hand[selectedCard].id);
 			let validEnchantees = [];
 			if (enchantmentSpell.damage) {

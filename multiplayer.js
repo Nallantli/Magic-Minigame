@@ -240,14 +240,14 @@ function mpBattleGameLoop(timeMs) {
 							};
 							newHand.splice(turnState.selectedCards[playerIndex], 1);
 							socket.send(JSON.stringify({
-								action: "UPDATE_HAND",
-								id: battleState.id,
-								hand: newHand
-							}));
-							socket.send(JSON.stringify({
 								action: "SELECT_CARD",
 								id: battleState.id,
 								card: null
+							}));
+							socket.send(JSON.stringify({
+								action: "UPDATE_HAND",
+								id: battleState.id,
+								hand: newHand
 							}));
 						} else {
 							socket.send(JSON.stringify({
