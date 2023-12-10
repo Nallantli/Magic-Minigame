@@ -96,7 +96,7 @@ const sprites = {
 	EDIT_DECK_67x11: new Sprite('./img/edit_deck_67x11.png', 67, 11, 2),
 	RETURN_TO_MENU_87x11: new Sprite('./img/return_to_menu_87x11.png', 93, 11, 2),
 	DECK_REMAIN_48x64: new Sprite('./img/deck_remain_48x64.png', 48, 64, 1),
-	ENCHANTMENT_BORDER_48x64: new Sprite('./img/enchantment_border_48x64.png', 48, 64, 1),
+	ENCHANTMENT_BORDER_48x64: new Sprite('./img/enchantment_border_48x64.png', 48, 64, 31),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
 };

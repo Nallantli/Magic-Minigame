@@ -69,7 +69,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
 				if (battleData[i].hand[selectedCards[i]].enchantments) {
-					sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
+					sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32), { iIndex: iterator % 31 });
 				}
 				if (selectedVictims[i].length > 0) {
 					const index = selectedVictims[i][0];
@@ -155,7 +155,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
 				if (battleData[i].hand[selectedCards[i]].enchantments) {
-					sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
+					sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32), { iIndex: iterator % 31 });
 				}
 				if (selectedVictims[i].length > 0) {
 					const index = selectedVictims[i][0];
@@ -183,7 +183,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 	return inputData;
 }
 
-function drawCards(battleState) {
+function drawCards(battleState, iterator) {
 	const { turnState: { selectedCards, battleData, selectedVictims }, playerIndex } = battleState;
 	const playerData = battleData[playerIndex];
 	let inputData = {};
@@ -225,9 +225,9 @@ function drawCards(battleState) {
 
 				makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
 					({ x, y, sizeX, sizeY }) => {
-						getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY, 0);
+						getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY);
 						if (enchantments) {
-							sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, x, y, sizeX, sizeY, 0);
+							sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, x, y, sizeX, sizeY, { iIndex: iterator % 31 });
 						}
 					},
 					({ x, y, sizeX, renderCallback }) => {
@@ -262,9 +262,9 @@ function drawCards(battleState) {
 
 				makeInteractable(startX + scale(50 * i), scale(276), scale(48), scale(64),
 					({ x, y, sizeX, sizeY }) => {
-						getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY, 0);
+						getCardSprite(spell).draw(ctx, x, y, sizeX, sizeY);
 						if (enchantments) {
-							sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, x, y, sizeX, sizeY, 0);
+							sprites.ENCHANTMENT_BORDER_48x64.draw(ctx, x, y, sizeX, sizeY, { iIndex: iterator % 31 });
 						}
 					},
 					({ x, y, sizeX, renderCallback }) => {
@@ -344,7 +344,7 @@ function drawBattleIdle(state) {
 	const { battleState, iterator } = state;
 
 	const inputData = {
-		...drawCards(battleState),
+		...drawCards(battleState, iterator),
 		...drawBattleField(battleState, iterator)
 	};
 
