@@ -189,7 +189,7 @@ function drawCards(battleState) {
 	} else {
 		const selectedCard = selectedCards[playerIndex];
 
-		const remainingDeck = playerData.deck.length;
+		const remainingDeck = playerData.battleDeck.length;
 
 		const startX = scale(240 - (playerData.hand.length + (remainingDeck > 0 ? 1 : 0)) * 25);
 
@@ -417,11 +417,11 @@ function postBattle(turnState, callback) {
 				continue;
 			}
 			while (turnState.battleData[i].hand.length < 7) {
-				const cardId = turnState.battleData[i].deck.pop();
-				if (!cardId) {
+				const deckSpell = turnState.battleData[i].battleDeck.pop();
+				if (!deckSpell) {
 					break;
 				}
-				turnState.battleData[i].hand.push({ id: cardId });
+				turnState.battleData[i].hand.push(deckSpell);
 			}
 		}
 		callback();

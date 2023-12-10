@@ -155,10 +155,12 @@ function calculateDamages(spell, enchantments, caster, victim) {
 
 function sortDeck(deck) {
 	deck.sort((a, b) => {
-		if (a.element === b.element) {
-			return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
+		const spellA = getSpell(a);
+		const spellB = getSpell(b);
+		if (spellA.element === spellB.element) {
+			return spellA.name < spellB.name ? -1 : (spellA.name > spellB.name ? 1 : 0);
 		}
-		return a.element < b.element ? -1 : (a.element > b.element ? 1 : 0)
+		return spellA.element < spellB.element ? -1 : (spellA.element > spellB.element ? 1 : 0)
 	});
 }
 
@@ -187,10 +189,10 @@ function getEnchantmentTooltips(enchantments) {
 
 function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calculatedDamages) {
 	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
-		const spellId = battleData[casterIndex].hand[spellIndex].id;
-		battleData[casterIndex].deck = [
-			spellId,
-			...battleData[casterIndex].deck
+		const handSpell = battleData[casterIndex].hand[spellIndex];
+		battleData[casterIndex].battleDeck = [
+			handSpell,
+			...battleData[casterIndex].battleDeck
 		];
 		battleData[casterIndex].hand.splice(spellIndex, 1);
 		return battleData;
@@ -277,19 +279,17 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calcul
 }
 
 function generateBattleEntity(entity, AI) {
-	const deck = [
-		...entity.deck
-	];
+	const battleDeck = entity.deck.map(id => ({ id }));
 
-	shuffleArray(deck);
+	shuffleArray(battleDeck);
 
 	let hand = [];
 	for (let i = 0; i < 7; i++) {
-		const card = deck.pop();
+		const card = battleDeck.pop();
 		if (!card) {
 			break;
 		}
-		hand.push({ id: card });
+		hand.push(card);
 	}
 
 	const hasSuperVril = Math.random() <= entity.superVrilChance;
@@ -300,7 +300,7 @@ function generateBattleEntity(entity, AI) {
 		vril: hasSuperVril ? 0 : 1,
 		superVril: hasSuperVril ? 1 : 0,
 		entity,
-		deck,
+		battleDeck,
 		hand,
 		AI
 	}

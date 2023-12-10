@@ -182,7 +182,7 @@ function mpBattleGameLoop(timeMs) {
 							socket.send(JSON.stringify({
 								action: "READY_UP",
 								id: battleState.id,
-								deck: state.player.deck
+								battleDeck: state.player.battleDeck
 							}));
 						}
 					},
