@@ -153,9 +153,6 @@ class AnimationEngine {
 		this.callback = callback;
 		this.iterator = 0;
 
-		this.frameCount = 0;
-		this.lastFrameCount = 0;
-
 		this.initialize();
 	}
 
@@ -798,11 +795,6 @@ class AnimationEngine {
 				forceHoverOn: () => fastForward == true
 			});
 
-		if (!this.fpsStartTime || timeMs - this.fpsStartTime >= 1000) {
-			this.fpsStartTime = timeMs;
-			this.lastFrameCount = this.frameCount;
-			this.frameCount = 0;
-		}
 		if (!this.startTime || timeMs - this.startTime >= 1000 / this.fps) {
 			this.doTick();
 			this.iterator++;
@@ -813,9 +805,7 @@ class AnimationEngine {
 				}
 			}
 			this.startTime = timeMs;
-			this.frameCount++;
 		}
-		numberText.draw(this.ctx, scale(1), scale(1), scale(4), scale(6), this.lastFrameCount < this.fps ? 2 : (this.lastFrameCount > this.fps ? 4 : 0), String(this.lastFrameCount));
 		Object.entries(this.tracker)
 			.toSorted((a, b) => a[1].zIndex - b[1].zIndex)
 			.forEach(([_, { display, sprite, alpha, posX, posY, sizeX, sizeY, rot, iIndex, text, mirror }]) => {
