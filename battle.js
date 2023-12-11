@@ -67,7 +67,9 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		}
 
 		if (playerIndex < 4) {
-			const selectedEntitySpell = (selectedCards[i] === null || selectedCards[i] === 'PASS') ? null : getSpell(battleData[i].hand[selectedCards[i]].id);
+			const selectedEntitySpell = (selectedCards[i] === null || selectedCards[i] === 'PASS' || battleData[i].hand?.[selectedCards[i]]?.id === undefined)
+				? null
+				: getSpell(battleData[i].hand?.[selectedCards[i]]?.id);
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(168), i * scale(67) + scale(10), scale(24), scale(32));
 				if (battleData[i].hand[selectedCards[i]].enchantments) {
@@ -153,7 +155,9 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		}
 
 		if (playerIndex >= 4) {
-			const selectedEntitySpell = (selectedCards[i] === null || selectedCards[i] === 'PASS') ? null : getSpell(battleData[i].hand[selectedCards[i]].id);
+			const selectedEntitySpell = (selectedCards[i] === null || selectedCards[i] === 'PASS' || battleData[i].hand?.[selectedCards[i]]?.id === undefined)
+				? null
+				: getSpell(battleData[i].hand?.[selectedCards[i]]?.id);
 			if (selectedEntitySpell) {
 				getCardSprite(selectedEntitySpell).draw(ctx, scale(480 - 168 - 24), i_offset * scale(67) + scale(10), scale(24), scale(32));
 				if (battleData[i].hand[selectedCards[i]].enchantments) {
