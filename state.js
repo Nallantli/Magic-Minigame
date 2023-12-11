@@ -1,38 +1,5 @@
-const mpWizards = [
-	{
-		"id": "fire_wizard",
-		"name": "Wizard Wizard",
-		"element": "fire",
-		"maxHealth": 800,
-		"health": 800,
-		"deck": [
-			"fire.fire_shield",
-			"water.water_shield",
-			"fire.fireball",
-			"fire.fireball",
-			"fire.fireball",
-			"fire.fireball",
-			"fire.balefire",
-			"fire.balefire",
-			"fire.balefire",
-			"fire.balefire",
-			"fire.fire_blade",
-			"fire.fire_trap"
-		],
-		"augments": {
-			"fire": 0.8,
-			"water": 1.1
-		},
-		"criticalRating": 110,
-		"superVrilChance": 0.25,
-		"spritePath": "wiz",
-		"idleFrames": 1,
-		"castFrames": 1,
-		"deathFrames": 8
-	},
-	{
-		"id": "air_wizard",
-		"name": "Top Hat Wizard",
+const defaultMPStats = {
+	'air': {
 		"element": "air",
 		"maxHealth": 960,
 		"health": 960,
@@ -55,15 +22,34 @@ const mpWizards = [
 			"earth": 1.1
 		},
 		"criticalRating": 90,
-		"superVrilChance": 0.25,
-		"spritePath": "wiz_top_hat",
-		"idleFrames": 1,
-		"castFrames": 1,
-		"deathFrames": 19
+		"superVrilChance": 0.25
 	},
-	{
-		"id": "water_wizard",
-		"name": "Baseball Wizard",
+	'fire': {
+		"element": "fire",
+		"maxHealth": 800,
+		"health": 800,
+		"deck": [
+			"fire.fire_shield",
+			"water.water_shield",
+			"fire.fireball",
+			"fire.fireball",
+			"fire.fireball",
+			"fire.fireball",
+			"fire.balefire",
+			"fire.balefire",
+			"fire.balefire",
+			"fire.balefire",
+			"fire.fire_blade",
+			"fire.fire_trap"
+		],
+		"augments": {
+			"fire": 0.8,
+			"water": 1.1
+		},
+		"criticalRating": 110,
+		"superVrilChance": 0.25
+	},
+	'water': {
 		"element": "water",
 		"maxHealth": 880,
 		"health": 880,
@@ -86,15 +72,9 @@ const mpWizards = [
 			"fire": 1.1
 		},
 		"criticalRating": 100,
-		"superVrilChance": 0.25,
-		"spritePath": "wiz_baseball",
-		"idleFrames": 1,
-		"castFrames": 1,
-		"deathFrames": 7
+		"superVrilChance": 0.25
 	},
-	{
-		"id": "earth_wizard",
-		"name": "Hatless Wizard",
+	'earth': {
 		"element": "earth",
 		"maxHealth": 1040,
 		"health": 1040,
@@ -117,11 +97,58 @@ const mpWizards = [
 			"air": 1.1
 		},
 		"criticalRating": 80,
-		"superVrilChance": 0.25,
+		"superVrilChance": 0.25
+	}
+}
+
+const MP_SPRITES = [
+	{
+		"spritePath": "wiz",
+		"idleFrames": 1,
+		"castFrames": 1,
+		"deathFrames": 8
+	},
+	{
+		"spritePath": "wiz_top_hat",
+		"idleFrames": 1,
+		"castFrames": 1,
+		"deathFrames": 19
+	},
+	{
+		"spritePath": "wiz_baseball",
+		"idleFrames": 1,
+		"castFrames": 1,
+		"deathFrames": 7
+	},
+	{
 		"spritePath": "wiz_no_hat",
 		"idleFrames": 1,
 		"castFrames": 1,
 		"deathFrames": 12
+	},
+	{
+		"spritePath": "skeleton",
+		"idleFrames": 16,
+		"castFrames": 5,
+		"deathFrames": 7
+	},
+	{
+		"spritePath": "ghost",
+		"idleFrames": 21,
+		"castFrames": 3,
+		"deathFrames": 12
+	},
+	{
+		"spritePath": "goomborb",
+		"idleFrames": 10,
+		"castFrames": 2,
+		"deathFrames": 7
+	},
+	{
+		"spritePath": "phoenix",
+		"idleFrames": 8,
+		"castFrames": 8,
+		"deathFrames": 10
 	}
 ];
 
@@ -135,7 +162,8 @@ let state = {
 		'solar.advantage'
 	],
 	player: {
-		...randomFromList(mpWizards),
+		...randomFromList(Object.values(defaultMPStats)),
+		...randomFromList(MP_SPRITES),
 		id: crypto.randomUUID(),
 		name: 'Player'
 	},

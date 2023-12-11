@@ -1,3 +1,10 @@
+const MP_ELEMENTS = [
+	'air',
+	'fire',
+	'water',
+	'earth'
+];
+
 function setUpSocket(socket) {
 	socket.addEventListener('message', event => {
 		const data = JSON.parse(event.data);
@@ -91,6 +98,7 @@ function setUpSocket(socket) {
 }
 
 function menuGameLoop(timeMs) {
+	const { iterator } = state;
 	if (state.menuState.errorMessage) {
 		font.draw(ctx, scale(240 - state.menuState.errorMessage.length * 3), scale(340), scale(6), scale(8), 2, state.menuState.errorMessage);
 	}
@@ -163,30 +171,83 @@ function menuGameLoop(timeMs) {
 			}
 		});
 
-	const wizardSelectionIndex = mpWizards.findIndex(({ element }) => state.player.element === element);
-	mpWizards.forEach((wizard, i) => {
-		makeInteractable(scale(240 - mpWizards.length * 36 + i * 70), scale(64), scale(70), scale(164),
+	const elementSelectionIndex = MP_ELEMENTS.findIndex(element => state.player.element === element);
+	MP_ELEMENTS.forEach((element, i) => {
+		makeInteractable(scale(240 - MP_ELEMENTS.length * 20 + i * 40 + 6), scale(60), scale(32), scale(32),
 			({ x, y, sizeX, sizeY }) => {
 				ctx.globalAlpha = 0.25;
-				getIdleSprite(wizard).draw(ctx, x - scale(30), y, scale(128), scale(128));
-				ELEMENT_ICONS[wizard.element].draw(ctx, x + scale(20), y + scale(132), scale(32), scale(32));
+				ELEMENT_ICONS[element].draw(ctx, x, y, sizeX, sizeY);
 			},
 			({ x, y, sizeX, sizeY }) => {
 				ctx.globalAlpha = 1;
-				getIdleSprite(wizard).draw(ctx, x - scale(30), y, scale(128), scale(128));
-				ELEMENT_ICONS[wizard.element].draw(ctx, x + scale(20), y + scale(132), scale(32), scale(32));
+				ELEMENT_ICONS[element].draw(ctx, x, y, sizeX, sizeY);
 			},
 			() => {
 				state.player = {
-					...wizard,
-					name: state.player.name,
-					id: state.player.id
+					...state.player,
+					...defaultMPStats[element]
 				}
 			},
 			{
-				forceHoverOn: () => wizardSelectionIndex === i
+				forceHoverOn: () => elementSelectionIndex === i
 			})
 	});
+	const wizardSelectionIndex = MP_SPRITES.findIndex(({ spritePath }) => state.player.spritePath === spritePath);
+	MP_SPRITES.forEach((spriteData, i) => {
+		if (wizardSelectionIndex === i) {
+			ctx.globalAlpha = 1;
+			entitySpriteDirectory[`${spriteData.spritePath}.idle`].draw(ctx,
+				scale(240 - (wizardSelectionIndex - i) * 60 - 36) - scale(30),
+				scale(100),
+				scale(128),
+				scale(128),
+				{ iIndex: iterator % spriteData.idleFrames });
+		} else {
+			ctx.globalAlpha = 0.25;
+			entitySpriteDirectory[`${spriteData.spritePath}.idle`].draw(ctx,
+				scale(240 - (wizardSelectionIndex - i) * 60 - 36) + scale(2),
+				scale(100) + scale(64),
+				scale(64),
+				scale(64),
+				{ iIndex: iterator % spriteData.idleFrames });
+		}
+	});
+	makeInteractable(scale(240 - 96), scale(100), scale(32), scale(64),
+		({ x, y, sizeX, sizeY }) => {
+			ctx.globalAlpha = 0.25;
+			sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 })
+		},
+		({ x, y, sizeX, sizeY, renderCallback }) => {
+			ctx.globalAlpha = 1;
+			sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 })
+		},
+		() => {
+			const nextIndex = wizardSelectionIndex - 1;
+			if (nextIndex >= 0) {
+				state.player = {
+					...state.player,
+					...MP_SPRITES[nextIndex]
+				}
+			}
+		});
+	makeInteractable(scale(240 + 64), scale(100), scale(32), scale(64),
+		({ x, y, sizeX, sizeY }) => {
+			ctx.globalAlpha = 0.25;
+			sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY)
+		},
+		({ x, y, sizeX, sizeY, renderCallback }) => {
+			ctx.globalAlpha = 1;
+			sprites.VICTIM_ARROW_8x16.draw(ctx, x, y, sizeX, sizeY)
+		},
+		() => {
+			const nextIndex = wizardSelectionIndex + 1;
+			if (nextIndex < MP_SPRITES.length) {
+				state.player = {
+					...state.player,
+					...MP_SPRITES[nextIndex]
+				}
+			}
+		});
 	ctx.globalAlpha = 1;
 
 	makeInteractable(scale(240 - 69), scale(310), scale(138), scale(22),
