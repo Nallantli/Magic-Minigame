@@ -1,7 +1,9 @@
 function drawBattleField(battleState, iterator) { // battleData, selectedCards, selectedVictims, playerIndex) {
 	let inputData = {};
 	const { turnState: { battleData, selectedCards, selectedVictims }, playerIndex } = battleState;
-	const selectedPlayerSpell = (selectedCards[playerIndex] === null || selectedCards[playerIndex] === 'PASS') ? null : getSpell(battleData[playerIndex].hand[selectedCards[playerIndex]].id);
+	const selectedPlayerSpell = (selectedCards[playerIndex] === null || selectedCards[playerIndex] === 'PASS' || battleData[playerIndex].hand?.[selectedCards[playerIndex]]?.id === undefined)
+		? null
+		: getSpell(battleData[playerIndex].hand?.[selectedCards[playerIndex]]?.id);
 
 	let tooltips = [];
 
