@@ -82,6 +82,12 @@ function registerEntity(entity) {
 	}
 }
 
+MP_SPRITES.forEach(({ spritePath, idleFrames, castFrames, deathFrames }) => {
+	entitySpriteDirectory[`${spritePath}.idle`] = new Sprite(`./img/characters/${spritePath}/idle_64x64.png`, 64, 64, idleFrames);
+	entitySpriteDirectory[`${spritePath}.cast`] = new Sprite(`./img/characters/${spritePath}/cast_64x64.png`, 64, 64, castFrames);
+	entitySpriteDirectory[`${spritePath}.death`] = new Sprite(`./img/characters/${spritePath}/death_64x64.png`, 64, 64, deathFrames);
+});
+
 function getEntity(id) {
 	return entityDirectory[id];
 }
