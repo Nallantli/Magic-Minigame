@@ -10,11 +10,7 @@ function startGameLoop(timeMs) {
 				...state,
 				path: 'LEVEL',
 				knownSpells: [
-					...level1Spells,
-					'lunar.corona_rubra',
-					'lunar.corona_viridis',
-					'lunar.corona_caerulea',
-					'lunar.corona_flava'
+					...level1Spells
 				],
 				player: {
 					...entityDirectory[randomFromList([
@@ -41,7 +37,11 @@ function startGameLoop(timeMs) {
 					...level3Spells,
 					...level4Spells,
 					'solar.force',
-					'solar.advantage'
+					'solar.advantage',
+					'lunar.corona_rubra',
+					'lunar.corona_viridis',
+					'lunar.corona_caerulea',
+					'lunar.corona_flava'
 				],
 				player: {
 					...randomFromList(Object.values(defaultMPStats)),
