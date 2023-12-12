@@ -1,6 +1,11 @@
 function drawBattleField(battleState, iterator) { // battleData, selectedCards, selectedVictims, playerIndex) {
 	let inputData = {};
-	const { turnState: { battleData, selectedCards, selectedVictims }, playerIndex } = battleState;
+	const { turnState: { battleData, selectedCards, selectedVictims, aura }, playerIndex } = battleState;
+
+	if (aura) {
+		spellSpriteDirectory[`${aura.id}.aura`].draw(ctx, 0, 0, scale(480), scale(270), { iIndex: iterator % spellSpriteDirectory[`${aura.id}.aura`].indices });
+	}
+
 	const selectedPlayerSpell = (selectedCards[playerIndex] === null || selectedCards[playerIndex] === 'PASS' || battleData[playerIndex].hand?.[selectedCards[playerIndex]]?.id === undefined)
 		? null
 		: getSpell(battleData[playerIndex].hand?.[selectedCards[playerIndex]]?.id);
@@ -296,6 +301,8 @@ function drawCards(battleState, iterator) {
 									}
 									inputData.selectedVictims.push(j);
 								}
+							} else if (spell.type === SPELL_TYPES.AURA) {
+								inputData.selectedVictims = [playerIndex];
 							}
 						}
 					},
@@ -461,7 +468,7 @@ function battleGameLoop(timeMs) {
 				|| (playerIndex >= 4 && turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).length === 0)) {
 				onWin();
 			} else {
-				state.animationQueue.push(new AnimationEngine(getReturnSequence(turnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+				state.animationQueue.push(new AnimationEngine(getReturnSequence(turnState), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 				selectCardsForAI(battleState);
 			}
 		}
@@ -481,17 +488,20 @@ function battleGameLoop(timeMs) {
 							spell,
 							enchantments,
 							turnState.battleData[turnState.battleIndex],
-							victimData))
+							victimData,
+							turnState.aura))
 					: ['FAILED'];
 				const sequence = turnState.battleIndex < 4
-					? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0)
-					: createRightAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0);
+					? createLeftAttackSequence(turnState, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0)
+					: createRightAttackSequence(turnState, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0);
 				const animation = new AnimationEngine({
 					ticks: sequence.length,
 					actions: sequence.actions
 				}, TICK_TIME, FPS, canvas, ctx, () => {
 					reduceAnimationQueue();
-					turnState.battleData = iterateSpell(turnState.battleIndex, victimIndices, spellIndex, turnState.battleData, calculatedDamages);
+					const iteration = iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages);
+					turnState.aura = iteration.aura;
+					turnState.battleData = iteration.battleData;
 					postBattle(turnState, postBattleCallback);
 				});
 				state.animationQueue.push(animation);

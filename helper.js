@@ -107,7 +107,7 @@ function criticalChance(cra, crb) {
 	return ((diff - 32) / (2 * (16 + Math.abs(diff - 32))) + 0.5) * (Math.min(cra, 100) / 100);
 }
 
-function calculateDamages(spell, enchantments, caster, victim) {
+function calculateDamages(spell, enchantments, caster, victim, aura) {
 	if (spell.type !== SPELL_TYPES.ATTACK_ALL && spell.type !== SPELL_TYPES.ATTACK_BASIC) {
 		return {};
 	}
@@ -118,7 +118,7 @@ function calculateDamages(spell, enchantments, caster, victim) {
 	const blades = caster.blades;
 	let usedBladeIds = [];
 	let totalUsedBladeIds = [];
-	let baseTilt = 1;
+	let baseTilt = 1 * (aura !== null && aura.element === spell.element ? aura.value : 1);
 	blades.forEach(({ id, value, element }, i) => {
 		if ((spell.element === element || element === 'all') && !totalUsedBladeIds.includes(id)) {
 			baseTilt *= (value + 100) / 100;
@@ -195,7 +195,9 @@ function getEnchantmentTooltips(enchantments) {
 	return tooltips
 }
 
-function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calculatedDamages) {
+function iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages) {
+	let { battleData, aura } = turnState;
+	const casterIndex = turnState.battleIndex;
 	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
 		const handSpell = battleData[casterIndex].hand[spellIndex];
 		battleData[casterIndex].battleDeck = [
@@ -203,10 +205,17 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calcul
 			...battleData[casterIndex].battleDeck
 		];
 		battleData[casterIndex].hand.splice(spellIndex, 1);
-		return battleData;
+		return { aura, battleData };
 	}
 	const spell = getSpell(battleData[casterIndex].hand[spellIndex].id);
 	switch (spell.type) {
+		case SPELL_TYPES.AURA:
+			aura = {
+				element: spell.auraElement,
+				value: spell.auraValue,
+				id: spell.id
+			};
+			break;
 		case SPELL_TYPES.HEALING_BASIC:
 			spell.heals.forEach(({ heal }) => battleData[victimIndices[0]].entity.health += heal);
 			break;
@@ -283,7 +292,10 @@ function iterateSpell(casterIndex, victimIndices, spellIndex, battleData, calcul
 			battleData[i].entity.health = battleData[i].entity.maxHealth;
 		}
 	}
-	return battleData;
+	return {
+		aura,
+		battleData
+	};
 }
 
 function generateBattleEntity(entity, AI) {
@@ -341,14 +353,16 @@ function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
 		}
 	}
 
-	state.animationQueue.push(new AnimationEngine(getReturnSequence(battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 
 	const turnState = {
 		battleData,
 		selectedCards: [null, null, null, null, null, null, null, null],
 		selectedVictims: [[], [], [], [], [], [], [], []],
-		battleIndex: -1
+		battleIndex: -1,
+		aura: null
 	};
+
+	state.animationQueue.push(new AnimationEngine(getReturnSequence(turnState), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 
 	const battleState = {
 		turnState,

@@ -10,7 +10,11 @@ function startGameLoop(timeMs) {
 				...state,
 				path: 'LEVEL',
 				knownSpells: [
-					...level1Spells
+					...level1Spells,
+					'lunar.corona_rubra',
+					'lunar.corona_viridis',
+					'lunar.corona_caerulea',
+					'lunar.corona_flava'
 				],
 				player: {
 					...entityDirectory[randomFromList([

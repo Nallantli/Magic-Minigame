@@ -1013,8 +1013,9 @@ function createMiddleVictimSequence(mirror, spellAnimationStartTick, victimId, v
 	];
 }
 
-function createLeftAttackSequence(battleData, casterIndex, victimIndices, spell, calculatedDamages, startTick) {
+function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, calculatedDamages, startTick) {
 	// initialize caster;
+	const { battleData, aura } = turnState;
 
 	const casterData = battleData[casterIndex];
 
@@ -1025,6 +1026,20 @@ function createLeftAttackSequence(battleData, casterIndex, victimIndices, spell,
 	// deal with shields etc.
 
 	let actions = [
+		...(turnState.aura ? [{
+			tick: 0,
+			type: ATYPES.INITIALIZE_ENTITY,
+			id: `aura`,
+			sprite: getAuraSprite(getSpell(turnState.aura.id)),
+			alpha: 1,
+			posX: 0,
+			posY: 0,
+			sizeX: scale(480),
+			sizeY: scale(270),
+			rot: 0,
+			zIndex: 1,
+			play: true
+		}] : []),
 		{
 			tick: startTick,
 			type: ATYPES.INITIALIZE_ENTITY,
@@ -1085,6 +1100,37 @@ function createLeftAttackSequence(battleData, casterIndex, victimIndices, spell,
 		}
 	];
 	switch (spell.type) {
+		case SPELL_TYPES.AURA: {
+			if (aura) {
+				actions = [
+					...actions,
+					{
+						tick: spellAnimationStartTick,
+						type: ATYPES.REMOVE_ENTITY,
+						id: 'aura'
+					}
+				];
+			}
+			actions = [
+				...actions,
+				{
+					tick: spellAnimationStartTick + getSpellSprite(spell).indices,
+					type: ATYPES.INITIALIZE_ENTITY,
+					id: 'new_aura',
+					sprite: getAuraSprite(spell),
+					alpha: 1,
+					posX: 0,
+					posY: 0,
+					sizeX: scale(480),
+					sizeY: scale(270),
+					rot: 0,
+					zIndex: 0,
+					play: true
+				}
+			];
+			spellAnimationStartTick -= 5;
+			break;
+		}
 		case SPELL_TYPES.HEALING_BASIC: {
 			const victimData = battleData[victimIndices[0]];
 			const victimId = `victim.${crypto.randomUUID()}`;
@@ -1208,8 +1254,9 @@ function createLeftAttackSequence(battleData, casterIndex, victimIndices, spell,
 	};
 }
 
-function createRightAttackSequence(battleData, casterIndex, victimIndices, spell, calculatedDamages, startTick) {
+function createRightAttackSequence(turnState, casterIndex, victimIndices, spell, calculatedDamages, startTick) {
 	// initialize caster;
+	const { battleData, aura } = turnState;
 
 	const casterData = battleData[casterIndex];
 
@@ -1220,6 +1267,20 @@ function createRightAttackSequence(battleData, casterIndex, victimIndices, spell
 	// deal with shields etc.
 
 	let actions = [
+		...(turnState.aura ? [{
+			tick: 0,
+			type: ATYPES.INITIALIZE_ENTITY,
+			id: `aura`,
+			sprite: getAuraSprite(getSpell(turnState.aura.id)),
+			alpha: 1,
+			posX: 0,
+			posY: 0,
+			sizeX: scale(480),
+			sizeY: scale(270),
+			rot: 0,
+			zIndex: 1,
+			play: true
+		}] : []),
 		{
 			tick: startTick,
 			type: ATYPES.INITIALIZE_ENTITY,
@@ -1277,10 +1338,41 @@ function createRightAttackSequence(battleData, casterIndex, victimIndices, spell
 			rot: 0,
 			zIndex: 0,
 			play: true,
-			mirror: true
+			mirror: spell.type !== SPELL_TYPES.AURA
 		}
 	];
 	switch (spell.type) {
+		case SPELL_TYPES.AURA: {
+			if (aura) {
+				actions = [
+					...actions,
+					{
+						tick: spellAnimationStartTick,
+						type: ATYPES.REMOVE_ENTITY,
+						id: 'aura'
+					}
+				];
+			}
+			actions = [
+				...actions,
+				{
+					tick: spellAnimationStartTick + getSpellSprite(spell).indices,
+					type: ATYPES.INITIALIZE_ENTITY,
+					id: 'new_aura',
+					sprite: getAuraSprite(spell),
+					alpha: 1,
+					posX: 0,
+					posY: 0,
+					sizeX: scale(480),
+					sizeY: scale(270),
+					rot: 0,
+					zIndex: 0,
+					play: true
+				}
+			];
+			spellAnimationStartTick -= 5;
+			break;
+		}
 		case SPELL_TYPES.HEALING_BASIC: {
 			const victimData = battleData[victimIndices[0]];
 			const victimId = `victim.${crypto.randomUUID()}`;
@@ -1450,6 +1542,20 @@ function createWithdrawAnimation(turnState) {
 	return {
 		ticks: 10,
 		actions: [
+			...(turnState.aura ? [{
+				tick: 0,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: `aura`,
+				sprite: getAuraSprite(getSpell(turnState.aura.id)),
+				alpha: 1,
+				posX: 0,
+				posY: 0,
+				sizeX: scale(480),
+				sizeY: scale(270),
+				rot: 0,
+				zIndex: 1,
+				play: true
+			}] : []),
 			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
 				tick: 0,
 				type: ATYPES.INITIALIZE_ENTITY,
@@ -1499,11 +1605,25 @@ function createWithdrawAnimation(turnState) {
 	};
 }
 
-function getReturnSequence(battleData) {
+function getReturnSequence(turnState) {
 	return {
 		ticks: 10,
 		actions: [
-			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+			...(turnState.aura ? [{
+				tick: 0,
+				type: ATYPES.INITIALIZE_ENTITY,
+				id: `aura`,
+				sprite: getAuraSprite(getSpell(turnState.aura.id)),
+				alpha: 1,
+				posX: 0,
+				posY: 0,
+				sizeX: scale(480),
+				sizeY: scale(270),
+				rot: 0,
+				zIndex: 1,
+				play: true
+			}] : []),
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
 				tick: 0,
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: `left.${i}`,
@@ -1517,7 +1637,7 @@ function getReturnSequence(battleData) {
 				zIndex: 1,
 				play: getIdleSprite(battleEntity.entity).indices > 1
 			})),
-			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
 				startTick: 0,
 				endTick: 9,
 				type: ATYPES.CHANGE_POSITION_X,
@@ -1525,7 +1645,7 @@ function getReturnSequence(battleData) {
 				posX: 0,
 				ease: EASE_TYPES.EASE_IN
 			})),
-			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
 				tick: 0,
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: `right.${i}`,
@@ -1540,7 +1660,7 @@ function getReturnSequence(battleData) {
 				play: getIdleSprite(battleEntity.entity).indices > 1,
 				mirror: true
 			})),
-			...battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
+			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
 				startTick: 0,
 				endTick: 9,
 				type: ATYPES.CHANGE_POSITION_X,

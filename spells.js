@@ -8,6 +8,9 @@ function registerSpell(spell) {
 		spellSpriteDirectory[`${spell.id}.spell`] = new Sprite(`./img/spells/${spell.id.replaceAll('.', '/')}/spell_240x135.png`, 240, 135, spell.frames);
 	}
 	spellSpriteDirectory[`${spell.id}.card`] = new Sprite(`./img/spells/${spell.id.replaceAll('.', '/')}/card_48x64.png`, 48, 64, 1);
+	if (spell.type === SPELL_TYPES.AURA) {
+		spellSpriteDirectory[`${spell.id}.aura`] = new Sprite(`./img/spells/${spell.id.replaceAll('.', '/')}/aura_240x135.png`, 240, 135, 9);
+	}
 	if (spell.victimBlades) {
 		spell.victimBlades.forEach(blade => {
 			spellSpriteDirectory[`${blade.id}`] = new Sprite(`./img/spells/${blade.id.replaceAll('.', '/')}.png`, 10, 12, 1);
@@ -42,12 +45,17 @@ function getCardSprite(spell) {
 	return spellSpriteDirectory[`${spell.id}.card`];
 }
 
+function getAuraSprite(spell) {
+	return spellSpriteDirectory[`${spell.id}.aura`];
+}
+
 function getSpellSprite(spell) {
 	return spellSpriteDirectory[`${spell.id}.spell`];
 }
 
 const spellUseTypes = {
 	TO_ALL: () => true,
+	TO_SELF: (casterIndex, victimIndex) => casterIndex === victimIndex,
 	TO_ALLIES: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex < 4) || (casterIndex >= 4 && victimIndex >= 4),
 	TO_ENEMIES: (casterIndex, victimIndex) => (casterIndex < 4 && victimIndex >= 4) || (casterIndex >= 4 && victimIndex < 4)
 };

@@ -282,7 +282,8 @@ const SPELL_TYPES = {
 	TRAP_BASIC: 'TRAP_BASIC',
 	JINX_BASIC: 'JINX_BASIC',
 
-	ENCHANTMENT: 'ENCHANTMENT'
+	ENCHANTMENT: 'ENCHANTMENT',
+	AURA: 'AURA'
 };
 
 const ELEMENT_ICONS = {
@@ -291,7 +292,8 @@ const ELEMENT_ICONS = {
 	air: new Sprite('./img/air_32x32.png', 32, 32, 2),
 	water: new Sprite('./img/water_32x32.png', 32, 32, 2),
 	earth: new Sprite('./img/earth_32x32.png', 32, 32, 2),
-	solar: new Sprite('./img/solar_32x32.png', 32, 32, 2)
+	solar: new Sprite('./img/solar_32x32.png', 32, 32, 2),
+	lunar: new Sprite('./img/lunar_32x32.png', 32, 32, 2)
 };
 
 const ELEMENT_COLORS = {
@@ -300,7 +302,8 @@ const ELEMENT_COLORS = {
 	fire: 2,
 	water: 3,
 	earth: 4,
-	solar: 5
+	solar: 5,
+	lunar: 6
 };
 
 const ELEMENT_ID_LIST = [
@@ -309,7 +312,8 @@ const ELEMENT_ID_LIST = [
 	'fire',
 	'water',
 	'earth',
-	'solar'
+	'solar',
+	'lunar'
 ];
 
 const ELEMENT_CARD_ITEMS = {
@@ -318,5 +322,6 @@ const ELEMENT_CARD_ITEMS = {
 	'fire': new Sprite('./img/fire_card_item_16x16.png', 16, 16, 18),
 	'water': new Sprite('./img/water_card_item_16x16.png', 16, 16, 18),
 	'earth': new Sprite('./img/earth_card_item_16x16.png', 16, 16, 18),
-	'solar': new Sprite('./img/solar_card_item_16x16.png', 16, 16, 18)
+	'solar': new Sprite('./img/solar_card_item_16x16.png', 16, 16, 18),
+	'lunar': new Sprite('./img/lunar_card_item_16x16.png', 16, 16, 18)
 };

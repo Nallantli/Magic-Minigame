@@ -51,7 +51,7 @@ function setUpSocket(socket) {
 							battleTrack.loop = true;
 							battleTrack.play();
 						} else {
-							state.animationQueue.push(new AnimationEngine(getReturnSequence(finalTurnState.battleData), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+							state.animationQueue.push(new AnimationEngine(getReturnSequence(finalTurnState), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
 						}
 						state = {
 							...state,
@@ -63,8 +63,8 @@ function setUpSocket(socket) {
 					}
 					animationData.forEach(({ turnState, victimIndices, spell, calculatedDamages }, i) => {
 						const sequence = turnState.battleIndex < 4
-							? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0)
-							: createRightAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0);
+							? createLeftAttackSequence(turnState, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0)
+							: createRightAttackSequence(turnState, turnState.battleIndex, victimIndices, spell, calculatedDamages, 0);
 						const animation = new AnimationEngine({
 							ticks: sequence.length,
 							actions: sequence.actions

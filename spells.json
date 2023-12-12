@@ -654,5 +654,53 @@
 		"type": "ENCHANTMENT",
 		"element": "solar",
 		"accuracy": 0.1
+	},
+	"lunar.corona_rubra": {
+		"id": "lunar.corona_rubra",
+		"name": "Corona Rubra",
+		"type": "AURA",
+		"element": "lunar",
+		"chance": 1,
+		"vrilRequired": 0,
+		"auraElement": "fire",
+		"auraValue": 1.1,
+		"frames": 4,
+		"spellUseType": "TO_SELF"
+	},
+	"lunar.corona_caerulea": {
+		"id": "lunar.corona_caerulea",
+		"name": "Corona Caerulea",
+		"type": "AURA",
+		"element": "lunar",
+		"chance": 1,
+		"vrilRequired": 0,
+		"auraElement": "water",
+		"auraValue": 1.1,
+		"frames": 4,
+		"spellUseType": "TO_SELF"
+	},
+	"lunar.corona_viridis": {
+		"id": "lunar.corona_viridis",
+		"name": "Corona Viridis",
+		"type": "AURA",
+		"element": "lunar",
+		"chance": 1,
+		"vrilRequired": 0,
+		"auraElement": "earth",
+		"auraValue": 1.1,
+		"frames": 4,
+		"spellUseType": "TO_SELF"
+	},
+	"lunar.corona_flava": {
+		"id": "lunar.corona_flava",
+		"name": "Corona Flava",
+		"type": "AURA",
+		"element": "lunar",
+		"chance": 1,
+		"vrilRequired": 0,
+		"auraElement": "air",
+		"auraValue": 1.1,
+		"frames": 4,
+		"spellUseType": "TO_SELF"
 	}
 }

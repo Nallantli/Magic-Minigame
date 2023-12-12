@@ -272,7 +272,8 @@ function mpBattleGameLoop(timeMs) {
 							}]));
 						} else if (turnState.selectedVictims[playerIndex].length > 0) {
 							let requestData = [];
-							if (getSpell(turnState.battleData[playerIndex]?.hand[turnState.selectedCards[playerIndex]]?.id)?.type === SPELL_TYPES.ATTACK_ALL) {
+							if (getSpell(turnState.battleData[playerIndex]?.hand[turnState.selectedCards[playerIndex]]?.id)?.type === SPELL_TYPES.ATTACK_ALL
+								|| getSpell(turnState.battleData[playerIndex]?.hand[turnState.selectedCards[playerIndex]]?.id)?.type === SPELL_TYPES.AURA) {
 								requestData.push({
 									action: "SELECT_CARD",
 									id: battleState.id,
