@@ -471,13 +471,15 @@ function battleGameLoop(timeMs) {
 				const spellIndex = turnState.selectedCards[turnState.battleIndex];
 				const spell = getSpell(turnState.battleData[turnState.battleIndex].hand[spellIndex].id);
 				const enchantments = turnState.battleData[turnState.battleIndex].hand[spellIndex].enchantments;
-				const calculatedDamages = victimIndices
-					.map(i => turnState.battleData[i])
-					.map(victimData => calculateDamages(
-						spell,
-						enchantments,
-						turnState.battleData[turnState.battleIndex],
-						victimData));
+				const doesSpellHit = Math.random() <= spell.chance + (enchantments?.accuracy || 0);
+				const calculatedDamages = doesSpellHit
+					? victimIndices.map(i => turnState.battleData[i])
+						.map(victimData => calculateDamages(
+							spell,
+							enchantments,
+							turnState.battleData[turnState.battleIndex],
+							victimData))
+					: ['FAILED'];
 				const sequence = turnState.battleIndex < 4
 					? createLeftAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0)
 					: createRightAttackSequence(turnState.battleData, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0);

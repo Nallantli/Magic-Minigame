@@ -121,6 +121,7 @@ function giveMeTheGun() {
 			}
 		],
 		vrilRequired: 1,
+		chance: 1,
 		frames: 12,
 		spellUseType: 'TO_ALL'
 	};
