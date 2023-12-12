@@ -626,7 +626,6 @@ function mapGameLoop(timeMs) {
 		const roomId = entitiesNear[0].roomId;
 		const entitiesInRoom = entities.filter(entity => entity.roomId === roomId).map(({ model }) => model);
 		const goLeft = Math.random() <= 0.5;
-		console.log(entitiesInRoom);
 		walkingTrack.pause();
 		walkingTrack.currentTime = 0;
 		const audioEntity = entitiesInRoom.find(({ track }) => track !== undefined);

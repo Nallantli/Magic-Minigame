@@ -8,7 +8,6 @@ const MP_ELEMENTS = [
 function setUpSocket(socket) {
 	socket.addEventListener('message', event => {
 		const data = JSON.parse(event.data);
-		console.log(data);
 		switch (data.action) {
 			case 'JOIN_FAILURE': {
 				const { message } = data;
@@ -269,10 +268,10 @@ function menuGameLoop(timeMs) {
 				path: 'MP_BATTLE'
 			};
 			socket.addEventListener('open', () => {
-				socket.send(JSON.stringify({
+				socket.send(JSON.stringify([{
 					action: 'CREATE_GAME',
 					entity: state.player
-				}));
+				}]));
 			});
 			setUpSocket(socket);
 		});
@@ -296,11 +295,11 @@ function menuGameLoop(timeMs) {
 				path: 'MP_BATTLE'
 			};
 			socket.addEventListener('open', () => {
-				socket.send(JSON.stringify({
+				socket.send(JSON.stringify([{
 					action: 'JOIN_GAME',
 					entity: state.player,
 					id: state.textboxes.joinTextbox.value
-				}));
+				}]));
 			});
 			setUpSocket(socket);
 		});

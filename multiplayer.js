@@ -47,13 +47,12 @@ function drawLobby(battleState, iterator, isReady) {
 					while (battleData[nextAvailablePos] !== null && nextAvailablePos < 8) {
 						nextAvailablePos++;
 					}
-					console.log(nextAvailablePos);
 					if (nextAvailablePos < 8) {
-						socket.send(JSON.stringify({
+						socket.send(JSON.stringify([{
 							action: "MOVE_SELF",
 							id: battleState.id,
 							pos: nextAvailablePos
-						}));
+						}]));
 					}
 				});
 		}
@@ -106,13 +105,12 @@ function drawLobby(battleState, iterator, isReady) {
 					while (battleData[nextAvailablePos] !== null && nextAvailablePos < 4) {
 						nextAvailablePos++;
 					}
-					console.log(nextAvailablePos);
 					if (nextAvailablePos < 4) {
-						socket.send(JSON.stringify({
+						socket.send(JSON.stringify([{
 							action: "MOVE_SELF",
 							id: battleState.id,
 							pos: nextAvailablePos
-						}));
+						}]));
 					}
 				});
 		}
@@ -174,16 +172,16 @@ function mpBattleGameLoop(timeMs) {
 					({ x, y, sizeX, sizeY }) => sprites.READY_UP_62x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
 					() => {
 						if (playerIsReady) {
-							socket.send(JSON.stringify({
+							socket.send(JSON.stringify([{
 								action: "READY_DOWN",
 								id: battleState.id
-							}));
+							}]));
 						} else {
-							socket.send(JSON.stringify({
+							socket.send(JSON.stringify([{
 								action: "READY_UP",
 								id: battleState.id,
 								deck: state.player.deck
-							}));
+							}]));
 						}
 					},
 					{
@@ -224,11 +222,11 @@ function mpBattleGameLoop(timeMs) {
 				inputData = { ...inputData, ...drawBattleIdle(state) };
 				if (turnState.battleData[playerIndex] !== null) {
 					if (inputData.selectedCard !== undefined) {
-						socket.send(JSON.stringify({
+						socket.send(JSON.stringify([{
 							action: "SELECT_CARD",
 							id: battleState.id,
 							card: inputData.selectedCard
-						}));
+						}]));
 					}
 					if (inputData.selectedVictims !== undefined) {
 						if (typeof inputData.selectedVictims === 'number') {
@@ -239,44 +237,54 @@ function mpBattleGameLoop(timeMs) {
 								accuracy: enchantmentSpell.accuracy
 							};
 							newHand.splice(turnState.selectedCards[playerIndex], 1);
-							socket.send(JSON.stringify({
-								action: "SELECT_CARD",
-								id: battleState.id,
-								card: null
-							}));
-							socket.send(JSON.stringify({
-								action: "UPDATE_HAND",
-								id: battleState.id,
-								hand: newHand
-							}));
+							socket.send(JSON.stringify([
+								{
+									action: "SELECT_CARD",
+									id: battleState.id,
+									card: null
+								}, {
+									action: "UPDATE_HAND",
+									id: battleState.id,
+									hand: newHand
+								}
+							]));
 						} else {
-							socket.send(JSON.stringify({
+							socket.send(JSON.stringify([{
 								action: "SELECT_VICTIMS",
 								id: battleState.id,
 								victims: inputData.selectedVictims
-							}));
+							}]));
 						}
 					}
 					if (inputData.discardCard !== undefined) {
-						socket.send(JSON.stringify({
+						socket.send(JSON.stringify([{
 							action: "UPDATE_HAND",
 							id: battleState.id,
 							hand: turnState.battleData[playerIndex].hand.toSpliced(inputData.discardCard, 1)
-						}));
+						}]));
 					}
 					if (rightClickPos) {
 						if (turnState.selectedCards[playerIndex] !== null && turnState.selectedVictims[playerIndex].length === 0) {
-							socket.send(JSON.stringify({
+							socket.send(JSON.stringify([{
 								action: "SELECT_CARD",
 								id: battleState.id,
 								card: null
-							}));
+							}]));
 						} else if (turnState.selectedVictims[playerIndex].length > 0) {
-							socket.send(JSON.stringify({
+							let requestData = [];
+							if (getSpell(turnState.battleData[playerIndex]?.hand[turnState.selectedCards[playerIndex]]?.id)?.type === SPELL_TYPES.ATTACK_ALL) {
+								requestData.push({
+									action: "SELECT_CARD",
+									id: battleState.id,
+									card: null
+								});
+							}
+							requestData.push({
 								action: "SELECT_VICTIMS",
 								id: battleState.id,
 								victims: []
-							}));
+							});
+							socket.send(JSON.stringify(requestData));
 						}
 					}
 				}

@@ -78,10 +78,10 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 				if (selectedVictims[i].length > 0) {
 					const index = selectedVictims[i][0];
 					if (index < 4) {
-						numberText.draw(ctx, scale(170), i * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index + 1) : 'X');
+						numberText.draw(ctx, scale(170), i * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index + 1) : '*');
 						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(182), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
 					} else {
-						numberText.draw(ctx, scale(182), i * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index - 3) : 'X');
+						numberText.draw(ctx, scale(182), i * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index - 3) : '*');
 						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(170), i * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
 					}
 				}
@@ -166,10 +166,10 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 				if (selectedVictims[i].length > 0) {
 					const index = selectedVictims[i][0];
 					if (index < 4) {
-						numberText.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index + 1) : 'X');
+						numberText.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index + 1) : '*');
 						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
 					} else {
-						numberText.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index - 3) : 'X');
+						numberText.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index - 3) : '*');
 						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
 					}
 				}
@@ -397,6 +397,9 @@ function handleInput(battleState, inputData) {
 		if (turnState.selectedCards[playerIndex] !== null && turnState.selectedVictims[playerIndex].length === 0) {
 			turnState.selectedCards[playerIndex] = null;
 		} else if (turnState.selectedVictims[playerIndex].length > 0) {
+			if (getSpell(turnState.battleData[playerIndex]?.hand[turnState.selectedCards[playerIndex]]?.id)?.type === SPELL_TYPES.ATTACK_ALL) {
+				turnState.selectedCards[playerIndex] = null;
+			}
 			turnState.selectedVictims[playerIndex] = [];
 		}
 	}

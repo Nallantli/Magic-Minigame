@@ -111,7 +111,7 @@ class NumberText {
 				return 12;
 			case '/':
 				return 13;
-			case 'X':
+			case '*':
 				return 14;
 			default:
 				return 15;
