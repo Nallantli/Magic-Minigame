@@ -36,12 +36,7 @@ function startGameLoop(timeMs) {
 					...level2Spells,
 					...level3Spells,
 					...level4Spells,
-					'solar.force',
-					'solar.advantage',
-					'lunar.corona_rubra',
-					'lunar.corona_viridis',
-					'lunar.corona_caerulea',
-					'lunar.corona_flava'
+					...astralSpells
 				],
 				player: {
 					...randomFromList(Object.values(defaultMPStats)),

@@ -662,8 +662,16 @@
 		"element": "lunar",
 		"chance": 1,
 		"vrilRequired": 0,
-		"auraElement": "fire",
-		"auraValue": 1.1,
+		"aura": [
+			{
+				"element": "fire",
+				"value": 1.1
+			},
+			{
+				"element": "water",
+				"value": 0.9
+			}
+		],
 		"frames": 4,
 		"spellUseType": "TO_SELF"
 	},
@@ -674,8 +682,16 @@
 		"element": "lunar",
 		"chance": 1,
 		"vrilRequired": 0,
-		"auraElement": "water",
-		"auraValue": 1.1,
+		"aura": [
+			{
+				"element": "water",
+				"value": 1.1
+			},
+			{
+				"element": "fire",
+				"value": 0.9
+			}
+		],
 		"frames": 4,
 		"spellUseType": "TO_SELF"
 	},
@@ -686,8 +702,16 @@
 		"element": "lunar",
 		"chance": 1,
 		"vrilRequired": 0,
-		"auraElement": "earth",
-		"auraValue": 1.1,
+		"aura": [
+			{
+				"element": "earth",
+				"value": 1.1
+			},
+			{
+				"element": "air",
+				"value": 0.9
+			}
+		],
 		"frames": 4,
 		"spellUseType": "TO_SELF"
 	},
@@ -698,8 +722,16 @@
 		"element": "lunar",
 		"chance": 1,
 		"vrilRequired": 0,
-		"auraElement": "air",
-		"auraValue": 1.1,
+		"aura": [
+			{
+				"element": "air",
+				"value": 1.1
+			},
+			{
+				"element": "earth",
+				"value": 0.9
+			}
+		],
 		"frames": 4,
 		"spellUseType": "TO_SELF"
 	}

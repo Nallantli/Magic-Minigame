@@ -118,7 +118,14 @@ function calculateDamages(spell, enchantments, caster, victim, aura) {
 	const blades = caster.blades;
 	let usedBladeIds = [];
 	let totalUsedBladeIds = [];
-	let baseTilt = 1 * (aura !== null && aura.element === spell.element ? aura.value : 1);
+	let baseTilt = 1;
+	if (aura) {
+		aura.modifiers.forEach(({ element, value }) => {
+			if (element === spell.element) {
+				baseTilt *= value;
+			}
+		});
+	}
 	blades.forEach(({ id, value, element }, i) => {
 		if ((spell.element === element || element === 'all') && !totalUsedBladeIds.includes(id)) {
 			baseTilt *= (value + 100) / 100;
@@ -211,9 +218,8 @@ function iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages) {
 	switch (spell.type) {
 		case SPELL_TYPES.AURA:
 			aura = {
-				element: spell.auraElement,
-				value: spell.auraValue,
-				id: spell.id
+				id: spell.id,
+				modifiers: spell.aura
 			};
 			break;
 		case SPELL_TYPES.HEALING_BASIC:

@@ -113,6 +113,15 @@ const level4Spells = [
 	'earth.pound'
 ];
 
+const astralSpells = [
+	'solar.force',
+	'solar.advantage',
+	'lunar.corona_rubra',
+	'lunar.corona_viridis',
+	'lunar.corona_caerulea',
+	'lunar.corona_flava'
+];
+
 // easter egg >:)
 function giveMeTheGun() {
 	console.log("https://media.tenor.com/xOefCCemGU4AAAAC/kek.gif");
