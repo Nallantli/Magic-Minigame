@@ -257,6 +257,9 @@ const sprites = {
 	RETURN_TO_MENU_87x11: new Sprite('./img/return_to_menu_87x11.png', 93, 11, 2),
 	DECK_REMAIN_48x64: new Sprite('./img/deck_remain_48x64.png', 48, 64, 1),
 	ENCHANTMENT_BORDER_48x64: new Sprite('./img/enchantment_border_48x64.png', 48, 64, 31),
+	SINGLEPLAYER_75x11: new Sprite('./img/singleplayer_75x11.png', 75, 11, 2),
+	MULTIPLAYER_75x11: new Sprite('./img/multiplayer_75x11.png', 75, 11, 2),
+	BANNER_240x135: new Sprite('./img/banner_240x135.png', 240, 135, 1),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
 };

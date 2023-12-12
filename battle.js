@@ -166,11 +166,9 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 				if (selectedVictims[i].length > 0) {
 					const index = selectedVictims[i][0];
 					if (index < 4) {
-						console.log(index, String(index + 1));
 						numberText.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index + 1) : 'X');
 						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 1 });
 					} else {
-						console.log(index, String(index - 3));
 						numberText.draw(ctx, scale(480 - 170 - 8), i_offset * scale(67) + scale(49), scale(8), scale(12), 0, selectedVictims[i].length === 1 ? String(index - 3) : 'X');
 						sprites.VICTIM_ARROW_8x16.draw(ctx, scale(480 - 182 - 8), i_offset * scale(67) + scale(46), scale(8), scale(16), { iIndex: 0 });
 					}
@@ -381,7 +379,6 @@ function handleInput(battleState, inputData) {
 	}
 	if (inputData.selectedVictims !== undefined) {
 		if (typeof inputData.selectedVictims === 'number') {
-			console.log("enchant");
 			const enchantmentSpell = getSpell(turnState.battleData[playerIndex].hand[turnState.selectedCards[playerIndex]].id);
 			turnState.battleData[playerIndex].hand[inputData.selectedVictims].enchantments = {
 				damage: enchantmentSpell.damage,

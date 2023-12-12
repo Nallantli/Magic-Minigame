@@ -1,21 +1,7 @@
 let state = {
-	knownSpells: [
-		...level1Spells,
-		...level2Spells,
-		...level3Spells,
-		...level4Spells,
-		'solar.force',
-		'solar.advantage'
-	],
-	player: {
-		...randomFromList(Object.values(defaultMPStats)),
-		...randomFromList(MP_SPRITES),
-		id: crypto.randomUUID(),
-		name: 'Player'
-	},
 	level: 1,
 	iterator: 0,
-	path: 'MENU',
+	path: 'START',
 	deckState: {
 		currentIndex: -1,
 		currentElement: 'air',
