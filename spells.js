@@ -9,7 +9,7 @@ function registerSpell(spell) {
 	}
 	spellSpriteDirectory[`${spell.id}.card`] = new Sprite(`./img/spells/${spell.id.replaceAll('.', '/')}/card_48x64.png`, 48, 64, 1);
 	if (spell.type === SPELL_TYPES.AURA) {
-		spellSpriteDirectory[`${spell.id}.aura`] = new Sprite(`./img/spells/${spell.id.replaceAll('.', '/')}/aura_240x135.png`, 240, 135, 9);
+		spellSpriteDirectory[`${spell.id}.aura`] = new Sprite(`./img/spells/${spell.id.replaceAll('.', '/')}/aura_240x135.png`, 240, 135, 18);
 	}
 	if (spell.victimBlades) {
 		spell.victimBlades.forEach(blade => {

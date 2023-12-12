@@ -10,14 +10,14 @@ function startGameLoop(timeMs) {
 				...state,
 				path: 'LEVEL',
 				knownSpells: [
-					...level1Spells
+					...level1Spells,
 				],
 				player: {
 					...entityDirectory[randomFromList([
 						'fire_wizard',
 						'air_wizard',
 						'water_wizard',
-						'earth_wizard'
+						'earth_wizard',
 					])],
 					id: crypto.randomUUID(),
 					name: 'Player'
