@@ -661,7 +661,7 @@
 		"type": "AURA",
 		"element": "lunar",
 		"chance": 1,
-		"vrilRequired": 0,
+		"vrilRequired": 1,
 		"aura": [
 			{
 				"element": "fire",
@@ -681,7 +681,7 @@
 		"type": "AURA",
 		"element": "lunar",
 		"chance": 1,
-		"vrilRequired": 0,
+		"vrilRequired": 1,
 		"aura": [
 			{
 				"element": "water",
@@ -701,7 +701,7 @@
 		"type": "AURA",
 		"element": "lunar",
 		"chance": 1,
-		"vrilRequired": 0,
+		"vrilRequired": 1,
 		"aura": [
 			{
 				"element": "earth",
@@ -721,7 +721,7 @@
 		"type": "AURA",
 		"element": "lunar",
 		"chance": 1,
-		"vrilRequired": 0,
+		"vrilRequired": 1,
 		"aura": [
 			{
 				"element": "air",

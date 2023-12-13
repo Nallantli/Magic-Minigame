@@ -338,8 +338,6 @@
 			"earth.earth_blade",
 			"earth.earth_blade",
 			"earth.earth_shield",
-			"earth.earth_shield",
-			"earth.boulder",
 			"earth.boulder",
 			"air.gentle_breeze",
 			"earth.burden",
@@ -349,8 +347,9 @@
 			"earth.earth_trap",
 			"earth.earthquake",
 			"earth.earthquake",
-			"earth.earthquake",
-			"earth.earthquake",
+			"earth.pound",
+			"earth.pound",
+			"earth.pound",
 			"lunar.corona_viridis"
 		],
 		"augments": {
