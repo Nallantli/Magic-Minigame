@@ -264,6 +264,7 @@ const sprites = {
 	SELECTOR_64x64: new Sprite('./img/selector_64x64.png', 64, 64, 2),
 	ENTITY_INFO_BACK_128x256: new Sprite('./img/entity_info_back_128x256.png', 128, 256, 2),
 	PLUS_11x11: new Sprite('./img/plus_11x11.png', 11, 11, 2),
+	X_11x11: new Sprite('./img/x_11x11.png', 11, 11, 2),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
 };

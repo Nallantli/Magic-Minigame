@@ -29,4 +29,24 @@ function entitySelectionGameLoop(timeMs) {
 		]
 		statStrings.forEach((str, i) => font.draw(ctx, scale(286), scale(206 + i * 8), scale(6), scale(8), 0, str));
 	}
+
+	makeInteractable(scale(480 - 32), scale(375 - 32), scale(32), scale(32),
+		({ x, y, sizeX, sizeY }) => sprites.BACK_32x32.draw(ctx, scale(480 - 32), scale(375 - 32), scale(32), scale(32)),
+		({ x, y, sizeX, sizeY, renderCallback }) => {
+			renderCallback();
+
+			ctx.fillStyle = 'white';
+			ctx.fillRect(x - scale(6), y, scale(4), sizeY);
+		},
+		() => {
+			if (state.entitySelectionState.onReturn) {
+				state.entitySelectionState.onReturn(undefined);
+			}
+		});
+
+	if (keysUp.includes('escape')) {
+		if (state.entitySelectionState.onReturn) {
+			state.entitySelectionState.onReturn(undefined);
+		}
+	}
 }

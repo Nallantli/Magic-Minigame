@@ -39,6 +39,20 @@ function drawLobby(battleState, playerIsHost, iterator) {
 			if (isHost) {
 				sprites.CROWN_9x8.draw(ctx, scale(150), i * scale(67) + scale(5), scale(9), scale(8));
 			}
+		} else {
+			font.draw(ctx, scale(147 - 24), i * scale(67) + scale(54), scale(6), scale(8), 0, '[AI]');
+			if (playerIsHost) {
+				makeInteractable(scale(160 - 13), i * scale(67) + scale(52), scale(11), scale(11),
+					({ x, y, sizeX, sizeY }) => sprites.X_11x11.draw(ctx, x, y, sizeX, sizeY),
+					({ x, y, sizeX, sizeY }) => sprites.X_11x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+					() => {
+						socket.send(JSON.stringify([{
+							action: "REMOVE_ENTITY",
+							id: battleState.id,
+							pos: i
+						}]));
+					});
+			}
 		}
 
 		if ((isAI && playerIsHost) || (i === playerIndex && !isReady)) {
@@ -108,7 +122,19 @@ function drawLobby(battleState, playerIsHost, iterator) {
 				sprites.CROWN_9x8.draw(ctx, scale(480 - 159), i_offset * scale(67) + scale(5), scale(9), scale(8));
 			}
 		} else {
-			font.draw(ctx, scale(480 - 160), i_offset * scale(67) + scale(54), scale(6), scale(8), 0, '[AI]');
+			font.draw(ctx, scale(480 - 146), i_offset * scale(67) + scale(54), scale(6), scale(8), 0, '[AI]');
+			if (playerIsHost) {
+				makeInteractable(scale(480 - 158), i_offset * scale(67) + scale(52), scale(11), scale(11),
+					({ x, y, sizeX, sizeY }) => sprites.X_11x11.draw(ctx, x, y, sizeX, sizeY),
+					({ x, y, sizeX, sizeY }) => sprites.X_11x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+					() => {
+						socket.send(JSON.stringify([{
+							action: "REMOVE_ENTITY",
+							id: battleState.id,
+							pos: i
+						}]));
+					});
+			}
 		}
 
 
@@ -248,14 +274,16 @@ function mpBattleGameLoop(timeMs) {
 							state.path = 'ENTITY_SELECTION';
 							state.entitySelectionState.onReturn = (entity) => {
 								state.path = 'MP_BATTLE';
-								socket.send(JSON.stringify([{
-									action: 'ADD_ENTITY',
-									id: battleState.id,
-									entity: {
-										...entity,
-										id: crypto.randomUUID()
-									}
-								}]))
+								if (entity) {
+									socket.send(JSON.stringify([{
+										action: 'ADD_ENTITY',
+										id: battleState.id,
+										entity: {
+											...entity,
+											id: crypto.randomUUID()
+										}
+									}]));
+								}
 							};
 						},
 						{
