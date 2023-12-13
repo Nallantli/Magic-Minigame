@@ -444,6 +444,36 @@ function postBattle(turnState, callback) {
 	}
 }
 
+function doRound(turnState, victimIndices, postBattleCallback) {
+	const spellIndex = turnState.selectedCards[turnState.battleIndex];
+	const spell = getSpell(turnState.battleData[turnState.battleIndex].hand[spellIndex].id);
+	const enchantments = turnState.battleData[turnState.battleIndex].hand[spellIndex].enchantments;
+	const doesSpellHit = Math.random() <= spell.chance + (enchantments?.accuracy || 0);
+	const calculatedDamages = doesSpellHit
+		? victimIndices.map(i => turnState.battleData[i])
+			.map(victimData => calculateDamages(
+				spell,
+				enchantments,
+				turnState.battleData[turnState.battleIndex],
+				victimData,
+				turnState.aura))
+		: ['FAILED'];
+	const sequence = turnState.battleIndex < 4
+		? createLeftAttackSequence(turnState, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0)
+		: createRightAttackSequence(turnState, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0);
+	const animation = new AnimationEngine({
+		ticks: sequence.length,
+		actions: sequence.actions
+	}, TICK_TIME, FPS, canvas, ctx, () => {
+		reduceAnimationQueue();
+		const iteration = iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages);
+		turnState.aura = iteration.aura;
+		turnState.battleData = iteration.battleData;
+		postBattle(turnState, postBattleCallback);
+	});
+	state.animationQueue.push(animation);
+}
+
 function battleGameLoop(timeMs) {
 	const { battleState, battleState: { turnState, onWin, onLose, playerIndex } } = state;
 
@@ -478,33 +508,7 @@ function battleGameLoop(timeMs) {
 			const victimIndices = turnState.selectedVictims[turnState.battleIndex]
 				.filter(i => turnState.battleData[i] !== null && turnState.battleData[i].entity.health > 0);
 			if (victimIndices.length > 0 && turnState.battleData[turnState.battleIndex].entity.health > 0) {
-				const spellIndex = turnState.selectedCards[turnState.battleIndex];
-				const spell = getSpell(turnState.battleData[turnState.battleIndex].hand[spellIndex].id);
-				const enchantments = turnState.battleData[turnState.battleIndex].hand[spellIndex].enchantments;
-				const doesSpellHit = Math.random() <= spell.chance + (enchantments?.accuracy || 0);
-				const calculatedDamages = doesSpellHit
-					? victimIndices.map(i => turnState.battleData[i])
-						.map(victimData => calculateDamages(
-							spell,
-							enchantments,
-							turnState.battleData[turnState.battleIndex],
-							victimData,
-							turnState.aura))
-					: ['FAILED'];
-				const sequence = turnState.battleIndex < 4
-					? createLeftAttackSequence(turnState, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0)
-					: createRightAttackSequence(turnState, turnState.battleIndex, victimIndices.toReversed(), spell, calculatedDamages.toReversed(), 0);
-				const animation = new AnimationEngine({
-					ticks: sequence.length,
-					actions: sequence.actions
-				}, TICK_TIME, FPS, canvas, ctx, () => {
-					reduceAnimationQueue();
-					const iteration = iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages);
-					turnState.aura = iteration.aura;
-					turnState.battleData = iteration.battleData;
-					postBattle(turnState, postBattleCallback);
-				});
-				state.animationQueue.push(animation);
+				doRound(turnState, victimIndices, postBattleCallback);
 			} else {
 				postBattle(turnState, postBattleCallback);
 			}

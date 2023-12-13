@@ -350,7 +350,8 @@
 			"earth.earthquake",
 			"earth.earthquake",
 			"earth.earthquake",
-			"earth.earthquake"
+			"earth.earthquake",
+			"lunar.corona_viridis"
 		],
 		"augments": {
 			"earth": 0.8,
