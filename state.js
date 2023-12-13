@@ -10,6 +10,10 @@ let state = {
 	menuState: {
 		errorMessage: undefined
 	},
+	entitySelectionState: {
+		selected: undefined,
+		onReturn: undefined
+	},
 	battleState: undefined,
 	animationQueue: [],
 	overlayAnimationQueue: [],

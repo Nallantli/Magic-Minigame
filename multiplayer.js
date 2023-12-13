@@ -1,4 +1,4 @@
-function drawLobby(battleState, iterator, isReady) {
+function drawLobby(battleState, playerIsHost, iterator) {
 	const { turnState: { battleData }, playerIndex, socket, players } = battleState;
 
 	for (let i = 0; i < 4; i++) {
@@ -12,16 +12,8 @@ function drawLobby(battleState, iterator, isReady) {
 			sprites.PLACARD_160x65.draw(ctx, scale(2), i * scale(67) + scale(2), scale(160), scale(65));
 		}
 
-		const { shields, blades, vril, superVril, entity } = battleEntity;
+		const { entity } = battleEntity;
 
-		const isReady = players.find(({ pos }) => pos === i).isReady;
-		if (isReady) {
-			const text = '[READY]'
-			font.draw(ctx, scale(160 - text.length * 6), i * scale(67) + scale(54), scale(6), scale(8), 0, text);
-		} else {
-			const text = '[NOT READY]'
-			font.draw(ctx, scale(160 - text.length * 6), i * scale(67) + scale(54), scale(6), scale(8), 0, text);
-		}
 
 		font.draw(ctx, scale(57), i * scale(67) + scale(5), scale(6), scale(8), ELEMENT_COLORS[entity.element], entity.name);
 		const healthString = String(entity.health);
@@ -32,7 +24,24 @@ function drawLobby(battleState, iterator, isReady) {
 
 		getIdleSprite(entity).draw(ctx, 0, i * scale(67) + 10, scale(64), scale(64), { iIndex: iterator % getIdleSprite(entity).indices });
 
-		if (i === playerIndex && !isReady) {
+		const isAI = players.find(({ pos }) => pos === i) === undefined;
+		const isReady = isAI ? true : players.find(({ pos }) => pos === i).isReady;
+		const isHost = isAI ? false : players.find(({ pos }) => pos === i).isHost;
+
+		if (!isAI) {
+			if (isReady) {
+				const text = '[READY]'
+				font.draw(ctx, scale(160 - text.length * 6), i * scale(67) + scale(54), scale(6), scale(8), 0, text);
+			} else {
+				const text = '[NOT READY]'
+				font.draw(ctx, scale(160 - text.length * 6), i * scale(67) + scale(54), scale(6), scale(8), 0, text);
+			}
+			if (isHost) {
+				sprites.CROWN_9x8.draw(ctx, scale(150), i * scale(67) + scale(5), scale(9), scale(8));
+			}
+		}
+
+		if ((isAI && playerIsHost) || (i === playerIndex && !isReady)) {
 			makeInteractable(scale(164), i * scale(67) + scale(2), scale(32), scale(64),
 				({ x, y, sizeX, sizeY }) => {
 					ctx.globalAlpha = 0.25;
@@ -49,9 +58,10 @@ function drawLobby(battleState, iterator, isReady) {
 					}
 					if (nextAvailablePos < 8) {
 						socket.send(JSON.stringify([{
-							action: "MOVE_SELF",
+							action: "MOVE_ENTITY",
 							id: battleState.id,
-							pos: nextAvailablePos
+							oldPos: i,
+							newPos: nextAvailablePos
 						}]));
 					}
 				});
@@ -70,16 +80,7 @@ function drawLobby(battleState, iterator, isReady) {
 			sprites.PLACARD_RIGHT_160x65.draw(ctx, scale(480 - 162), i_offset * scale(67) + scale(2), scale(160), scale(65));
 		}
 
-		const { shields, blades, vril, superVril, entity } = battleEntity;
-
-		const isReady = players.find(({ pos }) => pos === i).isReady;
-		if (isReady) {
-			const text = '[READY]'
-			font.draw(ctx, scale(480 - 160), i_offset * scale(67) + scale(54), scale(6), scale(8), 0, text);
-		} else {
-			const text = '[NOT READY]'
-			font.draw(ctx, scale(480 - 160), i_offset * scale(67) + scale(54), scale(6), scale(8), 0, text);
-		}
+		const { entity } = battleEntity;
 
 		font.draw(ctx, scale(480 - 57 - entity.name.length * 6), i_offset * scale(67) + scale(5), scale(6), scale(8), ELEMENT_COLORS[entity.element], entity.name);
 		const healthString = String(entity.health);
@@ -90,7 +91,28 @@ function drawLobby(battleState, iterator, isReady) {
 
 		getIdleSprite(entity).draw(ctx, scale(480 - 64), i_offset * scale(67) + 10, scale(64), scale(64), { iIndex: iterator % getIdleSprite(entity).indices, mirror: true });
 
-		if (i === playerIndex && !isReady) {
+
+		const isAI = players.find(({ pos }) => pos === i) === undefined;
+		const isReady = isAI ? true : players.find(({ pos }) => pos === i).isReady;
+		const isHost = isAI ? false : players.find(({ pos }) => pos === i).isHost;
+
+		if (!isAI) {
+			if (isReady) {
+				const text = '[READY]'
+				font.draw(ctx, scale(480 - 160), i_offset * scale(67) + scale(54), scale(6), scale(8), 0, text);
+			} else {
+				const text = '[NOT READY]'
+				font.draw(ctx, scale(480 - 160), i_offset * scale(67) + scale(54), scale(6), scale(8), 0, text);
+			}
+			if (isHost) {
+				sprites.CROWN_9x8.draw(ctx, scale(480 - 159), i_offset * scale(67) + scale(5), scale(9), scale(8));
+			}
+		} else {
+			font.draw(ctx, scale(480 - 160), i_offset * scale(67) + scale(54), scale(6), scale(8), 0, '[AI]');
+		}
+
+
+		if ((isAI && playerIsHost) || (i === playerIndex && !isReady)) {
 			makeInteractable(scale(480 - 196), i_offset * scale(67) + scale(2), scale(32), scale(64),
 				({ x, y, sizeX, sizeY }) => {
 					ctx.globalAlpha = 0.25;
@@ -107,9 +129,10 @@ function drawLobby(battleState, iterator, isReady) {
 					}
 					if (nextAvailablePos < 4) {
 						socket.send(JSON.stringify([{
-							action: "MOVE_SELF",
+							action: "MOVE_ENTITY",
 							id: battleState.id,
-							pos: nextAvailablePos
+							oldPos: i,
+							newPos: nextAvailablePos
 						}]));
 					}
 				});
@@ -154,7 +177,8 @@ function mpBattleGameLoop(timeMs) {
 		switch (turnState.battleIndex) {
 			case -2:
 				const playerIsReady = players.find(({ pos }) => pos === playerIndex).isReady;
-				drawLobby(battleState, iterator, playerIsReady);
+				const playerIsHost = players.find(({ pos }) => pos === playerIndex).isHost;
+				drawLobby(battleState, playerIsHost, iterator);
 				ctx.globalAlpha = 1;
 				font.draw(ctx, scale(240 - 60), scale(300), scale(30), scale(40), 0, id);
 				makeInteractable(scale(6), scale(346), scale(174), scale(22),
@@ -216,6 +240,33 @@ function mpBattleGameLoop(timeMs) {
 							ctx.globalAlpha = 1;
 						}
 					});
+				if (playerIsHost) {
+					makeInteractable(scale(462), scale(272), scale(11), scale(11),
+						({ x, y, sizeX, sizeY }) => sprites.PLUS_11x11.draw(ctx, x, y, sizeX, sizeY),
+						({ x, y, sizeX, sizeY }) => sprites.PLUS_11x11.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+						() => {
+							state.path = 'ENTITY_SELECTION';
+							state.entitySelectionState.onReturn = (entity) => {
+								state.path = 'MP_BATTLE';
+								socket.send(JSON.stringify([{
+									action: 'ADD_ENTITY',
+									id: battleState.id,
+									entity: {
+										...entity,
+										id: crypto.randomUUID()
+									}
+								}]))
+							};
+						},
+						{
+							disableOn: () => playerIsReady || turnState.battleData.filter(entity => entity === null).length === 0,
+							disabledRender: ({ renderCallback }) => {
+								ctx.globalAlpha = 0.25;
+								renderCallback();
+								ctx.globalAlpha = 1;
+							}
+						});
+				}
 				break;
 			case -1:
 				ctx.globalAlpha = 1;

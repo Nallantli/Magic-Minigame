@@ -81,6 +81,9 @@ function gameLoop(timeMs) {
 			case 'START':
 				startGameLoop(timeMs);
 				break;
+			case 'ENTITY_SELECTION':
+				entitySelectionGameLoop(timeMs);
+				break;
 			case 'DECK':
 				deckGameLoop(timeMs);
 				break;

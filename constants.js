@@ -260,6 +260,10 @@ const sprites = {
 	SINGLEPLAYER_75x11: new Sprite('./img/singleplayer_75x11.png', 75, 11, 2),
 	MULTIPLAYER_75x11: new Sprite('./img/multiplayer_75x11.png', 75, 11, 2),
 	BANNER_240x135: new Sprite('./img/banner_240x135.png', 240, 135, 1),
+	CROWN_9x8: new Sprite('./img/crown_9x8.png', 9, 8, 1),
+	SELECTOR_64x64: new Sprite('./img/selector_64x64.png', 64, 64, 2),
+	ENTITY_INFO_BACK_128x256: new Sprite('./img/entity_info_back_128x256.png', 128, 256, 2),
+	PLUS_11x11: new Sprite('./img/plus_11x11.png', 11, 11, 2),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
 };
