@@ -138,7 +138,8 @@ function calculateDamages(spell, enchantments, caster, victim, aura) {
 		isCritical,
 		usedBladeIds,
 		damages: spell.damages.map(d => {
-			let base = (d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage)) - (enchantments?.damage ? enchantments.damage / spell.damages.length : 0);
+			let rawBase = (d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage)) * (d.isPer ? getTotalVril(caster, d.element) : 1);
+			let base = rawBase - (enchantments?.damage ? enchantments.damage / spell.damages.length : 0);
 			let usedShieldIds = [];
 			let currentElement = d.element;
 			for (let i = shields.length - 1; i >= 0; i--) {
@@ -215,6 +216,7 @@ function iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages) {
 		return { aura, battleData };
 	}
 	const spell = getSpell(battleData[casterIndex].hand[spellIndex].id);
+	const isPer = spell.damages ? spell.damages.find(({ isPer }) => isPer) : false;
 	switch (spell.type) {
 		case SPELL_TYPES.AURA:
 			aura = {
@@ -277,15 +279,20 @@ function iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages) {
 		];
 	}
 
-	let vrilLeft = spell.vrilRequired;
-	while (vrilLeft > 1 && battleData[casterIndex].superVril > 0) {
-		battleData[casterIndex].superVril--;
-		vrilLeft -= 2;
-	}
-	if (battleData[casterIndex].vril === 0) {
-		battleData[casterIndex].superVril -= Math.ceil(vrilLeft / 2);
+	if (isPer) {
+		battleData[casterIndex].superVril = 0;
+		battleData[casterIndex].vril = 0;
 	} else {
-		battleData[casterIndex].vril -= vrilLeft;
+		let vrilLeft = spell.vrilRequired;
+		while (vrilLeft > 1 && battleData[casterIndex].superVril > 0) {
+			battleData[casterIndex].superVril--;
+			vrilLeft -= 2;
+		}
+		if (battleData[casterIndex].vril === 0) {
+			battleData[casterIndex].superVril -= Math.ceil(vrilLeft / 2);
+		} else {
+			battleData[casterIndex].vril -= vrilLeft;
+		}
 	}
 	battleData[casterIndex].hand.splice(spellIndex, 1);
 

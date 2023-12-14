@@ -377,14 +377,14 @@
 		"damages": [
 			{
 				"tick": 21,
-				"minDamage": -300,
-				"maxDamage": -340,
+				"damage": -70,
 				"steal": 0.5,
+				"isPer": true,
 				"element": "water"
 			}
 		],
 		"chance": 0.8,
-		"vrilRequired": 4,
+		"vrilRequired": 1,
 		"frames": 36,
 		"spellUseType": "TO_ENEMIES"
 	},
