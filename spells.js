@@ -113,6 +113,17 @@ const level4Spells = [
 	'earth.pound'
 ];
 
+const level5Spells = [
+	// need air special
+	// need air attack
+	// need fire special
+	// need fire attack
+	// need water special
+	'water.torrent',
+	// need earth special
+	// need earth attack
+];
+
 const astralSpells = [
 	'solar.force',
 	'solar.advantage',

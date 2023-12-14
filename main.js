@@ -36,6 +36,7 @@ function startGameLoop(timeMs) {
 					...level2Spells,
 					...level3Spells,
 					...level4Spells,
+					...level5Spells,
 					...astralSpells
 				],
 				player: {

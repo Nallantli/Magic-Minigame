@@ -369,6 +369,25 @@
 		"frames": 20,
 		"spellUseType": "TO_ENEMIES"
 	},
+	"water.torrent": {
+		"id": "water.torrent",
+		"name": "Torrent",
+		"type": "ATTACK_ALL",
+		"element": "water",
+		"damages": [
+			{
+				"tick": 21,
+				"minDamage": -300,
+				"maxDamage": -340,
+				"steal": 0.5,
+				"element": "water"
+			}
+		],
+		"chance": 0.8,
+		"vrilRequired": 4,
+		"frames": 36,
+		"spellUseType": "TO_ENEMIES"
+	},
 	"water.water_trap": {
 		"id": "water.water_trap",
 		"name": "Water Trap",
