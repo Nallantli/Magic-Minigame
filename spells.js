@@ -117,7 +117,7 @@ const level5Spells = [
 	// need air special
 	// need air attack
 	// need fire special
-	// need fire attack
+	'fire.lahat_chereb',
 	// need water special
 	'water.torrent',
 	// need earth special

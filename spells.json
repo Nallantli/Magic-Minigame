@@ -163,6 +163,24 @@
 		"frames": 19,
 		"spellUseType": "TO_ENEMIES"
 	},
+	"fire.lahat_chereb": {
+		"id": "fire.lahat_chereb",
+		"name": "Lahat Chereb",
+		"type": "ATTACK_BASIC",
+		"element": "fire",
+		"damages": [
+			{
+				"tick": 34,
+				"damage": -100,
+				"isPer": true,
+				"element": "fire"
+			}
+		],
+		"chance": 0.75,
+		"vrilRequired": 1,
+		"frames": 39,
+		"spellUseType": "TO_ENEMIES"
+	},
 	"fire.fire_shield": {
 		"id": "fire.fire_shield",
 		"name": "Fire Shield",
