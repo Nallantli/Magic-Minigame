@@ -49,6 +49,11 @@ function startGameLoop(timeMs) {
 		});
 }
 
+function drawCursor() {
+	ctx.globalAlpha = 1;
+	sprites.CURSOR_5x5.draw(ctx, Math.round(mousePos.x - scale(2)), Math.round(mousePos.y - scale(2)), scale(5), scale(5), { iIndex: state.mouseDown ? 1 : 0 });
+}
+
 function loseGameLoop(timeMs) {
 	sprites.YOU_DIED_160x64.draw(ctx, scale(240 - 80), scale(187 - 64), scale(160), scale(64));
 
@@ -117,6 +122,9 @@ function gameLoop(timeMs) {
 	keysPressed = [];
 	clickPos = undefined;
 	rightClickPos = undefined;
+
+	drawCursor();
+
 	window.requestAnimationFrame(gameLoop);
 }
 

@@ -102,6 +102,19 @@ function makeTextToolTip(text, fontSizeX, fontSizeY, iIndex) {
 	}
 }
 
+function makeNumberTextToolTip(textLines, fontSizeX, fontSizeY, iIndex) {
+	const { x, y } = mousePos;
+	const sizeX = fontSizeX * textLines.sort((a, b) => a.length > b.length)[0].length + scale(6);
+	const leftToRight = sizeX + x > scale(480);
+	const startX = leftToRight ? x - sizeX : x;
+	return (ctx) => {
+		drawBox(ctx, startX, y, sizeX, (fontSizeY * textLines.length) + scale(6));
+		for (let i = 0; i < textLines.length; i++) {
+			numberText.draw(ctx, startX + scale(3), y + fontSizeY * i + scale(3), fontSizeX, fontSizeY, iIndex, textLines[i]);
+		}
+	}
+}
+
 function criticalChance(cra, crb) {
 	const diff = cra - crb;
 	return ((diff - 32) / (2 * (16 + Math.abs(diff - 32))) + 0.5) * (Math.min(cra, 100) / 100);

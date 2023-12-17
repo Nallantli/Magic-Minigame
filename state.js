@@ -2,6 +2,7 @@ let state = {
 	level: 1,
 	iterator: 0,
 	path: 'START',
+	mouseDown: false,
 	deckState: {
 		currentIndex: -1,
 		currentElement: 'air',

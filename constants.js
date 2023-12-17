@@ -15,6 +15,14 @@ let keys = {};
 let keysUp = [];
 let keysPressed = [];
 
+canvas.addEventListener("mousedown", () => {
+	state.mouseDown = true;
+}, false);
+
+canvas.addEventListener("mouseup", () => {
+	state.mouseDown = false;
+}, false);
+
 canvas.addEventListener("mousemove", function (evt) {
 	mousePos = getMousePos(canvas, evt);
 }, false);
@@ -265,6 +273,7 @@ const sprites = {
 	ENTITY_INFO_BACK_128x256: new Sprite('./img/entity_info_back_128x256.png', 128, 256, 2),
 	PLUS_11x11: new Sprite('./img/plus_11x11.png', 11, 11, 2),
 	X_11x11: new Sprite('./img/x_11x11.png', 11, 11, 2),
+	CURSOR_5x5: new Sprite('./img/cursor_5x5.png', 5, 5, 2),
 	// MEME
 	FAZBEAR_32x64: new Sprite('./img/fazbear_32x64.png', 32, 64, 1)
 };

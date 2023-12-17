@@ -196,6 +196,7 @@ function drawCards(battleState, iterator) {
 	const { turnState: { selectedCards, battleData, selectedVictims }, playerIndex } = battleState;
 	const playerData = battleData[playerIndex];
 	let inputData = {};
+	let tooltips = [];
 	if (playerData === null) {
 		sprites.YOU_DIED_160x64.draw(ctx, scale(240 - 80), scale(280), scale(160), scale(64));
 	} else {
@@ -243,10 +244,7 @@ function drawCards(battleState, iterator) {
 						renderCallback();
 						if (enchantments) {
 							const enchantmentToolTips = getEnchantmentTooltips(enchantments);
-							const startY = y - scale(8 + 6 * enchantmentToolTips.length);
-							for (let j = 0; j < enchantmentToolTips.length; j++) {
-								numberText.draw(ctx, x + scale(24 - enchantmentToolTips[j].length * 2), startY + scale(6 * j), scale(4), scale(6), 5, enchantmentToolTips[j]);
-							}
+							tooltips.push(makeNumberTextToolTip(enchantmentToolTips, scale(4), scale(6), 5));
 						}
 						if (canSelectCard) {
 							ctx.fillStyle = 'white';
@@ -280,10 +278,7 @@ function drawCards(battleState, iterator) {
 						renderCallback();
 						if (enchantments) {
 							const enchantmentToolTips = getEnchantmentTooltips(enchantments);
-							const startY = y - scale(8 + 6 * enchantmentToolTips.length);
-							for (let j = 0; j < enchantmentToolTips.length; j++) {
-								numberText.draw(ctx, x + scale(24 - enchantmentToolTips[j].length * 2), startY + scale(6 * j), scale(4), scale(6), 5, enchantmentToolTips[j]);
-							}
+							tooltips.push(makeNumberTextToolTip(enchantmentToolTips, scale(4), scale(6), 5));
 						}
 						if (canSelectCard && selectedCard === null || selectedCard === i) {
 							ctx.fillStyle = 'white';
@@ -348,6 +343,9 @@ function drawCards(battleState, iterator) {
 		}
 
 	}
+
+	ctx.globalAlpha = 1;
+	tooltips.forEach(tooltip => tooltip(ctx));
 	return inputData;
 }
 
