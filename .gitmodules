@@ -1,0 +1,3 @@
+[submodule "animation-engine"]
+	path = animation-engine
+	url = https://github.com/Nallantli/animation-engine
