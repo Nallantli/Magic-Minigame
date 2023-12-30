@@ -784,17 +784,6 @@ class AnimationEngine {
 	}
 
 	runFrame(timeMs) {
-		makeInteractable(scale(480 - 17), scale(1), scale(16), scale(16),
-			({ x, y, sizeX, sizeY }) => {
-				this.ctx.globalAlpha = 0.25;
-				sprites.FF_BUTTON_16x16.draw(this.ctx, x, y, sizeX, sizeY);
-			},
-			({ x, y, sizeX, sizeY }) => sprites.FF_BUTTON_16x16.draw(this.ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
-			() => fastForward = !fastForward,
-			{
-				forceHoverOn: () => fastForward == true
-			});
-
 		if (!this.startTime || timeMs - this.startTime >= 1000 / this.fps) {
 			this.doTick();
 			this.iterator++;

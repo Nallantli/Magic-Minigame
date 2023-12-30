@@ -81,6 +81,16 @@ function gameLoop(timeMs) {
 	}
 
 	if (state.animationQueue.length > 0) {
+		makeInteractable(scale(480 - 17), scale(1), scale(16), scale(16),
+			({ x, y, sizeX, sizeY }) => {
+				ctx.globalAlpha = 0.25;
+				sprites.FF_BUTTON_16x16.draw(ctx, x, y, sizeX, sizeY);
+			},
+			({ x, y, sizeX, sizeY }) => sprites.FF_BUTTON_16x16.draw(ctx, x, y, sizeX, sizeY, { iIndex: 1 }),
+			() => fastForward = !fastForward,
+			{
+				forceHoverOn: () => fastForward == true
+			});
 		state.animationQueue[0].runFrame(timeMs);
 	} else {
 		switch (state.path) {
