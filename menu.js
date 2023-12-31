@@ -108,10 +108,10 @@ function menuGameLoop(timeMs) {
 				font.draw(ctx, x + scale(12), y - scale(4), scale(3), scale(4), 0, 'Player Name:');
 			}
 			if (isFocused) {
-				ctx.fillStyle = 'white';
+				ctx.fillStyle = WHITE_COLOR;
 				ctx.fillRect(x - scale(2), y - scale(2), sizeX + scale(4), sizeY + scale(4));
 			} else {
-				ctx.fillStyle = 'white';
+				ctx.fillStyle = WHITE_COLOR;
 				ctx.fillRect(x, y + scale(20), sizeX, scale(2));
 			}
 			ctx.fillStyle = '#333';
@@ -142,10 +142,10 @@ function menuGameLoop(timeMs) {
 				font.draw(ctx, x + scale(12), y - scale(4), scale(3), scale(4), 0, 'Room Code:');
 			}
 			if (isFocused) {
-				ctx.fillStyle = 'white';
+				ctx.fillStyle = WHITE_COLOR;
 				ctx.fillRect(x - scale(2), y - scale(2), sizeX + scale(4), sizeY + scale(4));
 			} else {
-				ctx.fillStyle = 'white';
+				ctx.fillStyle = WHITE_COLOR;
 				ctx.fillRect(x, y + scale(20), sizeX, scale(2));
 			}
 			ctx.fillStyle = '#333';

@@ -63,7 +63,7 @@ function loseGameLoop(timeMs) {
 		},
 		({ x, y, sizeX, renderCallback }) => {
 			renderCallback();
-			ctx.fillStyle = 'white';
+			ctx.fillStyle = WHITE_COLOR;
 			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
 		},
 		() => state.path = 'LEVEL');
@@ -72,7 +72,7 @@ function loseGameLoop(timeMs) {
 function gameLoop(timeMs) {
 	ctx.globalAlpha = 1;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = "black";
+	ctx.fillStyle = BLACK_COLOR;
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 	if (!state.startTime || timeMs - state.startTime >= 1000 / TICK_TIME) {

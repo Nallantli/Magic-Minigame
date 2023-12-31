@@ -558,7 +558,7 @@ function mapGameLoop(timeMs) {
 	font.draw(ctx, scale(16), scale(16), scale(6), scale(8), 0, '<Health>');
 	numberText.draw(ctx, scale(122 - healthString.length * 4), scale(18), scale(4), scale(6), 0, healthString);
 	const healthBarWidth = Math.round(106 * state.player.health / state.player.maxHealth);
-	ctx.fillStyle = 'white';
+	ctx.fillStyle = WHITE_COLOR;
 	ctx.fillRect(scale(16), scale(24), scale(healthBarWidth), scale(4));
 
 	items.forEach(item => {

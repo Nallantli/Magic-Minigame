@@ -8,7 +8,7 @@ function levelGameLoop(timeMs) {
 		},
 		({ x, y, sizeX, renderCallback }) => {
 			renderCallback();
-			ctx.fillStyle = 'white';
+			ctx.fillStyle = WHITE_COLOR;
 			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
 		},
 		() => {

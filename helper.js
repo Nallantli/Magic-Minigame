@@ -70,13 +70,13 @@ function drawBox(ctx, x, y, sizeX, sizeY) {
 	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y + sizeY - scale(3), scale(3), scale(3), { iIndex: 2 });
 	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y + sizeY - scale(3), scale(3), scale(3), { iIndex: 3 });
 
-	ctx.fillStyle = "black";
+	ctx.fillStyle = BLACK_COLOR;
 	ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(3));
 	ctx.fillRect(x + scale(3), y + sizeY - scale(3), sizeX - scale(6), scale(3));
 	ctx.fillRect(x, y + scale(3), scale(3), sizeY - scale(6));
 	ctx.fillRect(x + sizeX - scale(3), y + scale(3), scale(3), sizeY - scale(6));
 	ctx.fillRect(x + scale(3), y + scale(3), sizeX - scale(6), sizeY - scale(6));
-	ctx.fillStyle = "white";
+	ctx.fillStyle = WHITE_COLOR;
 	ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(1));
 	ctx.fillRect(x + scale(3), y + sizeY - scale(1), sizeX - scale(6), scale(1));
 	ctx.fillRect(x, y + scale(3), scale(1), sizeY - scale(6));

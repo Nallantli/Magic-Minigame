@@ -60,7 +60,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		const healthString = String(entity.health);
 		numberText.draw(ctx, scale(161 - healthString.length * 4), i * scale(67) + scale(21), scale(4), scale(6), 0, healthString);
 		const healthBarWidth = Math.round(106 * entity.health / entity.maxHealth);
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = WHITE_COLOR;
 		ctx.fillRect(scale(161 - healthBarWidth), i * scale(67) + scale(15), scale(healthBarWidth), scale(4));
 
 		getIdleSprite(entity).draw(ctx, 0, i * scale(67) + 10, scale(64), scale(64), { iIndex: iterator % getIdleSprite(entity).indices });
@@ -148,7 +148,7 @@ function drawBattleField(battleState, iterator) { // battleData, selectedCards, 
 		const healthString = String(entity.health);
 		numberText.draw(ctx, scale(480 - 160), i_offset * scale(67) + scale(21), scale(4), scale(6), 0, healthString);
 		const healthBarWidth = Math.round(106 * entity.health / entity.maxHealth);
-		ctx.fillStyle = 'white';
+		ctx.fillStyle = WHITE_COLOR;
 		ctx.fillRect(scale(480 - 161), i_offset * scale(67) + scale(15), scale(healthBarWidth), scale(4));
 
 		getIdleSprite(entity).draw(ctx, scale(480 - 64), i_offset * scale(67) + 10, scale(64), scale(64), { iIndex: iterator % getIdleSprite(entity).indices, mirror: true });
@@ -247,7 +247,7 @@ function drawCards(battleState, iterator) {
 							tooltips.push(makeNumberTextToolTip(enchantmentToolTips, scale(4), scale(6), 5));
 						}
 						if (canSelectCard) {
-							ctx.fillStyle = 'white';
+							ctx.fillStyle = WHITE_COLOR;
 							ctx.fillRect(x, y + scale(66), sizeX, scale(4));
 						}
 					},
@@ -281,7 +281,7 @@ function drawCards(battleState, iterator) {
 							tooltips.push(makeNumberTextToolTip(enchantmentToolTips, scale(4), scale(6), 5));
 						}
 						if (canSelectCard && selectedCard === null || selectedCard === i) {
-							ctx.fillStyle = 'white';
+							ctx.fillStyle = WHITE_COLOR;
 							ctx.fillRect(x, y + scale(66), sizeX, scale(4));
 						}
 					},
@@ -324,7 +324,7 @@ function drawCards(battleState, iterator) {
 				renderCallback();
 
 				if (selectedCard === null) {
-					ctx.fillStyle = 'white';
+					ctx.fillStyle = WHITE_COLOR;
 					ctx.fillRect(x, y + scale(18), sizeX, scale(4));
 				}
 			},
@@ -358,7 +358,7 @@ function drawBattleIdle(state) {
 	};
 
 	ctx.globalAlpha = 1;
-	ctx.fillStyle = 'white';
+	ctx.fillStyle = WHITE_COLOR;
 	ctx.fillRect(0, scale(270), scale(480), scale(1));
 
 	return inputData;

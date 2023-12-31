@@ -4,6 +4,9 @@ const SCALE_FACTOR = 4;
 const FPS = 75;
 let TICK_TIME = 15;
 
+const WHITE_COLOR = '#fefefe';
+const BLACK_COLOR = '#050403';
+
 const canvas = document.getElementById('main');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;

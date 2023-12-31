@@ -107,7 +107,7 @@ function deckGameLoop(timeMs) {
 		({ x, y, sizeX, sizeY, renderCallback }) => {
 			renderCallback();
 
-			ctx.fillStyle = 'white';
+			ctx.fillStyle = WHITE_COLOR;
 			ctx.fillRect(x - scale(6), y, scale(4), sizeY);
 		},
 		() => state.path = state.deckState.returnPath);
