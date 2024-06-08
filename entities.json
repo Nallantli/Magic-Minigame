@@ -30,14 +30,7 @@
 		"element": "air",
 		"maxHealth": 480,
 		"health": 480,
-		"deck": [
-			"air.air_shield",
-			"earth.earth_shield",
-			"air.updraft",
-			"air.updraft",
-			"air.updraft",
-			"air.updraft"
-		],
+		"deck": ["air.air_shield", "earth.earth_shield", "air.updraft", "air.updraft", "air.updraft", "air.updraft"],
 		"augments": {
 			"air": 0.8,
 			"earth": 1.1
@@ -55,14 +48,7 @@
 		"element": "water",
 		"maxHealth": 440,
 		"health": 440,
-		"deck": [
-			"water.water_shield",
-			"fire.fire_shield",
-			"water.wave",
-			"water.wave",
-			"water.wave",
-			"water.wave"
-		],
+		"deck": ["water.water_shield", "fire.fire_shield", "water.wave", "water.wave", "water.wave", "water.wave"],
 		"augments": {
 			"water": 0.8,
 			"fire": 1.1
@@ -105,12 +91,7 @@
 		"element": "earth",
 		"maxHealth": 150,
 		"health": 150,
-		"deck": [
-			"earth.boulder",
-			"earth.boulder",
-			"earth.boulder",
-			"air.updraft"
-		],
+		"deck": ["earth.boulder", "earth.boulder", "earth.boulder", "air.updraft"],
 		"augments": {
 			"earth": 0.9,
 			"air": 1.2
@@ -128,12 +109,7 @@
 		"element": "fire",
 		"maxHealth": 120,
 		"health": 120,
-		"deck": [
-			"fire.fireball",
-			"fire.fireball",
-			"fire.fireball",
-			"water.wave"
-		],
+		"deck": ["fire.fireball", "fire.fireball", "fire.fireball", "water.wave"],
 		"augments": {
 			"fire": 0.9,
 			"water": 1.2
@@ -151,12 +127,7 @@
 		"element": "air",
 		"maxHealth": 140,
 		"health": 140,
-		"deck": [
-			"air.updraft",
-			"air.updraft",
-			"air.updraft",
-			"earth.boulder"
-		],
+		"deck": ["air.updraft", "air.updraft", "air.updraft", "earth.boulder"],
 		"augments": {
 			"air": 0.9,
 			"earth": 1.2
@@ -174,12 +145,7 @@
 		"element": "water",
 		"maxHealth": 130,
 		"health": 130,
-		"deck": [
-			"water.wave",
-			"water.wave",
-			"water.wave",
-			"fire.fireball"
-		],
+		"deck": ["water.wave", "water.wave", "water.wave", "fire.fireball"],
 		"augments": {
 			"water": 0.9,
 			"fire": 1.2

@@ -22,10 +22,10 @@ class Tile {
 			return [5, 1];
 		}
 		if (neighbors[0] && neighbors[1] && !neighbors[2] && !neighbors[3]) {
-			return [2, 2]
+			return [2, 2];
 		}
 		if (!neighbors[0] && !neighbors[1] && neighbors[2] && !neighbors[3]) {
-			return [3, 1]
+			return [3, 1];
 		}
 		if (neighbors[0] && !neighbors[1] && neighbors[2] && !neighbors[3]) {
 			return [0, 2];

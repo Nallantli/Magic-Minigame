@@ -1,5 +1,12 @@
-
-function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculatedDamages) {
+function createMiddleCastingSequence(
+	enterLeft,
+	spellCastingStartTick,
+	spell,
+	casterId,
+	casterData,
+	castingCircleId,
+	calculatedDamages
+) {
 	const elementSparksId = crypto.randomUUID();
 	const spellTypeId = crypto.randomUUID();
 
@@ -15,7 +22,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			sizeX: scale(64),
 			sizeY: scale(64),
 			rot: -360,
-			zIndex: 1
+			zIndex: 1,
 		},
 		{
 			tick: spellCastingStartTick + 2,
@@ -23,7 +30,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			id: casterId,
 			sprite: getCastSprite(casterData.entity),
 			play: getCastSprite(casterData.entity).indices > 1,
-			mirror: !enterLeft
+			mirror: !enterLeft,
 		},
 		{
 			tick: spellCastingStartTick,
@@ -38,7 +45,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			rot: 0,
 			zIndex: 3,
 			iIndex: 0,
-			play: true
+			play: true,
 		},
 		{
 			startTick: spellCastingStartTick,
@@ -46,13 +53,13 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_POSITION_Y,
 			id: castingCircleId,
 			posY: scale(210),
-			ease: EASE_TYPES.EASE_OUT
+			ease: EASE_TYPES.EASE_OUT,
 		},
 		{
 			tick: spellCastingStartTick + 8,
 			type: ATYPES.SET_SPRITE,
 			id: castingCircleId,
-			sprite: sprites.CASTING_CIRCLE_48x24
+			sprite: sprites.CASTING_CIRCLE_48x24,
 		},
 		{
 			startTick: spellCastingStartTick,
@@ -60,7 +67,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_OPACITY,
 			id: castingCircleId,
 			alpha: 1,
-			ease: EASE_TYPES.EASE_IN
+			ease: EASE_TYPES.EASE_IN,
 		},
 		{
 			startTick: spellCastingStartTick + 4,
@@ -68,7 +75,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_OPACITY,
 			id: spellTypeId,
 			alpha: 1,
-			ease: EASE_TYPES.EASE_IN
+			ease: EASE_TYPES.EASE_IN,
 		},
 		{
 			startTick: spellCastingStartTick + 4,
@@ -76,7 +83,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_POSITION_Y,
 			id: spellTypeId,
 			posY: scale(56),
-			ease: EASE_TYPES.EASE_OUT
+			ease: EASE_TYPES.EASE_OUT,
 		},
 		{
 			startTick: spellCastingStartTick + 4,
@@ -84,7 +91,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_ROTATION,
 			id: spellTypeId,
 			rot: 0,
-			ease: EASE_TYPES.EASE_OUT
+			ease: EASE_TYPES.EASE_OUT,
 		},
 		{
 			startTick: spellCastingStartTick + 14,
@@ -92,7 +99,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_SIZE_X,
 			id: spellTypeId,
 			sizeX: scale(72),
-			ease: EASE_TYPES.EASE_OUT
+			ease: EASE_TYPES.EASE_OUT,
 		},
 		{
 			startTick: spellCastingStartTick + 14,
@@ -100,7 +107,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_SIZE_Y,
 			id: spellTypeId,
 			sizeY: scale(72),
-			ease: EASE_TYPES.EASE_OUT
+			ease: EASE_TYPES.EASE_OUT,
 		},
 		{
 			startTick: spellCastingStartTick + 14,
@@ -108,7 +115,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_POSITION_X,
 			id: spellTypeId,
 			posX: scale(240 - 36),
-			ease: EASE_TYPES.EASE_OUT
+			ease: EASE_TYPES.EASE_OUT,
 		},
 		{
 			startTick: spellCastingStartTick + 14,
@@ -116,7 +123,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_POSITION_Y,
 			id: spellTypeId,
 			posY: scale(52),
-			ease: EASE_TYPES.EASE_OUT
+			ease: EASE_TYPES.EASE_OUT,
 		},
 		{
 			startTick: spellCastingStartTick + 14,
@@ -124,39 +131,39 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			type: ATYPES.CHANGE_OPACITY,
 			id: spellTypeId,
 			alpha: 0,
-			ease: EASE_TYPES.EASE_OUT
-		}
+			ease: EASE_TYPES.EASE_OUT,
+		},
 	];
 
-	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
+	if (calculatedDamages.length === 1 && calculatedDamages[0] === "FAILED") {
 		const failedTextId = crypto.randomUUID();
 		actions = [
 			...actions,
 			{
 				tick: spellCastingStartTick + 14,
 				type: ATYPES.PLAY_SOUND,
-				audio: new Audio('./audio/failed_spell.wav'),
-				volume: 0.25
+				audio: new Audio("./audio/failed_spell.wav"),
+				volume: 0.25,
 			},
 			{
 				tick: spellCastingStartTick + 14,
 				type: ATYPES.SET_FRAME,
 				id: spellTypeId,
-				iIndex: 1
+				iIndex: 1,
 			},
 			{
 				tick: spellCastingStartTick + 14,
 				type: ATYPES.INITIALIZE_ENTITY,
 				id: failedTextId,
 				sprite: font,
-				text: 'FAILED',
+				text: "FAILED",
 				alpha: 1,
 				posX: scale(240 - 6 * 6),
 				posY: scale(64),
 				sizeX: scale(12),
 				sizeY: scale(16),
 				rot: 0,
-				zIndex: 2
+				zIndex: 2,
 			},
 			{
 				startTick: spellCastingStartTick + 14,
@@ -164,7 +171,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 				type: ATYPES.CHANGE_OPACITY,
 				id: failedTextId,
 				alpha: 0,
-				ease: EASE_TYPES.EASE_OUT
+				ease: EASE_TYPES.EASE_OUT,
 			},
 			{
 				startTick: spellCastingStartTick + 14,
@@ -172,17 +179,17 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 				type: ATYPES.CHANGE_POSITION_Y,
 				id: failedTextId,
 				posY: scale(48),
-				ease: EASE_TYPES.EASE_OUT
-			}
-		]
+				ease: EASE_TYPES.EASE_OUT,
+			},
+		];
 	} else {
 		actions = [
 			...actions,
 			{
 				tick: spellCastingStartTick + 14,
 				type: ATYPES.PLAY_SOUND,
-				audio: new Audio('./audio/cast.wav'),
-				volume: 0.1
+				audio: new Audio("./audio/cast.wav"),
+				volume: 0.1,
 			},
 			{
 				tick: spellCastingStartTick + 14,
@@ -195,7 +202,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 				sizeX: scale(64),
 				sizeY: scale(32),
 				rot: 0,
-				zIndex: 2
+				zIndex: 2,
 			},
 			{
 				startTick: spellCastingStartTick + 14,
@@ -203,7 +210,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 				type: ATYPES.CHANGE_OPACITY,
 				id: elementSparksId,
 				alpha: 0,
-				ease: EASE_TYPES.EASE_IN
+				ease: EASE_TYPES.EASE_IN,
 			},
 			{
 				startTick: spellCastingStartTick + 14,
@@ -211,7 +218,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 				type: ATYPES.CHANGE_POSITION_Y,
 				id: elementSparksId,
 				posY: scale(18),
-				ease: EASE_TYPES.EASE_IN
+				ease: EASE_TYPES.EASE_IN,
 			},
 			{
 				startTick: spellCastingStartTick + 14,
@@ -219,7 +226,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 				type: ATYPES.CHANGE_SIZE_X,
 				id: elementSparksId,
 				sizeX: scale(72),
-				ease: EASE_TYPES.EASE_IN
+				ease: EASE_TYPES.EASE_IN,
 			},
 			{
 				startTick: spellCastingStartTick + 14,
@@ -227,9 +234,9 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 				type: ATYPES.CHANGE_POSITION_X,
 				id: elementSparksId,
 				posX: scale(240 - 36),
-				ease: EASE_TYPES.EASE_IN
+				ease: EASE_TYPES.EASE_IN,
 			},
-		]
+		];
 		if (calculatedDamages.length > 0 && calculatedDamages[0].isCritical) {
 			const criticalTextId = crypto.randomUUID();
 			actions = [
@@ -239,14 +246,14 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 					type: ATYPES.INITIALIZE_ENTITY,
 					id: criticalTextId,
 					sprite: font,
-					text: 'CRITICAL',
+					text: "CRITICAL",
 					alpha: 1,
 					posX: scale(240 - 6 * 8),
 					posY: scale(64),
 					sizeX: scale(12),
 					sizeY: scale(16),
 					rot: 0,
-					zIndex: 2
+					zIndex: 2,
 				},
 				{
 					startTick: spellCastingStartTick + 14,
@@ -254,7 +261,7 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 					type: ATYPES.CHANGE_OPACITY,
 					id: criticalTextId,
 					alpha: 0,
-					ease: EASE_TYPES.EASE_OUT
+					ease: EASE_TYPES.EASE_OUT,
 				},
 				{
 					startTick: spellCastingStartTick + 14,
@@ -262,9 +269,9 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 					type: ATYPES.CHANGE_POSITION_Y,
 					id: criticalTextId,
 					posY: scale(48),
-					ease: EASE_TYPES.EASE_OUT
-				}
-			]
+					ease: EASE_TYPES.EASE_OUT,
+				},
+			];
 		}
 	}
 
@@ -274,8 +281,8 @@ function createMiddleCastingSequence(enterLeft, spellCastingStartTick, spell, ca
 			{
 				tick: spellCastingStartTick + getCastSprite(casterData.entity).indices + 2,
 				type: ATYPES.PAUSE_ANIMATION,
-				id: casterId
-			}
+				id: casterId,
+			},
 		];
 	}
 
@@ -300,7 +307,7 @@ function createLeftBladeCastingSequence(blades, baseId, iteratorOffset, startTic
 				sizeX: scale(20),
 				sizeY: scale(24),
 				rot: 0,
-				zIndex: 100
+				zIndex: 100,
 			},
 			{
 				startTick: startTick + (useTick ? tick : 0),
@@ -308,7 +315,7 @@ function createLeftBladeCastingSequence(blades, baseId, iteratorOffset, startTic
 				type: ATYPES.CHANGE_POSITION_Y,
 				id: `${baseId}.${i_offset}.${id}`,
 				posY: scale(310),
-				ease: EASE_TYPES.EASE_OUT
+				ease: EASE_TYPES.EASE_OUT,
 			},
 			{
 				startTick: startTick + (useTick ? tick : 0),
@@ -316,8 +323,8 @@ function createLeftBladeCastingSequence(blades, baseId, iteratorOffset, startTic
 				type: ATYPES.CHANGE_OPACITY,
 				id: `${baseId}.${i_offset}.${id}`,
 				alpha: 1,
-				ease: EASE_TYPES.EASE_OUT
-			}
+				ease: EASE_TYPES.EASE_OUT,
+			},
 		];
 
 		if (useTick) {
@@ -326,9 +333,9 @@ function createLeftBladeCastingSequence(blades, baseId, iteratorOffset, startTic
 				{
 					tick: startTick + tick + 2,
 					type: ATYPES.PLAY_SOUND,
-					audio: new Audio(isBonus ? './audio/bonus.wav' : './audio/malus.wav'),
-					volume: 0.1
-				}
+					audio: new Audio(isBonus ? "./audio/bonus.wav" : "./audio/malus.wav"),
+					volume: 0.1,
+				},
 			];
 		}
 	});
@@ -354,7 +361,7 @@ function createLeftShieldCastingSequence(shields, baseId, iteratorOffset, startT
 				sizeX: scale(20),
 				sizeY: scale(24),
 				rot: 0,
-				zIndex: 100
+				zIndex: 100,
 			},
 			{
 				startTick: startTick + (useTick ? tick : 0),
@@ -362,7 +369,7 @@ function createLeftShieldCastingSequence(shields, baseId, iteratorOffset, startT
 				type: ATYPES.CHANGE_POSITION_Y,
 				id: `${baseId}.${i_offset}.${id}`,
 				posY: posY,
-				ease: EASE_TYPES.EASE_OUT
+				ease: EASE_TYPES.EASE_OUT,
 			},
 			{
 				startTick: startTick + (useTick ? tick : 0),
@@ -370,8 +377,8 @@ function createLeftShieldCastingSequence(shields, baseId, iteratorOffset, startT
 				type: ATYPES.CHANGE_OPACITY,
 				id: `${baseId}.${i_offset}.${id}`,
 				alpha: 1,
-				ease: EASE_TYPES.EASE_OUT
-			}
+				ease: EASE_TYPES.EASE_OUT,
+			},
 		];
 
 		if (useTick) {
@@ -380,9 +387,9 @@ function createLeftShieldCastingSequence(shields, baseId, iteratorOffset, startT
 				{
 					tick: startTick + tick + 2,
 					type: ATYPES.PLAY_SOUND,
-					audio: new Audio(isBonus ? './audio/bonus.wav' : './audio/malus.wav'),
-					volume: 0.1
-				}
+					audio: new Audio(isBonus ? "./audio/bonus.wav" : "./audio/malus.wav"),
+					volume: 0.1,
+				},
 			];
 		}
 	});
@@ -392,54 +399,56 @@ function createLeftShieldCastingSequence(shields, baseId, iteratorOffset, startT
 function createRightShieldCastingSequence(shields, baseId, iteratorOffset, startTick, useTick, posX, posY) {
 	let actions = [];
 
-	shields.map((s, j) => ({ s, j })).forEach(({ s: { id, tick, isBonus }, j }, i) => {
-		const i_offset = i + iteratorOffset;
-		const j_offset = j + iteratorOffset;
-		actions = [
-			...actions,
-			{
-				tick: startTick + (useTick ? tick : 0),
-				type: ATYPES.INITIALIZE_ENTITY,
-				id: `${baseId}.${j_offset}.${id}`,
-				sprite: spellSpriteDirectory[id],
-				alpha: 0,
-				posX: posX - scale(24 * i_offset),
-				posY: posY + scale(8),
-				sizeX: scale(20),
-				sizeY: scale(24),
-				rot: 0,
-				zIndex: 100
-			},
-			{
-				startTick: startTick + (useTick ? tick : 0),
-				endTick: startTick + 5 + (useTick ? tick : 0),
-				type: ATYPES.CHANGE_POSITION_Y,
-				id: `${baseId}.${j_offset}.${id}`,
-				posY: posY,
-				ease: EASE_TYPES.EASE_OUT
-			},
-			{
-				startTick: startTick + (useTick ? tick : 0),
-				endTick: startTick + 5 + (useTick ? tick : 0),
-				type: ATYPES.CHANGE_OPACITY,
-				id: `${baseId}.${j_offset}.${id}`,
-				alpha: 1,
-				ease: EASE_TYPES.EASE_OUT
-			}
-		];
-
-		if (useTick) {
+	shields
+		.map((s, j) => ({ s, j }))
+		.forEach(({ s: { id, tick, isBonus }, j }, i) => {
+			const i_offset = i + iteratorOffset;
+			const j_offset = j + iteratorOffset;
 			actions = [
 				...actions,
 				{
-					tick: startTick + tick + 2,
-					type: ATYPES.PLAY_SOUND,
-					audio: new Audio(isBonus ? './audio/bonus.wav' : './audio/malus.wav'),
-					volume: 0.1
-				}
+					tick: startTick + (useTick ? tick : 0),
+					type: ATYPES.INITIALIZE_ENTITY,
+					id: `${baseId}.${j_offset}.${id}`,
+					sprite: spellSpriteDirectory[id],
+					alpha: 0,
+					posX: posX - scale(24 * i_offset),
+					posY: posY + scale(8),
+					sizeX: scale(20),
+					sizeY: scale(24),
+					rot: 0,
+					zIndex: 100,
+				},
+				{
+					startTick: startTick + (useTick ? tick : 0),
+					endTick: startTick + 5 + (useTick ? tick : 0),
+					type: ATYPES.CHANGE_POSITION_Y,
+					id: `${baseId}.${j_offset}.${id}`,
+					posY: posY,
+					ease: EASE_TYPES.EASE_OUT,
+				},
+				{
+					startTick: startTick + (useTick ? tick : 0),
+					endTick: startTick + 5 + (useTick ? tick : 0),
+					type: ATYPES.CHANGE_OPACITY,
+					id: `${baseId}.${j_offset}.${id}`,
+					alpha: 1,
+					ease: EASE_TYPES.EASE_OUT,
+				},
 			];
-		}
-	});
+
+			if (useTick) {
+				actions = [
+					...actions,
+					{
+						tick: startTick + tick + 2,
+						type: ATYPES.PLAY_SOUND,
+						audio: new Audio(isBonus ? "./audio/bonus.wav" : "./audio/malus.wav"),
+						volume: 0.1,
+					},
+				];
+			}
+		});
 
 	return actions;
 }
@@ -447,54 +456,56 @@ function createRightShieldCastingSequence(shields, baseId, iteratorOffset, start
 function createRightBladeCastingSequence(blades, baseId, iteratorOffset, startTick, useTick) {
 	let actions = [];
 
-	blades.map((s, j) => ({ s, j })).forEach(({ s: { id, tick, isBonus }, j }, i) => {
-		const i_offset = i + iteratorOffset;
-		const j_offset = j + iteratorOffset;
-		actions = [
-			...actions,
-			{
-				tick: startTick + (useTick ? tick : 0),
-				type: ATYPES.INITIALIZE_ENTITY,
-				id: `${baseId}.${j_offset}.${id}`,
-				sprite: spellSpriteDirectory[id],
-				alpha: 0,
-				posX: scale(480 - 26) - scale(24 * i_offset),
-				posY: scale(318),
-				sizeX: scale(20),
-				sizeY: scale(24),
-				rot: 0,
-				zIndex: 100
-			},
-			{
-				startTick: startTick + (useTick ? tick : 0),
-				endTick: startTick + 5 + (useTick ? tick : 0),
-				type: ATYPES.CHANGE_POSITION_Y,
-				id: `${baseId}.${j_offset}.${id}`,
-				posY: scale(310),
-				ease: EASE_TYPES.EASE_OUT
-			},
-			{
-				startTick: startTick + (useTick ? tick : 0),
-				endTick: startTick + 5 + (useTick ? tick : 0),
-				type: ATYPES.CHANGE_OPACITY,
-				id: `${baseId}.${j_offset}.${id}`,
-				alpha: 1,
-				ease: EASE_TYPES.EASE_OUT
-			}
-		];
-
-		if (useTick) {
+	blades
+		.map((s, j) => ({ s, j }))
+		.forEach(({ s: { id, tick, isBonus }, j }, i) => {
+			const i_offset = i + iteratorOffset;
+			const j_offset = j + iteratorOffset;
 			actions = [
 				...actions,
 				{
-					tick: startTick + tick + 2,
-					type: ATYPES.PLAY_SOUND,
-					audio: new Audio(isBonus ? './audio/bonus.wav' : './audio/malus.wav'),
-					volume: 0.1
-				}
+					tick: startTick + (useTick ? tick : 0),
+					type: ATYPES.INITIALIZE_ENTITY,
+					id: `${baseId}.${j_offset}.${id}`,
+					sprite: spellSpriteDirectory[id],
+					alpha: 0,
+					posX: scale(480 - 26) - scale(24 * i_offset),
+					posY: scale(318),
+					sizeX: scale(20),
+					sizeY: scale(24),
+					rot: 0,
+					zIndex: 100,
+				},
+				{
+					startTick: startTick + (useTick ? tick : 0),
+					endTick: startTick + 5 + (useTick ? tick : 0),
+					type: ATYPES.CHANGE_POSITION_Y,
+					id: `${baseId}.${j_offset}.${id}`,
+					posY: scale(310),
+					ease: EASE_TYPES.EASE_OUT,
+				},
+				{
+					startTick: startTick + (useTick ? tick : 0),
+					endTick: startTick + 5 + (useTick ? tick : 0),
+					type: ATYPES.CHANGE_OPACITY,
+					id: `${baseId}.${j_offset}.${id}`,
+					alpha: 1,
+					ease: EASE_TYPES.EASE_OUT,
+				},
 			];
-		}
-	});
+
+			if (useTick) {
+				actions = [
+					...actions,
+					{
+						tick: startTick + tick + 2,
+						type: ATYPES.PLAY_SOUND,
+						audio: new Audio(isBonus ? "./audio/bonus.wav" : "./audio/malus.wav"),
+						volume: 0.1,
+					},
+				];
+			}
+		});
 
 	return actions;
 }
@@ -507,19 +518,19 @@ function createCastingExitSequence(exitLeft, cleanUpStartTick, casterId, casting
 			id: casterId,
 			sprite: getIdleSprite(casterData.entity),
 			play: getIdleSprite(casterData.entity).indices > 1,
-			mirror: !exitLeft
+			mirror: !exitLeft,
 		},
 		{
 			tick: cleanUpStartTick - 6,
 			type: ATYPES.SET_SPRITE,
 			id: castingCircleId,
 			sprite: sprites.CASTING_CIRCLE_END_48x24,
-			play: true
+			play: true,
 		},
 		{
 			tick: cleanUpStartTick + 2,
 			type: ATYPES.REMOVE_ENTITY,
-			id: castingCircleId
+			id: castingCircleId,
 		},
 		{
 			startTick: cleanUpStartTick + 2,
@@ -527,19 +538,27 @@ function createCastingExitSequence(exitLeft, cleanUpStartTick, casterId, casting
 			id: casterId,
 			type: ATYPES.CHANGE_POSITION_X,
 			posX: exitLeft ? scale(-128) : scale(480),
-			ease: EASE_TYPES.EASE_IN
-		}
+			ease: EASE_TYPES.EASE_IN,
+		},
 	];
 }
 
-function createCleanUpSequence(exitLeft, spellRemovalTick, cleanUpStartTick, spellId, casterId, castingCircleId, casterData) {
+function createCleanUpSequence(
+	exitLeft,
+	spellRemovalTick,
+	cleanUpStartTick,
+	spellId,
+	casterId,
+	castingCircleId,
+	casterData
+) {
 	return [
 		{
 			tick: spellRemovalTick,
 			type: ATYPES.REMOVE_ENTITY,
-			id: spellId
+			id: spellId,
 		},
-		...createCastingExitSequence(exitLeft, cleanUpStartTick, casterId, castingCircleId, casterData)
+		...createCastingExitSequence(exitLeft, cleanUpStartTick, casterId, castingCircleId, casterData),
 	];
 }
 
@@ -551,8 +570,8 @@ function createEntityExitSequence(exitLeft, startTick, entityId) {
 			id: entityId,
 			type: ATYPES.CHANGE_POSITION_X,
 			posX: exitLeft ? scale(-128) : scale(480),
-			ease: EASE_TYPES.EASE_IN
-		}
+			ease: EASE_TYPES.EASE_IN,
+		},
 	];
 }
 
@@ -574,7 +593,7 @@ function createEntityEnterSequence(enterLeft, startTick, casterId, casterData) {
 			rot: 0,
 			zIndex: 4,
 			mirror: !enterLeft,
-			play: getIdleSprite(casterData.entity).indices > 1
+			play: getIdleSprite(casterData.entity).indices > 1,
 		},
 		{
 			tick: startTick,
@@ -588,7 +607,7 @@ function createEntityEnterSequence(enterLeft, startTick, casterId, casterData) {
 			sizeY: scale(8),
 			rot: 0,
 			zIndex: 4,
-			text: casterData.entity.name
+			text: casterData.entity.name,
 		},
 		{
 			tick: startTick,
@@ -602,7 +621,7 @@ function createEntityEnterSequence(enterLeft, startTick, casterId, casterData) {
 			sizeY: scale(8),
 			rot: 0,
 			zIndex: 4,
-			iIndex: ELEMENT_COLORS[casterData.entity.element]
+			iIndex: ELEMENT_COLORS[casterData.entity.element],
 		},
 		{
 			startTick: startTick,
@@ -610,7 +629,7 @@ function createEntityEnterSequence(enterLeft, startTick, casterId, casterData) {
 			type: ATYPES.CHANGE_POSITION_X,
 			id: casterId,
 			posX: scale(240 - 64),
-			ease: EASE_TYPES.EASE_OUT
+			ease: EASE_TYPES.EASE_OUT,
 		},
 		{
 			startTick: startTick,
@@ -618,7 +637,7 @@ function createEntityEnterSequence(enterLeft, startTick, casterId, casterData) {
 			type: ATYPES.CHANGE_POSITION_Y,
 			id: casterId,
 			posY: scale(118),
-			ease: EASE_TYPES.EASE_OUT
+			ease: EASE_TYPES.EASE_OUT,
 		},
 		{
 			startTick: startTick,
@@ -626,7 +645,7 @@ function createEntityEnterSequence(enterLeft, startTick, casterId, casterData) {
 			type: ATYPES.CHANGE_SIZE_X,
 			id: casterId,
 			sizeX: scale(128),
-			ease: EASE_TYPES.EASE_IN
+			ease: EASE_TYPES.EASE_IN,
 		},
 		{
 			startTick: startTick,
@@ -634,8 +653,8 @@ function createEntityEnterSequence(enterLeft, startTick, casterId, casterData) {
 			type: ATYPES.CHANGE_SIZE_Y,
 			id: casterId,
 			sizeY: scale(128),
-			ease: EASE_TYPES.EASE_IN
-		}
+			ease: EASE_TYPES.EASE_IN,
+		},
 	];
 }
 
@@ -647,7 +666,7 @@ function createMoveEntityToBattleSequence(moveLeft, spellCastingStartTick, caste
 			type: ATYPES.CHANGE_POSITION_X,
 			id: casterId,
 			posX: moveLeft ? scale(48 - 64) : scale(496 - 128),
-			ease: EASE_TYPES.CONSTANT
+			ease: EASE_TYPES.CONSTANT,
 		},
 		{
 			startTick: spellCastingStartTick + 15,
@@ -655,12 +674,20 @@ function createMoveEntityToBattleSequence(moveLeft, spellCastingStartTick, caste
 			type: ATYPES.CHANGE_POSITION_X,
 			id: castingCircleId,
 			posX: moveLeft ? 0 : scale(480 - 96),
-			ease: EASE_TYPES.CONSTANT
-		}
+			ease: EASE_TYPES.CONSTANT,
+		},
 	];
 }
 
-function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, victimDatas, victimIds, casterData, spell, calculatedDamages) {
+function createMoveVictimToBattleSequence(
+	enterLeft,
+	spellAnimationStartTick,
+	victimDatas,
+	victimIds,
+	casterData,
+	spell,
+	calculatedDamages
+) {
 	let actions = [];
 	let buffer = 0;
 
@@ -680,36 +707,94 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				rot: 0,
 				zIndex: 8 - i,
 				play: getIdleSprite(victimData.entity).indices > 1,
-				mirror: !enterLeft
+				mirror: !enterLeft,
 			},
 			{
 				startTick: spellAnimationStartTick,
 				endTick: spellAnimationStartTick + 7 + i,
 				type: ATYPES.CHANGE_POSITION_X,
 				id: victimIds[i],
-				posX: enterLeft ? scale(-8 - (victimDatas.length * 8) + i * 32) : scale(432 - (72 - victimDatas.length * 8) - i * 16),
-				ease: EASE_TYPES.CONSTANT
+				posX: enterLeft
+					? scale(-8 - victimDatas.length * 8 + i * 32)
+					: scale(432 - (72 - victimDatas.length * 8) - i * 16),
+				ease: EASE_TYPES.CONSTANT,
 			},
 		];
-	})
+	});
 
 	if (victimDatas.length === 1) {
 		const victimData = victimDatas[0];
 		if (enterLeft) {
 			actions = [
 				...actions,
-				...createLeftShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(6), scale(280)),
-				...createLeftBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false),
-				...createLeftShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick, true, scale(6), scale(280)),
-				...createLeftBladeCastingSequence(spell.victimBlades || [], victimData.entity.id, victimData.blades.length, spellAnimationStartTick, true)
+				...createLeftShieldCastingSequence(
+					victimData.shields,
+					victimData.entity.id,
+					0,
+					spellAnimationStartTick,
+					false,
+					scale(6),
+					scale(280)
+				),
+				...createLeftBladeCastingSequence(
+					victimData.blades,
+					victimData.entity.id,
+					0,
+					spellAnimationStartTick,
+					false
+				),
+				...createLeftShieldCastingSequence(
+					spell.victimShields || [],
+					victimData.entity.id,
+					victimData.shields.length,
+					spellAnimationStartTick,
+					true,
+					scale(6),
+					scale(280)
+				),
+				...createLeftBladeCastingSequence(
+					spell.victimBlades || [],
+					victimData.entity.id,
+					victimData.blades.length,
+					spellAnimationStartTick,
+					true
+				),
 			];
 		} else {
 			actions = [
 				...actions,
-				...createRightShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(480 - 26), scale(280)),
-				...createRightBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false),
-				...createRightShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick, true, scale(480 - 26), scale(280)),
-				...createRightBladeCastingSequence(spell.victimBlades || [], victimData.entity.id, victimData.blades.length, spellAnimationStartTick, true)
+				...createRightShieldCastingSequence(
+					victimData.shields,
+					victimData.entity.id,
+					0,
+					spellAnimationStartTick,
+					false,
+					scale(480 - 26),
+					scale(280)
+				),
+				...createRightBladeCastingSequence(
+					victimData.blades,
+					victimData.entity.id,
+					0,
+					spellAnimationStartTick,
+					false
+				),
+				...createRightShieldCastingSequence(
+					spell.victimShields || [],
+					victimData.entity.id,
+					victimData.shields.length,
+					spellAnimationStartTick,
+					true,
+					scale(480 - 26),
+					scale(280)
+				),
+				...createRightBladeCastingSequence(
+					spell.victimBlades || [],
+					victimData.entity.id,
+					victimData.blades.length,
+					spellAnimationStartTick,
+					true
+				),
 			];
 		}
 	} else {
@@ -717,14 +802,46 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 			if (enterLeft) {
 				actions = [
 					...actions,
-					...createLeftShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(72 - victimDatas.length * 8 + i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i)),
-					...createLeftShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick, true, scale(72 - victimDatas.length * 8 + i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i))
+					...createLeftShieldCastingSequence(
+						victimData.shields,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false,
+						scale(72 - victimDatas.length * 8 + i * 26),
+						scale(90) + scale(128 - i * 16) - scale(28 * i)
+					),
+					...createLeftShieldCastingSequence(
+						spell.victimShields || [],
+						victimData.entity.id,
+						victimData.shields.length,
+						spellAnimationStartTick,
+						true,
+						scale(72 - victimDatas.length * 8 + i * 26),
+						scale(90) + scale(128 - i * 16) - scale(28 * i)
+					),
 				];
 			} else {
 				actions = [
 					...actions,
-					...createRightShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(450 - (72 - victimDatas.length * 8) - i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i)),
-					...createRightShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick, true, scale(450 - (72 - victimDatas.length * 8) - i * 26), scale(90) + scale(128 - i * 16) - scale(28 * i))
+					...createRightShieldCastingSequence(
+						victimData.shields,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false,
+						scale(450 - (72 - victimDatas.length * 8) - i * 26),
+						scale(90) + scale(128 - i * 16) - scale(28 * i)
+					),
+					...createRightShieldCastingSequence(
+						spell.victimShields || [],
+						victimData.entity.id,
+						victimData.shields.length,
+						spellAnimationStartTick,
+						true,
+						scale(450 - (72 - victimDatas.length * 8) - i * 26),
+						scale(90) + scale(128 - i * 16) - scale(28 * i)
+					),
 				];
 			}
 		});
@@ -741,7 +858,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				type: ATYPES.CHANGE_POSITION_Y,
 				id: `${casterData.entity.id}.${index}.${id}`,
 				posY: scale(270),
-				ease: EASE_TYPES.EASE_OUT
+				ease: EASE_TYPES.EASE_OUT,
 			},
 			{
 				startTick: spellAnimationStartTick + 5,
@@ -749,12 +866,12 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				type: ATYPES.CHANGE_OPACITY,
 				id: `${casterData.entity.id}.${index}.${id}`,
 				alpha: scale(0),
-				ease: EASE_TYPES.EASE_OUT
-			}
+				ease: EASE_TYPES.EASE_OUT,
+			},
 		];
 	});
 
-	let victimHealths = victimDatas.map(v => v.entity.health);
+	let victimHealths = victimDatas.map((v) => v.entity.health);
 	let stolenHealth = 0;
 	let lastStolenHealthTick = 0;
 
@@ -775,7 +892,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 						type: ATYPES.CHANGE_POSITION_Y,
 						id: `${victimData.entity.id}.${index}.${id}`,
 						posY: scale(270),
-						ease: EASE_TYPES.EASE_OUT
+						ease: EASE_TYPES.EASE_OUT,
 					},
 					{
 						startTick: spellAnimationStartTick + 5 + tick,
@@ -783,14 +900,16 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 						type: ATYPES.CHANGE_OPACITY,
 						id: `${victimData.entity.id}.${index}.${id}`,
 						alpha: scale(0),
-						ease: EASE_TYPES.EASE_OUT
-					}
+						ease: EASE_TYPES.EASE_OUT,
+					},
 				];
 			});
 
-			const damageString = `${damage}${augmented !== undefined ? augmented : ''}`;
+			const damageString = `${damage}${augmented !== undefined ? augmented : ""}`;
 
-			const entityPosX = enterLeft ? scale(-8 - (victimDatas.length * 8) + i * 32) : scale(432 - (72 - victimDatas.length * 8) - i * 16);
+			const entityPosX = enterLeft
+				? scale(-8 - victimDatas.length * 8 + i * 32)
+				: scale(432 - (72 - victimDatas.length * 8) - i * 16);
 			const entitySizeX = scale(128 - i * 16);
 
 			actions = [
@@ -798,8 +917,8 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				{
 					tick: spellAnimationStartTick + 5 + tick,
 					type: ATYPES.PLAY_SOUND,
-					audio: new Audio('./audio/hurt.wav'),
-					volume: 0.1
+					audio: new Audio("./audio/hurt.wav"),
+					volume: 0.1,
 				},
 				{
 					tick: spellAnimationStartTick + 5 + tick,
@@ -814,7 +933,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 					rot: 0,
 					iIndex: ELEMENT_COLORS[element],
 					zIndex: 0,
-					text: damageString
+					text: damageString,
 				},
 				{
 					startTick: spellAnimationStartTick + 5 + tick,
@@ -822,7 +941,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 					type: ATYPES.CHANGE_POSITION_Y,
 					id: damageTextId,
 					posY: scale(126) - scale(28 * i),
-					ease: EASE_TYPES.EASE_OUT
+					ease: EASE_TYPES.EASE_OUT,
 				},
 				{
 					startTick: spellAnimationStartTick + 5 + tick + 2,
@@ -830,9 +949,14 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 					type: ATYPES.CHANGE_OPACITY,
 					id: damageTextId,
 					alpha: 0,
-					ease: EASE_TYPES.EASE_OUT
+					ease: EASE_TYPES.EASE_OUT,
 				},
-				...createJitterSequence(spellAnimationStartTick + 5 + tick, entityPosX, victimId, enterLeft ? scale(-8) : scale(8))
+				...createJitterSequence(
+					spellAnimationStartTick + 5 + tick,
+					entityPosX,
+					victimId,
+					enterLeft ? scale(-8) : scale(8)
+				),
 			];
 
 			if (steal) {
@@ -863,7 +987,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				rot: 0,
 				iIndex: 0,
 				zIndex: 0,
-				text: healString
+				text: healString,
 			},
 			{
 				startTick: spellAnimationStartTick + 5 + lastStolenHealthTick,
@@ -871,7 +995,7 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				type: ATYPES.CHANGE_POSITION_Y,
 				id: stealTextId,
 				posY: scale(110),
-				ease: EASE_TYPES.EASE_OUT
+				ease: EASE_TYPES.EASE_OUT,
 			},
 			{
 				startTick: spellAnimationStartTick + 5 + lastStolenHealthTick + 2,
@@ -879,8 +1003,8 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				type: ATYPES.CHANGE_OPACITY,
 				id: stealTextId,
 				alpha: 0,
-				ease: EASE_TYPES.EASE_OUT
-			}
+				ease: EASE_TYPES.EASE_OUT,
+			},
 		];
 	}
 
@@ -894,8 +1018,8 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 				{
 					tick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2,
 					type: ATYPES.PLAY_SOUND,
-					audio: new Audio('./audio/death.wav'),
-					volume: 0.1
+					audio: new Audio("./audio/death.wav"),
+					volume: 0.1,
 				},
 				{
 					tick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2,
@@ -903,21 +1027,25 @@ function createMoveVictimToBattleSequence(enterLeft, spellAnimationStartTick, vi
 					type: ATYPES.SET_SPRITE,
 					sprite: getDeathSprite(victimData.entity),
 					play: true,
-					mirror: !enterLeft
+					mirror: !enterLeft,
 				},
 				{
 					tick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2 + buffer,
 					id: victimId,
-					type: ATYPES.PAUSE_ANIMATION
-				}
+					type: ATYPES.PAUSE_ANIMATION,
+				},
 			];
 		}
 	});
 
-	victimIds.forEach(victimId => {
+	victimIds.forEach((victimId) => {
 		actions = [
 			...actions,
-			...createEntityExitSequence(enterLeft, spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2 + buffer, victimId)
+			...createEntityExitSequence(
+				enterLeft,
+				spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2 + buffer,
+				victimId
+			),
 		];
 	});
 
@@ -930,50 +1058,50 @@ function createJitterSequence(startTick, posX, victimId, delta) {
 			tick: startTick,
 			type: ATYPES.SET_POSITION_X,
 			id: victimId,
-			posX: posX + delta
+			posX: posX + delta,
 		},
 		{
 			tick: startTick + 1,
 			type: ATYPES.SET_POSITION_X,
 			id: victimId,
-			posX: posX
+			posX: posX,
 		},
 		{
 			tick: startTick + 2,
 			type: ATYPES.SET_POSITION_X,
 			id: victimId,
-			posX: posX + delta
+			posX: posX + delta,
 		},
 		{
 			tick: startTick + 3,
 			type: ATYPES.SET_POSITION_X,
 			id: victimId,
-			posX: posX
+			posX: posX,
 		},
 		{
 			tick: startTick,
 			type: ATYPES.SET_OPACITY,
 			id: victimId,
-			alpha: 0.5
+			alpha: 0.5,
 		},
 		{
 			tick: startTick + 1,
 			type: ATYPES.SET_OPACITY,
 			id: victimId,
-			alpha: 1
+			alpha: 1,
 		},
 		{
 			tick: startTick + 2,
 			type: ATYPES.SET_OPACITY,
 			id: victimId,
-			alpha: 0.5
+			alpha: 0.5,
 		},
 		{
 			tick: startTick + 3,
 			type: ATYPES.SET_OPACITY,
 			id: victimId,
-			alpha: 1
-		}
+			alpha: 1,
+		},
 	];
 }
 
@@ -992,7 +1120,7 @@ function createMiddleVictimSequence(mirror, spellAnimationStartTick, victimId, v
 			rot: 0,
 			zIndex: 2,
 			play: getIdleSprite(victimData.entity).indices > 1,
-			mirror: mirror
+			mirror: mirror,
 		},
 		{
 			startTick: spellAnimationStartTick,
@@ -1000,7 +1128,7 @@ function createMiddleVictimSequence(mirror, spellAnimationStartTick, victimId, v
 			type: ATYPES.CHANGE_POSITION_Y,
 			id: victimId,
 			posY: scale(118),
-			ease: EASE_TYPES.CONSTANT
+			ease: EASE_TYPES.CONSTANT,
 		},
 		{
 			startTick: spellAnimationStartTick + 5 + getSpellSprite(spell).indices + 2,
@@ -1008,8 +1136,8 @@ function createMiddleVictimSequence(mirror, spellAnimationStartTick, victimId, v
 			id: victimId,
 			type: ATYPES.CHANGE_POSITION_Y,
 			posY: scale(270),
-			ease: EASE_TYPES.EASE_IN
-		}
+			ease: EASE_TYPES.EASE_IN,
+		},
 	];
 }
 
@@ -1026,24 +1154,28 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 	// deal with shields etc.
 
 	let actions = [
-		...(turnState.aura ? [{
-			tick: 0,
-			type: ATYPES.INITIALIZE_ENTITY,
-			id: `aura`,
-			sprite: getAuraSprite(getSpell(turnState.aura.id)),
-			alpha: 1,
-			posX: 0,
-			posY: 0,
-			sizeX: scale(480),
-			sizeY: scale(270),
-			rot: 0,
-			zIndex: 1,
-			play: true
-		}] : []),
+		...(turnState.aura
+			? [
+					{
+						tick: 0,
+						type: ATYPES.INITIALIZE_ENTITY,
+						id: `aura`,
+						sprite: getAuraSprite(getSpell(turnState.aura.id)),
+						alpha: 1,
+						posX: 0,
+						posY: 0,
+						sizeX: scale(480),
+						sizeY: scale(270),
+						rot: 0,
+						zIndex: 1,
+						play: true,
+					},
+			  ]
+			: []),
 		{
 			tick: startTick,
 			type: ATYPES.INITIALIZE_ENTITY,
-			id: 'bottom_cover',
+			id: "bottom_cover",
 			sprite: sprites.BOTTOM_COVER_480x105,
 			alpha: 1,
 			posX: 0,
@@ -1052,11 +1184,19 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 			sizeY: scale(105),
 			rot: 0,
 			zIndex: 3,
-			play: false
+			play: false,
 		},
 		...createEntityEnterSequence(true, startTick, casterId, casterData),
-		...createLeftShieldCastingSequence(casterData.shields, casterData.entity.id, 0, startTick, false, scale(6), scale(280)),
-		...createLeftBladeCastingSequence(casterData.blades, casterData.entity.id, 0, startTick, false)
+		...createLeftShieldCastingSequence(
+			casterData.shields,
+			casterData.entity.id,
+			0,
+			startTick,
+			false,
+			scale(6),
+			scale(280)
+		),
+		...createLeftBladeCastingSequence(casterData.blades, casterData.entity.id, 0, startTick, false),
 	];
 
 	const spellCastingStartTick = startTick + 10;
@@ -1064,19 +1204,27 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 	// spell casting
 	actions = [
 		...actions,
-		...createMiddleCastingSequence(true, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculatedDamages)
+		...createMiddleCastingSequence(
+			true,
+			spellCastingStartTick,
+			spell,
+			casterId,
+			casterData,
+			castingCircleId,
+			calculatedDamages
+		),
 	];
 
 	let spellAnimationStartTick = spellCastingStartTick + 25;
 
-	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
+	if (calculatedDamages.length === 1 && calculatedDamages[0] === "FAILED") {
 		return {
 			length: spellAnimationStartTick + 8,
 			actions: [
 				...actions,
-				...createCastingExitSequence(true, spellAnimationStartTick, casterId, castingCircleId, casterData)
-			]
-		}
+				...createCastingExitSequence(true, spellAnimationStartTick, casterId, castingCircleId, casterData),
+			],
+		};
 	}
 
 	// spell animation
@@ -1085,7 +1233,7 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 	actions = [
 		...actions,
 		{
-			tick: spellAnimationStartTick + ((battleData[victimIndices[0]].entity.id === casterData.entity.id) ? 0 : 5),
+			tick: spellAnimationStartTick + (battleData[victimIndices[0]].entity.id === casterData.entity.id ? 0 : 5),
 			type: ATYPES.INITIALIZE_ENTITY,
 			id: spellId,
 			sprite: getSpellSprite(spell),
@@ -1096,8 +1244,8 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 			sizeY: scale(270),
 			rot: 0,
 			zIndex: 0,
-			play: true
-		}
+			play: true,
+		},
 	];
 	switch (spell.type) {
 		case SPELL_TYPES.AURA: {
@@ -1107,8 +1255,8 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 					{
 						tick: spellAnimationStartTick,
 						type: ATYPES.REMOVE_ENTITY,
-						id: 'aura'
-					}
+						id: "aura",
+					},
 				];
 			}
 			actions = [
@@ -1116,7 +1264,7 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 				{
 					tick: spellAnimationStartTick + getSpellSprite(spell).indices,
 					type: ATYPES.INITIALIZE_ENTITY,
-					id: 'new_aura',
+					id: "new_aura",
 					sprite: getAuraSprite(spell),
 					alpha: 1,
 					posX: 0,
@@ -1125,8 +1273,8 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 					sizeY: scale(270),
 					rot: 0,
 					zIndex: 0,
-					play: true
-				}
+					play: true,
+				},
 			];
 			spellAnimationStartTick -= 5;
 			break;
@@ -1139,8 +1287,22 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 					...actions,
 					...createMoveEntityToBattleSequence(true, spellCastingStartTick, casterId, castingCircleId),
 					...createMiddleVictimSequence(false, spellAnimationStartTick, victimId, victimData, spell),
-					...createRightShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(480 - 26), scale(280)),
-					...createRightBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false)
+					...createRightShieldCastingSequence(
+						victimData.shields,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false,
+						scale(480 - 26),
+						scale(280)
+					),
+					...createRightBladeCastingSequence(
+						victimData.blades,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false
+					),
 				];
 			} else {
 				spellAnimationStartTick -= 5;
@@ -1165,7 +1327,7 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 						rot: 0,
 						iIndex: 0,
 						zIndex: 0,
-						text: healText
+						text: healText,
 					},
 					{
 						startTick: spellAnimationStartTick + 5 + tick,
@@ -1173,7 +1335,7 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 						type: ATYPES.CHANGE_POSITION_Y,
 						id: healTextId,
 						posY: scale(110),
-						ease: EASE_TYPES.EASE_OUT
+						ease: EASE_TYPES.EASE_OUT,
 					},
 					{
 						startTick: spellAnimationStartTick + 5 + tick + 2,
@@ -1181,14 +1343,14 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 						type: ATYPES.CHANGE_OPACITY,
 						id: healTextId,
 						alpha: 0,
-						ease: EASE_TYPES.EASE_OUT
+						ease: EASE_TYPES.EASE_OUT,
 					},
 					{
 						tick: spellAnimationStartTick + 5 + tick,
 						type: ATYPES.PLAY_SOUND,
-						audio: new Audio('./audio/heal.wav'),
-						volume: 0.1
-					}
+						audio: new Audio("./audio/heal.wav"),
+						volume: 0.1,
+					},
 				];
 			});
 
@@ -1204,22 +1366,84 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 				actions = [
 					...actions,
 					...createMoveEntityToBattleSequence(true, spellCastingStartTick, casterId, castingCircleId),
-					...createMiddleVictimSequence(victimIndices[0] >= 4, spellAnimationStartTick, victimId, victimData, spell),
-					...createRightShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(480 - 26), scale(280)),
-					...createRightBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false),
+					...createMiddleVictimSequence(
+						victimIndices[0] >= 4,
+						spellAnimationStartTick,
+						victimId,
+						victimData,
+						spell
+					),
+					...createRightShieldCastingSequence(
+						victimData.shields,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false,
+						scale(480 - 26),
+						scale(280)
+					),
+					...createRightBladeCastingSequence(
+						victimData.blades,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false
+					),
 					// new
-					...createRightShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick, true, scale(480 - 26), scale(280)),
-					...createRightBladeCastingSequence(spell.victimBlades || [], victimData.entity.id, victimData.blades.length, spellAnimationStartTick + 5, true),
-					...createLeftShieldCastingSequence(spell.casterShields || [], casterData.entity.id, casterData.shields.length, spellAnimationStartTick + 5, true, scale(6), scale(280)),
-					...createLeftBladeCastingSequence(spell.casterBlades || [], casterData.entity.id, casterData.blades.length, spellAnimationStartTick + 5, true)
+					...createRightShieldCastingSequence(
+						spell.victimShields || [],
+						victimData.entity.id,
+						victimData.shields.length,
+						spellAnimationStartTick,
+						true,
+						scale(480 - 26),
+						scale(280)
+					),
+					...createRightBladeCastingSequence(
+						spell.victimBlades || [],
+						victimData.entity.id,
+						victimData.blades.length,
+						spellAnimationStartTick + 5,
+						true
+					),
+					...createLeftShieldCastingSequence(
+						spell.casterShields || [],
+						casterData.entity.id,
+						casterData.shields.length,
+						spellAnimationStartTick + 5,
+						true,
+						scale(6),
+						scale(280)
+					),
+					...createLeftBladeCastingSequence(
+						spell.casterBlades || [],
+						casterData.entity.id,
+						casterData.blades.length,
+						spellAnimationStartTick + 5,
+						true
+					),
 				];
 			} else {
 				spellAnimationStartTick -= 5;
 
 				actions = [
 					...actions,
-					...createLeftShieldCastingSequence(spell.victimShields || [], casterData.entity.id, casterData.shields.length, spellAnimationStartTick + 5, true, scale(6), scale(280)),
-					...createLeftBladeCastingSequence(spell.victimBlades || [], casterData.entity.id, casterData.blades.length, spellAnimationStartTick + 5, true)
+					...createLeftShieldCastingSequence(
+						spell.victimShields || [],
+						casterData.entity.id,
+						casterData.shields.length,
+						spellAnimationStartTick + 5,
+						true,
+						scale(6),
+						scale(280)
+					),
+					...createLeftBladeCastingSequence(
+						spell.victimBlades || [],
+						casterData.entity.id,
+						casterData.blades.length,
+						spellAnimationStartTick + 5,
+						true
+					),
 				];
 			}
 
@@ -1227,30 +1451,43 @@ function createLeftAttackSequence(turnState, casterIndex, victimIndices, spell, 
 		}
 		case SPELL_TYPES.ATTACK_BASIC:
 		case SPELL_TYPES.ATTACK_ALL: {
-			const victimDatas = victimIndices.map(i => battleData[i]);
-			const victimIds = victimIndices.map(_ => `victim.${crypto.randomUUID()}`);
+			const victimDatas = victimIndices.map((i) => battleData[i]);
+			const victimIds = victimIndices.map((_) => `victim.${crypto.randomUUID()}`);
 			actions = [
 				...actions,
 				...createMoveEntityToBattleSequence(true, spellCastingStartTick, casterId, castingCircleId),
 			];
 
-			const victimActions = createMoveVictimToBattleSequence(false, spellAnimationStartTick, victimDatas, victimIds, casterData, spell, calculatedDamages);
+			const victimActions = createMoveVictimToBattleSequence(
+				false,
+				spellAnimationStartTick,
+				victimDatas,
+				victimIds,
+				casterData,
+				spell,
+				calculatedDamages
+			);
 			buffer = victimActions.buffer;
-			actions = [
-				...actions,
-				...victimActions.actions
-			];
+			actions = [...actions, ...victimActions.actions];
 			break;
 		}
 	}
 	const cleanUpStartTick = spellAnimationStartTick + 5 + getSpellSprite(spell).indices + buffer;
 	actions = [
 		...actions,
-		...createCleanUpSequence(true, spellAnimationStartTick + 5 + getSpellSprite(spell).indices, cleanUpStartTick, spellId, casterId, castingCircleId, casterData)
+		...createCleanUpSequence(
+			true,
+			spellAnimationStartTick + 5 + getSpellSprite(spell).indices,
+			cleanUpStartTick,
+			spellId,
+			casterId,
+			castingCircleId,
+			casterData
+		),
 	];
 	return {
 		length: cleanUpStartTick + 8,
-		actions
+		actions,
 	};
 }
 
@@ -1267,24 +1504,28 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 	// deal with shields etc.
 
 	let actions = [
-		...(turnState.aura ? [{
-			tick: 0,
-			type: ATYPES.INITIALIZE_ENTITY,
-			id: `aura`,
-			sprite: getAuraSprite(getSpell(turnState.aura.id)),
-			alpha: 1,
-			posX: 0,
-			posY: 0,
-			sizeX: scale(480),
-			sizeY: scale(270),
-			rot: 0,
-			zIndex: 1,
-			play: true
-		}] : []),
+		...(turnState.aura
+			? [
+					{
+						tick: 0,
+						type: ATYPES.INITIALIZE_ENTITY,
+						id: `aura`,
+						sprite: getAuraSprite(getSpell(turnState.aura.id)),
+						alpha: 1,
+						posX: 0,
+						posY: 0,
+						sizeX: scale(480),
+						sizeY: scale(270),
+						rot: 0,
+						zIndex: 1,
+						play: true,
+					},
+			  ]
+			: []),
 		{
 			tick: startTick,
 			type: ATYPES.INITIALIZE_ENTITY,
-			id: 'bottom_cover',
+			id: "bottom_cover",
 			sprite: sprites.BOTTOM_COVER_480x105,
 			alpha: 1,
 			posX: 0,
@@ -1293,11 +1534,19 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 			sizeY: scale(105),
 			rot: 0,
 			zIndex: 3,
-			play: false
+			play: false,
 		},
 		...createEntityEnterSequence(false, startTick, casterId, casterData),
-		...createRightShieldCastingSequence(casterData.shields, casterData.entity.id, 0, startTick, false, scale(480 - 26), scale(280)),
-		...createRightBladeCastingSequence(casterData.blades, casterData.entity.id, 0, startTick, false)
+		...createRightShieldCastingSequence(
+			casterData.shields,
+			casterData.entity.id,
+			0,
+			startTick,
+			false,
+			scale(480 - 26),
+			scale(280)
+		),
+		...createRightBladeCastingSequence(casterData.blades, casterData.entity.id, 0, startTick, false),
 	];
 
 	const spellCastingStartTick = startTick + 10;
@@ -1305,19 +1554,27 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 	// spell casting
 	actions = [
 		...actions,
-		...createMiddleCastingSequence(false, spellCastingStartTick, spell, casterId, casterData, castingCircleId, calculatedDamages)
+		...createMiddleCastingSequence(
+			false,
+			spellCastingStartTick,
+			spell,
+			casterId,
+			casterData,
+			castingCircleId,
+			calculatedDamages
+		),
 	];
 
 	let spellAnimationStartTick = spellCastingStartTick + 25;
 
-	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
+	if (calculatedDamages.length === 1 && calculatedDamages[0] === "FAILED") {
 		return {
 			length: spellAnimationStartTick + 8,
 			actions: [
 				...actions,
-				...createCastingExitSequence(false, spellAnimationStartTick, casterId, castingCircleId, casterData)
-			]
-		}
+				...createCastingExitSequence(false, spellAnimationStartTick, casterId, castingCircleId, casterData),
+			],
+		};
 	}
 
 	// spell animation
@@ -1326,7 +1583,7 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 	actions = [
 		...actions,
 		{
-			tick: spellAnimationStartTick + ((battleData[victimIndices[0]].entity.id === casterData.entity.id) ? 0 : 5),
+			tick: spellAnimationStartTick + (battleData[victimIndices[0]].entity.id === casterData.entity.id ? 0 : 5),
 			type: ATYPES.INITIALIZE_ENTITY,
 			id: spellId,
 			sprite: getSpellSprite(spell),
@@ -1338,8 +1595,8 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 			rot: 0,
 			zIndex: 0,
 			play: true,
-			mirror: spell.type !== SPELL_TYPES.AURA
-		}
+			mirror: spell.type !== SPELL_TYPES.AURA,
+		},
 	];
 	switch (spell.type) {
 		case SPELL_TYPES.AURA: {
@@ -1349,8 +1606,8 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 					{
 						tick: spellAnimationStartTick,
 						type: ATYPES.REMOVE_ENTITY,
-						id: 'aura'
-					}
+						id: "aura",
+					},
 				];
 			}
 			actions = [
@@ -1358,7 +1615,7 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 				{
 					tick: spellAnimationStartTick + getSpellSprite(spell).indices,
 					type: ATYPES.INITIALIZE_ENTITY,
-					id: 'new_aura',
+					id: "new_aura",
 					sprite: getAuraSprite(spell),
 					alpha: 1,
 					posX: 0,
@@ -1367,8 +1624,8 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 					sizeY: scale(270),
 					rot: 0,
 					zIndex: 0,
-					play: true
-				}
+					play: true,
+				},
 			];
 			spellAnimationStartTick -= 5;
 			break;
@@ -1381,8 +1638,22 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 					...actions,
 					...createMoveEntityToBattleSequence(false, spellCastingStartTick, casterId, castingCircleId),
 					...createMiddleVictimSequence(true, spellAnimationStartTick, victimId, victimData, spell),
-					...createLeftShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(6), scale(280)),
-					...createLeftBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false)
+					...createLeftShieldCastingSequence(
+						victimData.shields,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false,
+						scale(6),
+						scale(280)
+					),
+					...createLeftBladeCastingSequence(
+						victimData.blades,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false
+					),
 				];
 			} else {
 				spellAnimationStartTick -= 5;
@@ -1407,7 +1678,7 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 						rot: 0,
 						iIndex: 0,
 						zIndex: 0,
-						text: healText
+						text: healText,
 					},
 					{
 						startTick: spellAnimationStartTick + 5 + tick,
@@ -1415,7 +1686,7 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 						type: ATYPES.CHANGE_POSITION_Y,
 						id: healTextId,
 						posY: scale(110),
-						ease: EASE_TYPES.EASE_OUT
+						ease: EASE_TYPES.EASE_OUT,
 					},
 					{
 						startTick: spellAnimationStartTick + 5 + tick + 2,
@@ -1423,14 +1694,14 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 						type: ATYPES.CHANGE_OPACITY,
 						id: healTextId,
 						alpha: 0,
-						ease: EASE_TYPES.EASE_OUT
+						ease: EASE_TYPES.EASE_OUT,
 					},
 					{
 						tick: spellAnimationStartTick + 5 + tick,
 						type: ATYPES.PLAY_SOUND,
-						audio: new Audio('./audio/heal.wav'),
-						volume: 0.1
-					}
+						audio: new Audio("./audio/heal.wav"),
+						volume: 0.1,
+					},
 				];
 			});
 
@@ -1446,22 +1717,84 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 				actions = [
 					...actions,
 					...createMoveEntityToBattleSequence(false, spellCastingStartTick, casterId, castingCircleId),
-					...createMiddleVictimSequence(victimIndices[0] >= 4, spellAnimationStartTick, victimId, victimData, spell),
-					...createLeftShieldCastingSequence(victimData.shields, victimData.entity.id, 0, spellAnimationStartTick, false, scale(6), scale(280)),
-					...createLeftBladeCastingSequence(victimData.blades, victimData.entity.id, 0, spellAnimationStartTick, false),
+					...createMiddleVictimSequence(
+						victimIndices[0] >= 4,
+						spellAnimationStartTick,
+						victimId,
+						victimData,
+						spell
+					),
+					...createLeftShieldCastingSequence(
+						victimData.shields,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false,
+						scale(6),
+						scale(280)
+					),
+					...createLeftBladeCastingSequence(
+						victimData.blades,
+						victimData.entity.id,
+						0,
+						spellAnimationStartTick,
+						false
+					),
 					// new
-					...createLeftShieldCastingSequence(spell.victimShields || [], victimData.entity.id, victimData.shields.length, spellAnimationStartTick + 5, true, scale(6), scale(280)),
-					...createLeftBladeCastingSequence(spell.victimBlades || [], victimData.entity.id, victimData.blades.length, spellAnimationStartTick + 5, true),
-					...createRightShieldCastingSequence(spell.casterShields || [], casterData.entity.id, casterData.shields.length, spellAnimationStartTick + 5, true, scale(480 - 26), scale(280)),
-					...createRightBladeCastingSequence(spell.casterBlades || [], casterData.entity.id, casterData.blades.length, spellAnimationStartTick + 5, true)
+					...createLeftShieldCastingSequence(
+						spell.victimShields || [],
+						victimData.entity.id,
+						victimData.shields.length,
+						spellAnimationStartTick + 5,
+						true,
+						scale(6),
+						scale(280)
+					),
+					...createLeftBladeCastingSequence(
+						spell.victimBlades || [],
+						victimData.entity.id,
+						victimData.blades.length,
+						spellAnimationStartTick + 5,
+						true
+					),
+					...createRightShieldCastingSequence(
+						spell.casterShields || [],
+						casterData.entity.id,
+						casterData.shields.length,
+						spellAnimationStartTick + 5,
+						true,
+						scale(480 - 26),
+						scale(280)
+					),
+					...createRightBladeCastingSequence(
+						spell.casterBlades || [],
+						casterData.entity.id,
+						casterData.blades.length,
+						spellAnimationStartTick + 5,
+						true
+					),
 				];
 			} else {
 				spellAnimationStartTick -= 5;
 
 				actions = [
 					...actions,
-					...createRightShieldCastingSequence(spell.victimShields || [], casterData.entity.id, casterData.shields.length, spellAnimationStartTick + 5, true, scale(480 - 26), scale(280)),
-					...createRightBladeCastingSequence(spell.victimBlades || [], casterData.entity.id, casterData.blades.length, spellAnimationStartTick + 5, true)
+					...createRightShieldCastingSequence(
+						spell.victimShields || [],
+						casterData.entity.id,
+						casterData.shields.length,
+						spellAnimationStartTick + 5,
+						true,
+						scale(480 - 26),
+						scale(280)
+					),
+					...createRightBladeCastingSequence(
+						spell.victimBlades || [],
+						casterData.entity.id,
+						casterData.blades.length,
+						spellAnimationStartTick + 5,
+						true
+					),
 				];
 			}
 
@@ -1469,30 +1802,43 @@ function createRightAttackSequence(turnState, casterIndex, victimIndices, spell,
 		}
 		case SPELL_TYPES.ATTACK_BASIC:
 		case SPELL_TYPES.ATTACK_ALL: {
-			const victimDatas = victimIndices.map(i => battleData[i]);
-			const victimIds = victimIndices.map(_ => `victim.${crypto.randomUUID()}`);
+			const victimDatas = victimIndices.map((i) => battleData[i]);
+			const victimIds = victimIndices.map((_) => `victim.${crypto.randomUUID()}`);
 			actions = [
 				...actions,
 				...createMoveEntityToBattleSequence(false, spellCastingStartTick, casterId, castingCircleId),
 			];
 
-			const victimActions = createMoveVictimToBattleSequence(true, spellAnimationStartTick, victimDatas, victimIds, casterData, spell, calculatedDamages);
+			const victimActions = createMoveVictimToBattleSequence(
+				true,
+				spellAnimationStartTick,
+				victimDatas,
+				victimIds,
+				casterData,
+				spell,
+				calculatedDamages
+			);
 			buffer = victimActions.buffer;
-			actions = [
-				...actions,
-				...victimActions.actions
-			];
+			actions = [...actions, ...victimActions.actions];
 			break;
 		}
 	}
 	const cleanUpStartTick = spellAnimationStartTick + 5 + getSpellSprite(spell).indices + buffer;
 	actions = [
 		...actions,
-		...createCleanUpSequence(false, spellAnimationStartTick + 5 + getSpellSprite(spell).indices, cleanUpStartTick, spellId, casterId, castingCircleId, casterData)
+		...createCleanUpSequence(
+			false,
+			spellAnimationStartTick + 5 + getSpellSprite(spell).indices,
+			cleanUpStartTick,
+			spellId,
+			casterId,
+			castingCircleId,
+			casterData
+		),
 	];
 	return {
 		length: cleanUpStartTick + 8,
-		actions
+		actions,
 	};
 }
 
@@ -1501,7 +1847,7 @@ function createCardDropSequence(spell) {
 		{
 			tick: 0,
 			type: ATYPES.INITIALIZE_ENTITY,
-			id: 'spell_card',
+			id: "spell_card",
 			sprite: getCardSprite(spell),
 			alpha: 1,
 			posX: scale(240),
@@ -1515,26 +1861,26 @@ function createCardDropSequence(spell) {
 			startTick: 0,
 			endTick: 7,
 			type: ATYPES.CHANGE_POSITION_X,
-			id: 'spell_card',
+			id: "spell_card",
 			posX: scale(240 - 77),
-			ease: EASE_TYPES.CONSTANT
+			ease: EASE_TYPES.CONSTANT,
 		},
 		{
 			startTick: 0,
 			endTick: 7,
 			type: ATYPES.CHANGE_SIZE_X,
-			id: 'spell_card',
+			id: "spell_card",
 			sizeX: scale(144),
-			ease: EASE_TYPES.CONSTANT
+			ease: EASE_TYPES.CONSTANT,
 		},
 		{
 			startTick: 7,
 			endTick: 9,
 			type: ATYPES.CHANGE_POSITION_Y,
-			id: 'spell_card',
+			id: "spell_card",
 			posY: scale(375),
-			ease: EASE_TYPES.EASE_IN
-		}
+			ease: EASE_TYPES.EASE_IN,
+		},
 	];
 }
 
@@ -1542,66 +1888,86 @@ function createWithdrawAnimation(turnState) {
 	return {
 		ticks: 10,
 		actions: [
-			...(turnState.aura ? [{
-				tick: 0,
-				type: ATYPES.INITIALIZE_ENTITY,
-				id: `aura`,
-				sprite: getAuraSprite(getSpell(turnState.aura.id)),
-				alpha: 1,
-				posX: 0,
-				posY: 0,
-				sizeX: scale(480),
-				sizeY: scale(270),
-				rot: 0,
-				zIndex: 1,
-				play: true
-			}] : []),
-			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
-				tick: 0,
-				type: ATYPES.INITIALIZE_ENTITY,
-				id: `left.${i}`,
-				sprite: getIdleSprite(battleEntity.entity),
-				alpha: 1,
-				posX: 0,
-				posY: i * scale(67) + 10,
-				sizeX: scale(64),
-				sizeY: scale(64),
-				rot: 0,
-				zIndex: 1,
-				play: getIdleSprite(battleEntity.entity).indices > 1
-			})),
-			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
-				startTick: 0,
-				endTick: 9,
-				type: ATYPES.CHANGE_POSITION_X,
-				id: `left.${i}`,
-				posX: scale(-64),
-				ease: EASE_TYPES.EASE_IN
-			})),
-			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
-				tick: 0,
-				type: ATYPES.INITIALIZE_ENTITY,
-				id: `right.${i}`,
-				sprite: getIdleSprite(battleEntity.entity),
-				alpha: 1,
-				posX: scale(480 - 64),
-				posY: (i - 4) * scale(67) + 10,
-				sizeX: scale(64),
-				sizeY: scale(64),
-				rot: 0,
-				zIndex: 1,
-				play: getIdleSprite(battleEntity.entity).indices > 1,
-				mirror: true
-			})),
-			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
-				startTick: 0,
-				endTick: 9,
-				type: ATYPES.CHANGE_POSITION_X,
-				id: `right.${i}`,
-				posX: scale(480),
-				ease: EASE_TYPES.EASE_IN
-			}))
-		]
+			...(turnState.aura
+				? [
+						{
+							tick: 0,
+							type: ATYPES.INITIALIZE_ENTITY,
+							id: `aura`,
+							sprite: getAuraSprite(getSpell(turnState.aura.id)),
+							alpha: 1,
+							posX: 0,
+							posY: 0,
+							sizeX: scale(480),
+							sizeY: scale(270),
+							rot: 0,
+							zIndex: 1,
+							play: true,
+						},
+				  ]
+				: []),
+			...turnState.battleData
+				.map((battleEntity, i) => ({ battleEntity, i }))
+				.filter(({ i }) => i < 4)
+				.filter(({ battleEntity }) => battleEntity !== null)
+				.map(({ battleEntity, i }) => ({
+					tick: 0,
+					type: ATYPES.INITIALIZE_ENTITY,
+					id: `left.${i}`,
+					sprite: getIdleSprite(battleEntity.entity),
+					alpha: 1,
+					posX: 0,
+					posY: i * scale(67) + 10,
+					sizeX: scale(64),
+					sizeY: scale(64),
+					rot: 0,
+					zIndex: 1,
+					play: getIdleSprite(battleEntity.entity).indices > 1,
+				})),
+			...turnState.battleData
+				.map((battleEntity, i) => ({ battleEntity, i }))
+				.filter(({ i }) => i < 4)
+				.filter(({ battleEntity }) => battleEntity !== null)
+				.map(({ battleEntity, i }) => ({
+					startTick: 0,
+					endTick: 9,
+					type: ATYPES.CHANGE_POSITION_X,
+					id: `left.${i}`,
+					posX: scale(-64),
+					ease: EASE_TYPES.EASE_IN,
+				})),
+			...turnState.battleData
+				.map((battleEntity, i) => ({ battleEntity, i }))
+				.filter(({ i }) => i >= 4)
+				.filter(({ battleEntity }) => battleEntity !== null)
+				.map(({ battleEntity, i }) => ({
+					tick: 0,
+					type: ATYPES.INITIALIZE_ENTITY,
+					id: `right.${i}`,
+					sprite: getIdleSprite(battleEntity.entity),
+					alpha: 1,
+					posX: scale(480 - 64),
+					posY: (i - 4) * scale(67) + 10,
+					sizeX: scale(64),
+					sizeY: scale(64),
+					rot: 0,
+					zIndex: 1,
+					play: getIdleSprite(battleEntity.entity).indices > 1,
+					mirror: true,
+				})),
+			...turnState.battleData
+				.map((battleEntity, i) => ({ battleEntity, i }))
+				.filter(({ i }) => i >= 4)
+				.filter(({ battleEntity }) => battleEntity !== null)
+				.map(({ battleEntity, i }) => ({
+					startTick: 0,
+					endTick: 9,
+					type: ATYPES.CHANGE_POSITION_X,
+					id: `right.${i}`,
+					posX: scale(480),
+					ease: EASE_TYPES.EASE_IN,
+				})),
+		],
 	};
 }
 
@@ -1609,65 +1975,85 @@ function getReturnSequence(turnState) {
 	return {
 		ticks: 10,
 		actions: [
-			...(turnState.aura ? [{
-				tick: 0,
-				type: ATYPES.INITIALIZE_ENTITY,
-				id: `aura`,
-				sprite: getAuraSprite(getSpell(turnState.aura.id)),
-				alpha: 1,
-				posX: 0,
-				posY: 0,
-				sizeX: scale(480),
-				sizeY: scale(270),
-				rot: 0,
-				zIndex: 1,
-				play: true
-			}] : []),
-			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
-				tick: 0,
-				type: ATYPES.INITIALIZE_ENTITY,
-				id: `left.${i}`,
-				sprite: getIdleSprite(battleEntity.entity),
-				alpha: 1,
-				posX: scale(-64),
-				posY: i * scale(67) + 10,
-				sizeX: scale(64),
-				sizeY: scale(64),
-				rot: 0,
-				zIndex: 1,
-				play: getIdleSprite(battleEntity.entity).indices > 1
-			})),
-			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i < 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
-				startTick: 0,
-				endTick: 9,
-				type: ATYPES.CHANGE_POSITION_X,
-				id: `left.${i}`,
-				posX: 0,
-				ease: EASE_TYPES.EASE_IN
-			})),
-			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ battleEntity, i }) => ({
-				tick: 0,
-				type: ATYPES.INITIALIZE_ENTITY,
-				id: `right.${i}`,
-				sprite: getIdleSprite(battleEntity.entity),
-				alpha: 1,
-				posX: scale(480),
-				posY: (i - 4) * scale(67) + 10,
-				sizeX: scale(64),
-				sizeY: scale(64),
-				rot: 0,
-				zIndex: 1,
-				play: getIdleSprite(battleEntity.entity).indices > 1,
-				mirror: true
-			})),
-			...turnState.battleData.map((battleEntity, i) => ({ battleEntity, i })).filter(({ i }) => i >= 4).filter(({ battleEntity }) => battleEntity !== null).map(({ i }) => ({
-				startTick: 0,
-				endTick: 9,
-				type: ATYPES.CHANGE_POSITION_X,
-				id: `right.${i}`,
-				posX: scale(480 - 64),
-				ease: EASE_TYPES.EASE_IN
-			}))
-		]
+			...(turnState.aura
+				? [
+						{
+							tick: 0,
+							type: ATYPES.INITIALIZE_ENTITY,
+							id: `aura`,
+							sprite: getAuraSprite(getSpell(turnState.aura.id)),
+							alpha: 1,
+							posX: 0,
+							posY: 0,
+							sizeX: scale(480),
+							sizeY: scale(270),
+							rot: 0,
+							zIndex: 1,
+							play: true,
+						},
+				  ]
+				: []),
+			...turnState.battleData
+				.map((battleEntity, i) => ({ battleEntity, i }))
+				.filter(({ i }) => i < 4)
+				.filter(({ battleEntity }) => battleEntity !== null)
+				.map(({ battleEntity, i }) => ({
+					tick: 0,
+					type: ATYPES.INITIALIZE_ENTITY,
+					id: `left.${i}`,
+					sprite: getIdleSprite(battleEntity.entity),
+					alpha: 1,
+					posX: scale(-64),
+					posY: i * scale(67) + 10,
+					sizeX: scale(64),
+					sizeY: scale(64),
+					rot: 0,
+					zIndex: 1,
+					play: getIdleSprite(battleEntity.entity).indices > 1,
+				})),
+			...turnState.battleData
+				.map((battleEntity, i) => ({ battleEntity, i }))
+				.filter(({ i }) => i < 4)
+				.filter(({ battleEntity }) => battleEntity !== null)
+				.map(({ i }) => ({
+					startTick: 0,
+					endTick: 9,
+					type: ATYPES.CHANGE_POSITION_X,
+					id: `left.${i}`,
+					posX: 0,
+					ease: EASE_TYPES.EASE_IN,
+				})),
+			...turnState.battleData
+				.map((battleEntity, i) => ({ battleEntity, i }))
+				.filter(({ i }) => i >= 4)
+				.filter(({ battleEntity }) => battleEntity !== null)
+				.map(({ battleEntity, i }) => ({
+					tick: 0,
+					type: ATYPES.INITIALIZE_ENTITY,
+					id: `right.${i}`,
+					sprite: getIdleSprite(battleEntity.entity),
+					alpha: 1,
+					posX: scale(480),
+					posY: (i - 4) * scale(67) + 10,
+					sizeX: scale(64),
+					sizeY: scale(64),
+					rot: 0,
+					zIndex: 1,
+					play: getIdleSprite(battleEntity.entity).indices > 1,
+					mirror: true,
+				})),
+			...turnState.battleData
+				.map((battleEntity, i) => ({ battleEntity, i }))
+				.filter(({ i }) => i >= 4)
+				.filter(({ battleEntity }) => battleEntity !== null)
+				.map(({ i }) => ({
+					startTick: 0,
+					endTick: 9,
+					type: ATYPES.CHANGE_POSITION_X,
+					id: `right.${i}`,
+					posX: scale(480 - 64),
+					ease: EASE_TYPES.EASE_IN,
+				})),
+		],
 	};
 }

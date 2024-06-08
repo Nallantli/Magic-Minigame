@@ -1,15 +1,22 @@
 function levelGameLoop(timeMs) {
-	const levelText = `LEVEL ${state.level}`
-	font.draw(ctx, scale(240 - levelText.length * 12), scale(128), scale(24), scale(32), 0, levelText);
+	const levelText = `LEVEL ${state.level}`;
+	font.draw(ctx, scale(240 - levelText.length * 12), scale(128), scale(24), scale(32), {
+		iIndex: 0,
+		text: levelText,
+	});
 
-	makeInteractable(scale(240 - 5 * 3), scale(192), scale(6 * 5), scale(12),
+	makeInteractable(
+		scale(240 - 5 * 3),
+		scale(192),
+		scale(6 * 5),
+		scale(12),
 		({ x, y, sizeX, sizeY }) => {
-			font.draw(ctx, x, y, scale(6), scale(8), 0, 'Start');
+			font.draw(ctx, x, y, scale(6), scale(8), { iIndex: 0, text: "Start" });
 		},
 		({ x, y, sizeX, renderCallback }) => {
 			renderCallback();
-			ctx.fillStyle = WHITE_COLOR;
-			ctx.fillRect(x, y + scale(14), sizeX, scale(4))
+			ctx.fillStyle = COLORS_HEX.white;
+			ctx.fillRect(x, y + scale(14), sizeX, scale(4));
 		},
 		() => {
 			walkingTrack.play();
@@ -30,7 +37,8 @@ function levelGameLoop(timeMs) {
 			printMap(state.mapState.map);
 			state = {
 				...state,
-				path: 'MAP'
+				path: "MAP",
 			};
-		});
+		}
+	);
 }

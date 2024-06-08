@@ -1,33 +1,33 @@
 let state = {
 	level: 1,
 	iterator: 0,
-	path: 'START',
+	path: "START",
 	mouseDown: false,
 	deckState: {
 		currentIndex: -1,
-		currentElement: 'air',
-		returnPath: 'MENU'
+		currentElement: "air",
+		returnPath: "MENU",
 	},
 	menuState: {
-		errorMessage: undefined
+		errorMessage: undefined,
 	},
 	entitySelectionState: {
 		selected: undefined,
-		onReturn: undefined
+		onReturn: undefined,
 	},
 	battleState: undefined,
 	animationQueue: [],
 	overlayAnimationQueue: [],
 	textboxes: {
 		usernameTextbox: {
-			value: 'Player',
-			isFocused: false
+			value: "Player",
+			isFocused: false,
 		},
 		joinTextbox: {
-			value: '',
-			isFocused: false
-		}
-	}
+			value: "",
+			isFocused: false,
+		},
+	},
 };
 
 const reduceAnimationQueue = () => state.animationQueue.splice(0, 1);

@@ -4,13 +4,13 @@ function scale(x) {
 
 function getMousePos(canvas, evt) {
 	var rect = canvas.getBoundingClientRect(), // abs. size of element
-		scaleX = canvas.width / rect.width,    // relationship bitmap vs. element for x
-		scaleY = canvas.height / rect.height;  // relationship bitmap vs. element for y
+		scaleX = canvas.width / rect.width, // relationship bitmap vs. element for x
+		scaleY = canvas.height / rect.height; // relationship bitmap vs. element for y
 
 	return {
-		x: (evt.clientX - rect.left) * scaleX,   // scale mouse coordinates after they have
-		y: (evt.clientY - rect.top) * scaleY     // been adjusted to be relative to element
-	}
+		x: (evt.clientX - rect.left) * scaleX, // scale mouse coordinates after they have
+		y: (evt.clientY - rect.top) * scaleY, // been adjusted to be relative to element
+	};
 }
 
 /* Randomize array in-place using Durstenfeld shuffle algorithm */
@@ -25,17 +25,40 @@ function shuffleArray(array) {
 
 function makeInteractable(x, y, sizeX, sizeY, render, hoverRender, onPress, options) {
 	if (options?.disableOn && options?.disableOn({ x, y, sizeX, sizeY })) {
-		options?.disabledRender({ x, y, sizeX, sizeY, renderRaw: render, renderCallback: () => render({ x, y, sizeX, sizeY }) });
+		options?.disabledRender({
+			x,
+			y,
+			sizeX,
+			sizeY,
+			renderRaw: render,
+			renderCallback: () => render({ x, y, sizeX, sizeY }),
+		});
 		return;
 	}
-	if (options?.forceHoverOn && options?.forceHoverOn({ x, y, sizeX, sizeY }) || (mousePos.x >= x && mousePos.x < x + sizeX && mousePos.y >= y && mousePos.y < y + sizeY)) {
+	if (
+		(options?.forceHoverOn && options?.forceHoverOn({ x, y, sizeX, sizeY })) ||
+		(mousePos.x >= x && mousePos.x < x + sizeX && mousePos.y >= y && mousePos.y < y + sizeY)
+	) {
 		if (hoverRender) {
-			hoverRender({ x, y, sizeX, sizeY, renderRaw: render, renderCallback: () => render({ x, y, sizeX, sizeY }) });
+			hoverRender({
+				x,
+				y,
+				sizeX,
+				sizeY,
+				renderRaw: render,
+				renderCallback: () => render({ x, y, sizeX, sizeY }),
+			});
 		}
 		if (onPress && clickPos?.x >= x && clickPos?.x < x + sizeX && clickPos?.y >= y && clickPos?.y < y + sizeY) {
 			onPress({ x, y, sizeX, sizeY });
 		}
-		if (options?.onRightPress && rightClickPos?.x >= x && rightClickPos?.x < x + sizeX && rightClickPos?.y >= y && rightClickPos?.y < y + sizeY) {
+		if (
+			options?.onRightPress &&
+			rightClickPos?.x >= x &&
+			rightClickPos?.x < x + sizeX &&
+			rightClickPos?.y >= y &&
+			rightClickPos?.y < y + sizeY
+		) {
 			options.onRightPress({ x, y, sizeX, sizeY });
 		}
 	} else {
@@ -45,10 +68,19 @@ function makeInteractable(x, y, sizeX, sizeY, render, hoverRender, onPress, opti
 
 function makeTextBox(id, x, y, sizeX, sizeY, render, validator, onUnfocus) {
 	if (clickPos !== undefined) {
-		if (!state.textboxes[id].isFocused && clickPos?.x >= x && clickPos?.x < x + sizeX && clickPos?.y >= y && clickPos?.y < y + sizeY) {
+		if (
+			!state.textboxes[id].isFocused &&
+			clickPos?.x >= x &&
+			clickPos?.x < x + sizeX &&
+			clickPos?.y >= y &&
+			clickPos?.y < y + sizeY
+		) {
 			state.textboxes[id].isFocused = true;
 		}
-		if (state.textboxes[id].isFocused && (clickPos?.x < x || clickPos?.x >= x + sizeX || clickPos?.y < y || clickPos?.y >= y + sizeY)) {
+		if (
+			state.textboxes[id].isFocused &&
+			(clickPos?.x < x || clickPos?.x >= x + sizeX || clickPos?.y < y || clickPos?.y >= y + sizeY)
+		) {
 			state.textboxes[id].isFocused = false;
 			if (onUnfocus) {
 				onUnfocus({ value: state.textboxes[id].value });
@@ -56,7 +88,7 @@ function makeTextBox(id, x, y, sizeX, sizeY, render, validator, onUnfocus) {
 		}
 	}
 	if (state.textboxes[id].isFocused) {
-		keysPressed.forEach(key => {
+		keysPressed.forEach((key) => {
 			state.textboxes[id].value = validator(state.textboxes[id].value, key);
 		});
 	}
@@ -70,13 +102,13 @@ function drawBox(ctx, x, y, sizeX, sizeY) {
 	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x + sizeX - scale(3), y + sizeY - scale(3), scale(3), scale(3), { iIndex: 2 });
 	sprites.TOOLTIP_CORNER_3x3.draw(ctx, x, y + sizeY - scale(3), scale(3), scale(3), { iIndex: 3 });
 
-	ctx.fillStyle = BLACK_COLOR;
+	ctx.fillStyle = COLORS_HEX.black;
 	ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(3));
 	ctx.fillRect(x + scale(3), y + sizeY - scale(3), sizeX - scale(6), scale(3));
 	ctx.fillRect(x, y + scale(3), scale(3), sizeY - scale(6));
 	ctx.fillRect(x + sizeX - scale(3), y + scale(3), scale(3), sizeY - scale(6));
 	ctx.fillRect(x + scale(3), y + scale(3), sizeX - scale(6), sizeY - scale(6));
-	ctx.fillStyle = WHITE_COLOR;
+	ctx.fillStyle = COLORS_HEX.white;
 	ctx.fillRect(x + scale(3), y, sizeX - scale(6), scale(1));
 	ctx.fillRect(x + scale(3), y + sizeY - scale(1), sizeX - scale(6), scale(1));
 	ctx.fillRect(x, y + scale(3), scale(1), sizeY - scale(6));
@@ -98,8 +130,8 @@ function makeTextToolTip(text, fontSizeX, fontSizeY, iIndex) {
 	const startX = leftToRight ? x - sizeX : x;
 	return (ctx) => {
 		drawBox(ctx, startX, y, sizeX, fontSizeY + scale(6));
-		font.draw(ctx, startX + scale(3), y + scale(3), fontSizeX, fontSizeY, iIndex, text);
-	}
+		font.draw(ctx, startX + scale(3), y + scale(3), fontSizeX, fontSizeY, { iIndex, text });
+	};
 }
 
 function makeNumberTextToolTip(textLines, fontSizeX, fontSizeY, iIndex) {
@@ -108,11 +140,14 @@ function makeNumberTextToolTip(textLines, fontSizeX, fontSizeY, iIndex) {
 	const leftToRight = sizeX + x > scale(480);
 	const startX = leftToRight ? x - sizeX : x;
 	return (ctx) => {
-		drawBox(ctx, startX, y, sizeX, (fontSizeY * textLines.length) + scale(6));
+		drawBox(ctx, startX, y, sizeX, fontSizeY * textLines.length + scale(6));
 		for (let i = 0; i < textLines.length; i++) {
-			numberText.draw(ctx, startX + scale(3), y + fontSizeY * i + scale(3), fontSizeX, fontSizeY, iIndex, textLines[i]);
+			numberText.draw(ctx, startX + scale(3), y + fontSizeY * i + scale(3), fontSizeX, fontSizeY, {
+				iIndex,
+				text: textLines[i],
+			});
 		}
-	}
+	};
 }
 
 function criticalChance(cra, crb) {
@@ -125,7 +160,9 @@ function calculateDamages(spell, enchantments, caster, victim, aura) {
 		return {};
 	}
 
-	const isCritical = spell.element === caster.entity.element && Math.random() <= criticalChance(caster.entity.criticalRating, victim.entity.criticalRating);
+	const isCritical =
+		spell.element === caster.entity.element &&
+		Math.random() <= criticalChance(caster.entity.criticalRating, victim.entity.criticalRating);
 
 	const shields = victim.shields;
 	const blades = caster.blades;
@@ -140,7 +177,7 @@ function calculateDamages(spell, enchantments, caster, victim, aura) {
 		});
 	}
 	blades.forEach(({ id, value, element }, i) => {
-		if ((spell.element === element || element === 'all') && !totalUsedBladeIds.includes(id)) {
+		if ((spell.element === element || element === "all") && !totalUsedBladeIds.includes(id)) {
 			baseTilt *= (value + 100) / 100;
 			totalUsedBladeIds.push(id);
 			usedBladeIds.push({ index: i, id });
@@ -150,14 +187,16 @@ function calculateDamages(spell, enchantments, caster, victim, aura) {
 	return {
 		isCritical,
 		usedBladeIds,
-		damages: spell.damages.map(d => {
-			let rawBase = (d.damage !== undefined ? d.damage : (Math.random() * (d.maxDamage - d.minDamage) + d.minDamage)) * (d.isPer ? getTotalVril(caster, d.element) : 1);
+		damages: spell.damages.map((d) => {
+			let rawBase =
+				(d.damage !== undefined ? d.damage : Math.random() * (d.maxDamage - d.minDamage) + d.minDamage) *
+				(d.isPer ? getTotalVril(caster, d.element) : 1);
 			let base = rawBase - (enchantments?.damage ? enchantments.damage / spell.damages.length : 0);
 			let usedShieldIds = [];
 			let currentElement = d.element;
 			for (let i = shields.length - 1; i >= 0; i--) {
 				const { id, value, element, elementTo } = shields[i];
-				if ((currentElement === element || element === 'all') && !totalUsedShieldIds.includes(id)) {
+				if ((currentElement === element || element === "all") && !totalUsedShieldIds.includes(id)) {
 					if (value) {
 						base += base * (value / 100);
 					}
@@ -175,10 +214,10 @@ function calculateDamages(spell, enchantments, caster, victim, aura) {
 			return {
 				...d,
 				damage: Math.round(base * baseTilt * (augment !== undefined ? augment : 1)),
-				augmented: augment !== undefined ? (augment > 1 ? ' ++' : ' --') : undefined,
-				usedShieldIds
+				augmented: augment !== undefined ? (augment > 1 ? " ++" : " --") : undefined,
+				usedShieldIds,
 			};
-		})
+		}),
 	};
 }
 
@@ -187,9 +226,9 @@ function sortDeck(deck) {
 		const spellA = getSpell(a);
 		const spellB = getSpell(b);
 		if (spellA.element === spellB.element) {
-			return spellA.name < spellB.name ? -1 : (spellA.name > spellB.name ? 1 : 0);
+			return spellA.name < spellB.name ? -1 : spellA.name > spellB.name ? 1 : 0;
 		}
-		return spellA.element < spellB.element ? -1 : (spellA.element > spellB.element ? 1 : 0)
+		return spellA.element < spellB.element ? -1 : spellA.element > spellB.element ? 1 : 0;
 	});
 }
 
@@ -213,18 +252,15 @@ function getEnchantmentTooltips(enchantments) {
 	if (enchantments.accuracy) {
 		tooltips.push(`+${enchantments.accuracy * 100}%CD`);
 	}
-	return tooltips
+	return tooltips;
 }
 
 function iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages) {
 	let { battleData, aura } = turnState;
 	const casterIndex = turnState.battleIndex;
-	if (calculatedDamages.length === 1 && calculatedDamages[0] === 'FAILED') {
+	if (calculatedDamages.length === 1 && calculatedDamages[0] === "FAILED") {
 		const handSpell = battleData[casterIndex].hand[spellIndex];
-		battleData[casterIndex].battleDeck = [
-			handSpell,
-			...battleData[casterIndex].battleDeck
-		];
+		battleData[casterIndex].battleDeck = [handSpell, ...battleData[casterIndex].battleDeck];
 		battleData[casterIndex].hand.splice(spellIndex, 1);
 		return { aura, battleData };
 	}
@@ -234,11 +270,11 @@ function iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages) {
 		case SPELL_TYPES.AURA:
 			aura = {
 				id: spell.id,
-				modifiers: spell.aura
+				modifiers: spell.aura,
 			};
 			break;
 		case SPELL_TYPES.HEALING_BASIC:
-			spell.heals.forEach(({ heal }) => battleData[victimIndices[0]].entity.health += heal);
+			spell.heals.forEach(({ heal }) => (battleData[victimIndices[0]].entity.health += heal));
 			break;
 		case SPELL_TYPES.ATTACK_BASIC:
 		case SPELL_TYPES.ATTACK_ALL:
@@ -257,39 +293,29 @@ function iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages) {
 							battleData[casterIndex].entity.health -= Math.round(damage * steal);
 						}
 					});
-					battleData[casterIndex].blades = battleData[casterIndex].blades.filter((_, j) => !usedBladeIds.map(({ index }) => index).includes(j));
+					battleData[casterIndex].blades = battleData[casterIndex].blades.filter(
+						(_, j) => !usedBladeIds.map(({ index }) => index).includes(j)
+					);
 					battleData[victimIndex].shields = newShields;
 				});
 			}
 			break;
 	}
 	if (spell.victimShields) {
-		victimIndices.forEach(i => {
-			battleData[i].shields = [
-				...battleData[i].shields,
-				...spell.victimShields
-			];
+		victimIndices.forEach((i) => {
+			battleData[i].shields = [...battleData[i].shields, ...spell.victimShields];
 		});
 	}
 	if (spell.casterShields) {
-		battleData[casterIndex].shields = [
-			...battleData[casterIndex].shields,
-			...spell.casterShields
-		];
+		battleData[casterIndex].shields = [...battleData[casterIndex].shields, ...spell.casterShields];
 	}
 	if (spell.victimBlades) {
-		victimIndices.forEach(i => {
-			battleData[i].blades = [
-				...battleData[i].blades,
-				...spell.victimBlades
-			];
+		victimIndices.forEach((i) => {
+			battleData[i].blades = [...battleData[i].blades, ...spell.victimBlades];
 		});
 	}
 	if (spell.casterBlades) {
-		battleData[casterIndex].blades = [
-			...battleData[casterIndex].blades,
-			...spell.casterBlades
-		];
+		battleData[casterIndex].blades = [...battleData[casterIndex].blades, ...spell.casterBlades];
 	}
 
 	if (isPer) {
@@ -320,12 +346,12 @@ function iterateSpell(victimIndices, spellIndex, turnState, calculatedDamages) {
 	}
 	return {
 		aura,
-		battleData
+		battleData,
 	};
 }
 
 function generateBattleEntity(entity, AI) {
-	const battleDeck = entity.deck.map(id => ({ id }));
+	const battleDeck = entity.deck.map((id) => ({ id }));
 
 	shuffleArray(battleDeck);
 
@@ -348,19 +374,15 @@ function generateBattleEntity(entity, AI) {
 		entity,
 		battleDeck,
 		hand,
-		AI
-	}
+		AI,
+	};
 }
 
 function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
-	let leftBattleEntities = [
-		...leftEntities.map(entity => generateBattleEntity(entity, randomAI))
-	];
+	let leftBattleEntities = [...leftEntities.map((entity) => generateBattleEntity(entity, randomAI))];
 	shuffleArray(leftBattleEntities);
 
-	let rightBattleEntities = [
-		...rightEntities.map(entity => generateBattleEntity(entity, randomAI))
-	];
+	let rightBattleEntities = [...rightEntities.map((entity) => generateBattleEntity(entity, randomAI))];
 	shuffleArray(rightBattleEntities);
 
 	let battleData = [];
@@ -379,22 +401,25 @@ function generateBattleState(leftEntities, rightEntities, onWin, onLose) {
 		}
 	}
 
-
 	const turnState = {
 		battleData,
 		selectedCards: [null, null, null, null, null, null, null, null],
 		selectedVictims: [[], [], [], [], [], [], [], []],
 		battleIndex: -1,
-		aura: null
+		aura: null,
 	};
 
-	state.animationQueue.push(new AnimationEngine(getReturnSequence(turnState), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue));
+	state.animationQueue.push(
+		new AnimationEngine(getReturnSequence(turnState), TICK_TIME, FPS, canvas, ctx, reduceAnimationQueue)
+	);
 
 	const battleState = {
 		turnState,
-		playerIndex: battleData.findIndex(battleEntity => battleEntity !== null && battleEntity.entity.id === state.player.id),
+		playerIndex: battleData.findIndex(
+			(battleEntity) => battleEntity !== null && battleEntity.entity.id === state.player.id
+		),
 		onWin,
-		onLose
+		onLose,
 	};
 	selectCardsForAI(battleState);
 	return battleState;
