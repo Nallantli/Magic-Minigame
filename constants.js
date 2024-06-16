@@ -1,4 +1,4 @@
-const serverUrl = "wss://wmgs.nallant.li:8080";
+const serverUrl = "wss://wmg.nallant.li:443";
 
 const SCALE_FACTOR = 4;
 const FPS = 75;
